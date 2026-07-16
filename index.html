@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>樣板設定｜ChatManage</title>
+<style>
+:root{
+  --blue:#4A90D9; --blue-dark:#3F86CC; --blue-light:#6EB3E4;
+  --ink:#4A4A4A; --ink-light:#8C9BA5; --line:#C9CDD4; --line-soft:#E3E7EC;
+  --bg-soft:#F5F8FB; --var-bg:#FFF4E3; --var-ink:#C07A1F; --var-line:#EBCB96;
+  --danger:#D9534F;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:#fff;font-size:15px}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink)}
+
+/* ===== 問卷套用區（滿意度類） ===== */
+.survey-pick{max-width:640px}
+.survey-pick select{width:100%;height:40px;border:1px solid var(--line);border-radius:5px;padding:0 12px;background:#fff}
+.survey-preview{margin-top:16px;border:1px solid var(--line-soft);border-radius:8px;overflow:hidden}
+.survey-preview .sp-head{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg-soft);border-bottom:1px solid var(--line-soft);font-weight:700;color:var(--blue)}
+.survey-preview .sp-head .cnt{font-size:13px;color:var(--ink-light);font-weight:400}
+.sq{display:flex;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line-soft)}
+.sq:last-child{border-bottom:none}
+.sq .qno{flex:none;width:36px;font-weight:700;color:var(--blue)}
+.sq .qbody{flex:1}
+.sq .qtype{display:inline-block;font-size:12px;font-weight:600;border-radius:4px;padding:2px 8px;margin-right:8px;border:1px solid}
+.sq .qtype.rate{color:#2E8B57;border-color:#BFE3CF;background:#F0FAF4}
+.sq .qtype.choice{color:var(--var-ink);border-color:var(--var-line);background:var(--var-bg)}
+.sq .qtext{display:inline}
+.sq .qopts{margin-top:6px;font-size:13.5px;color:var(--ink-light);line-height:1.9}
+.sq .qopts div::before{content:"○ ";color:var(--blue)}
+.survey-empty{padding:26px;text-align:center;color:#B9C1C9;font-size:14px}
+.survey-tabs{display:flex;gap:0;margin-bottom:-1px;position:relative;z-index:1}
+.survey-tabs .tab{padding:8px 18px;font-size:13px;font-weight:600;border:1px solid var(--line-soft);border-bottom:none;border-radius:6px 6px 0 0;background:#fff;color:var(--ink-light);cursor:pointer}
+.survey-tabs .tab.active{color:var(--blue);border-color:var(--line);background:#fff;border-bottom:1px solid #fff;margin-bottom:-1px}
+.survey-tab-body{border:1px solid var(--line);border-radius:0 8px 8px 8px;padding:14px}
+.sq .qopts-radio{margin-top:6px;display:flex;gap:14px;flex-wrap:wrap}
+.sq .qopts-radio label{display:flex;align-items:center;gap:4px;font-size:13px;color:var(--ink-light);cursor:default}
+.sq .q6-resp{margin-top:10px;padding:10px;background:var(--bg-soft);border:1px solid var(--line-soft);border-radius:6px}
+.sq .q6-resp .q6-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:13px}
+.sq .q6-resp .q6-row:last-child{margin-bottom:0}
+.sq .q6-resp select{height:30px;border:1px solid var(--line);border-radius:4px;padding:0 6px;font-size:13px;background:#fff}
+
+/* ===== 頂欄 ===== */
+.topbar{display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 24px;
+  background:linear-gradient(180deg,var(--blue-light),var(--blue-dark));color:#fff;position:sticky;top:0;z-index:50}
+.logo{display:flex;align-items:center;gap:8px;font-size:22px;font-weight:700;letter-spacing:4px}
+.logo .mark{display:inline-flex;width:26px;height:26px;border:2px solid #fff;border-radius:5px;align-items:center;justify-content:center;font-size:14px;letter-spacing:0}
+.topnav{display:flex;align-items:center;gap:0;font-size:15px}
+.topnav a{color:#fff;text-decoration:none;padding:4px 14px;border-left:1px solid rgba(255,255,255,.55);white-space:nowrap}
+.topnav a:first-child{border-left:none}
+.topnav a.active{font-weight:700}
+.user{display:flex;align-items:center;gap:14px;margin-left:14px}
+.user .who{display:flex;align-items:center;gap:6px}
+.user .avatar{width:22px;height:22px;border:1.6px solid #fff;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px}
+.btn-logout{background:transparent;border:1.5px solid #fff;color:#fff;border-radius:6px;padding:5px 14px;font-size:14px}
+
+/* ===== 版面 ===== */
+.wrap{max-width:1180px;margin:0 auto;padding:28px 32px 80px}
+.crumb{font-size:13px;color:var(--ink-light);margin-bottom:6px}
+.crumb b{color:var(--blue)}
+h1.page-title{text-align:center;font-size:28px;font-weight:400;color:#7C8790;margin:10px 0 4px}
+.required-note{text-align:right;font-size:13px;color:var(--ink-light);margin-bottom:8px}
+.star{color:var(--blue);margin-right:4px}
+
+/* ===== 基本資訊列 ===== */
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:18px 32px;padding:18px 20px;border:1px solid var(--line-soft);border-radius:8px;background:#fff;margin-bottom:26px}
+.field label{display:block;font-weight:600;margin-bottom:8px}
+.field input[type=text],.field select{width:100%;height:40px;border:1px solid var(--line);border-radius:5px;padding:0 12px;background:#fff}
+.field input::placeholder{color:#B9C1C9}
+.field .readonly{background:var(--bg-soft);color:var(--ink)}
+.radios{display:flex;align-items:center;gap:22px;height:40px}
+.radios label{display:flex;align-items:center;gap:6px;font-weight:400;margin:0}
+
+/* ===== Part 區卡片 ===== */
+.part{border:1px solid var(--line-soft);border-radius:8px;margin-bottom:26px;background:#fff;overflow:hidden}
+.part-head{display:flex;align-items:baseline;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line-soft);background:var(--bg-soft)}
+.part-head .no{font-size:13px;color:var(--ink-light);letter-spacing:1px}
+.part-head h2{font-size:18px;color:var(--blue);font-weight:700}
+.part-head .hint{font-size:13px;color:var(--ink-light)}
+.part-body{padding:18px 20px}
+
+/* ===== 台詞行 ===== */
+.lines{display:flex;flex-direction:column;gap:8px}
+.line{display:flex;align-items:center;gap:10px;padding:6px 8px;border:1px solid var(--line-soft);border-radius:6px;background:#fff}
+.line.dragging{opacity:.45}
+.line.drop-above{box-shadow:0 -2px 0 var(--blue)}
+.line.drop-below{box-shadow:0 2px 0 var(--blue)}
+.grip{cursor:grab;color:#B9C1C9;font-size:15px;user-select:none;padding:0 2px;letter-spacing:-2px}
+.tag{flex:none;width:52px;text-align:center;font-size:13px;font-weight:600;border-radius:4px;padding:4px 0;border:1px solid}
+.tag-script{color:var(--blue);border-color:#BCD9F2;background:#F0F7FD}
+.line select.scriptsel{flex:1;height:36px;min-width:0;border:1px solid var(--line);border-radius:5px;padding:0 8px;background:#F0F7FD;text-overflow:ellipsis}
+.field .src{font-size:12px;color:var(--ink-light);margin-top:6px}
+.field .src a{color:var(--blue);text-decoration:none}
+.line .del{flex:none;width:26px;height:26px;border:none;background:transparent;color:#B9C1C9;font-size:17px;border-radius:50%;line-height:1}
+.line .del:hover{color:var(--danger);background:#FBEDEC}
+.add-bar{display:flex;gap:10px;margin-top:12px}
+.btn-add{border:1px dashed var(--blue);color:var(--blue);background:#fff;border-radius:6px;padding:6px 16px;font-size:14px}
+.btn-add:hover{background:#F0F7FD}
+
+/* ===== 主流程區塊 ===== */
+.block{border:1px solid var(--line);border-radius:8px;margin-bottom:16px;background:#fff}
+.block.dragging{opacity:.45}
+.block.drop-above{box-shadow:0 -2px 0 var(--blue)}
+.block.drop-below{box-shadow:0 2px 0 var(--blue)}
+.block-head{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg-soft);border-bottom:1px solid var(--line-soft);border-radius:8px 8px 0 0}
+.block-head .bname{font-weight:700;color:var(--blue);border:none;background:transparent;font-size:15px;width:200px}
+.block-head .bname:focus{outline:1px solid var(--line);border-radius:4px;background:#fff}
+.block-head .sp{flex:1}
+.block-head .del-block{border:none;background:transparent;color:#B9C1C9;font-size:14px}
+.block-head .del-block:hover{color:var(--danger)}
+.block-body{padding:14px}
+.btn-add-block{width:100%;border:1px dashed var(--blue);color:var(--blue);background:#fff;border-radius:8px;padding:10px 0;font-size:15px}
+.btn-add-block:hover{background:#F0F7FD}
+
+/* ===== 回應設定 ===== */
+.resp-title{font-size:14px;font-weight:700;color:var(--ink);margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+.resp-title::before{content:"";width:4px;height:14px;background:var(--blue);border-radius:2px}
+.resps{display:flex;flex-direction:column;gap:8px}
+.resp{display:flex;align-items:center;gap:10px;background:var(--bg-soft);border:1px solid var(--line-soft);border-radius:6px;padding:8px 10px;flex-wrap:wrap}
+.resp .arrow{color:var(--ink-light)}
+.resp select{height:34px;border:1px solid var(--line);border-radius:5px;padding:0 8px;background:#fff}
+.resp .del{border:none;background:transparent;color:#B9C1C9;font-size:16px}
+.resp .del:hover{color:var(--danger)}
+.resp .module{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-light)}
+.resp .skillset{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-light)}
+.resp input.skill-code{width:130px;height:34px;border:1px solid var(--line);border-radius:5px;padding:0 10px;background:#fff}
+.resp .action-script{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-light)}
+.resp .action-script select{min-width:180px}
+.resp-sub .sub-script{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-light)}
+.resp-sub .sub-script select{min-width:160px}
+.resp select.rintent{height:34px;border:1px solid var(--line);border-radius:5px;padding:0 8px;background:#fff;min-width:130px}
+.resp select.resp-action{min-width:180px}
+.resp .goto{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-light)}
+.resp .goto .goto-block{max-width:230px}
+.resp .inbound-set{flex-basis:100%;display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px;padding:8px 10px;background:#fff;border:1px dashed var(--line);border-radius:6px}
+.resp .inbound-set label{font-size:13px;font-weight:600;color:var(--blue);white-space:nowrap}
+.resp .inbound-set input.inbound-text{flex:1;min-width:260px;height:34px;border:1px solid var(--line);border-radius:5px;padding:0 10px;background:#fff}
+.resp .inbound-set .note{flex-basis:100%;font-size:12px;color:var(--ink-light)}
+.hidden{display:none!important}
+.btn-add-resp{align-self:flex-start;border:1px dashed var(--ink-light);color:var(--ink-light);background:#fff;border-radius:6px;padding:5px 14px;font-size:13px;margin-top:8px}
+.btn-add-resp:hover{color:var(--blue);border-color:var(--blue)}
+
+/* ===== 回應子欄位（聽不懂/閒置 threshold） ===== */
+.resp-sub{flex-basis:100%;display:flex;flex-direction:column;gap:6px;margin-top:6px;padding:8px 10px;background:#fff;border:1px dashed var(--line);border-radius:6px}
+.resp-sub .sub-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.resp-sub .sub-label{font-size:13px;font-weight:600;color:var(--blue);white-space:nowrap;min-width:150px}
+.resp-sub select{height:34px;border:1px solid var(--line);border-radius:5px;padding:0 8px;background:#fff}
+.resp-sub .skillset{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-light)}
+.resp-sub input.skill-code{width:130px;height:34px;border:1px solid var(--line);border-radius:5px;padding:0 10px;background:#fff}
+
+/* ===== 共用回應判斷 ===== */
+.shared-checks{margin-top:14px;padding:10px 14px;background:#FBFCFD;border:1px solid var(--line-soft);border-radius:6px}
+.shared-checks .sc-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.shared-checks .sc-title .sc-hint{font-weight:400;color:var(--ink-light);margin-left:8px;font-size:12px}
+.shared-checks .sc-items{display:flex;gap:22px;flex-wrap:wrap}
+.shared-checks label{display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer}
+
+/* ===== 變數對照表 ===== */
+.var-legend{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding:10px 16px;background:var(--var-bg);border:1px solid var(--var-line);border-radius:8px;margin:-12px 0 26px;font-size:13px}
+.var-legend .vl-title{font-weight:700;color:var(--var-ink)}
+.var-legend .vl-item{color:var(--var-ink)}
+.var-legend .vl-item b{font-weight:700;margin-right:2px}
+.var-legend .vl-note{color:var(--ink-light);flex-basis:100%}
+
+/* ===== 語音預覽 ===== */
+.preview{margin-top:14px;background:#F0F7FD;border:1px solid #D7E9F8;border-radius:6px;padding:10px 14px;font-size:14px;line-height:2}
+.preview .pv-label{font-size:12px;color:var(--blue);font-weight:700;margin-right:8px}
+.preview .chip-var{display:inline-block;background:var(--var-bg);border:1px solid var(--var-line);color:var(--var-ink);border-radius:4px;padding:0 6px;margin:0 2px;font-size:13px}
+.preview .pv-empty{color:#B9C1C9}
+
+/* ===== 底部按鈕 ===== */
+.actions{display:flex;justify-content:center;gap:18px;margin-top:34px}
+.btn-pill{border:none;border-radius:999px;padding:10px 38px;font-size:16px;color:#fff;
+  background:linear-gradient(180deg,var(--blue-light),var(--blue-dark));box-shadow:0 2px 4px rgba(63,134,204,.35)}
+.btn-pill:hover{filter:brightness(1.05)}
+.btn-pill.ghost{background:#fff;color:var(--blue);border:1.5px solid var(--blue);box-shadow:none}
+.toast{position:fixed;left:50%;bottom:40px;transform:translateX(-50%) translateY(20px);background:rgba(60,70,80,.92);color:#fff;
+  padding:10px 26px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.25s}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media (max-width:900px){
+  .topnav{display:none}
+  .meta{grid-template-columns:1fr}
+  .wrap{padding:20px 16px 70px}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo"><span class="mark">M</span>MANAGE</div>
+  <nav class="topnav">
+    <a href="#">帳號維護</a><a href="#">系統服務</a><a href="#">大腦日誌分析</a>
+    <a href="#">ChatWeb管理</a><a href="#" class="active">批次管理</a>
+    <a href="#">權限管理</a><a href="#">訊息通知管理</a>
+  </nav>
+  <div class="user">
+    <span class="who"><span class="avatar">&#x1F464;</span>超級管理員1</span>
+    <button class="btn-logout">登出</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="crumb">批次管理 ＞ 外撥語音流程管理 ＞ <b id="crumb-cur">樣板設定</b></div>
+  <h1 class="page-title" id="page-title">樣板設定</h1>
+  <div class="required-note"><span class="star">★</span>為必填欄位</div>
+
+  <!-- 基本資訊 -->
+  <section class="meta">
+    <div class="field">
+      <label>流程編號</label>
+      <input type="text" class="readonly" id="flow-no" value="" readonly>
+      <div class="src">由系統自動編號，為唯一值，用於與IVR廠商串接，新增後不可修改</div>
+    </div>
+    <div class="field">
+      <label><span class="star">★</span>業務流程名稱</label>
+      <input type="text" id="flow-name" value="" placeholder="請輸入業務流程名稱">
+    </div>
+    <div class="field">
+      <label><span class="star">★</span>樣板類型</label>
+      <select id="tpl-type">
+        <option>滿意度類</option>
+        <option>客戶意願確認轉真人服務類</option>
+        <option>業務資訊通知類</option>
+      </select>
+      <div class="src">選單值來源：<a href="#">系統參數管理</a>（需先新增參數類別與參數值）｜切換類型後，下方欄位將依樣板結構重載</div>
+    </div>
+    <div class="field">
+      <label><span class="star">★</span>是否啟用</label>
+      <div class="radios">
+        <label><input type="radio" name="enabled" checked> 啟用</label>
+        <label><input type="radio" name="enabled"> 不啟用</label>
+      </div>
+    </div>
+    <div class="field" id="fld-survey-code" hidden>
+      <label><span class="star">★</span>問卷代碼</label>
+      <select id="survey-code">
+        <option value="Q001">Q001｜財富管理客戶滿意度調查</option>
+        <option value="Q002">Q002｜信用卡服務滿意度調查</option>
+      </select>
+      <div class="src">用於對應本流程使用之問卷題目與選項（定期自IVR取回）｜切換時下方題目即時更新</div>
+    </div>
+  </section>
+
+  <!-- 依樣板類型動態產生 -->
+  <div id="dyn"></div>
+
+  <div class="actions">
+    <button class="btn-pill ghost" id="btn-cancel">取消</button>
+    <button class="btn-pill" id="btn-save">儲存</button>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   TEMPLATES 種子資料
+   ===================================================================== */
+var TEMPLATES = {
+
+  "滿意度類": {
+    flowNo: "OB-2026-0003",
+    flowName: "財富管理客戶滿意度調查",
+    vars: [{"code":"p1","name":"客戶姓名"}],
+    scripts: [
+      {"code":"S001","text":"您好，這裡是華南銀行客服中心，請問您是{p1}先生/小姐嗎？"},
+      {"code":"S003","text":"請您以1~5分評分，滿意程度愈高，分數愈高"},
+      {"code":"S021","text":"{p1}小姐/先生您好，首先非常感謝您長期以來對華南銀行的支持，為了給您更好的服務，可否耽誤您幾分鐘進行「財富管理客戶滿意度調查」呢？"},
+      {"code":"S025","text":"問卷到此結束，您珍貴的意見，是我們進步的動力，再次表示衷心的感謝。"},
+      {"code":"S026","text":"問卷到此結束，請問您是否還有其他意見想反應？將為您轉接真人。"},
+      {"code":"S030","text":"請您稍候，將為您轉接線上智能客服，謝謝！"}
+    ],
+    surveys: [
+      {"code":"Q001","name":"財富管理客戶滿意度調查","questions":[
+        {"type":"單選題","text":"您對理專的服務態度滿意程度1~5分"},
+        {"type":"單選題","text":"您對理專的專業能力滿意程度1~5分"},
+        {"type":"單選題","text":"您對理專說明商品內容與風險的清楚程度滿意程度1~5分"},
+        {"type":"單選題","text":"您對理專主動關心您投資狀況的頻率滿意程度1~5分"},
+        {"type":"單選題","text":"整體而言，您對本行財富管理服務滿意程度1~5分"},
+        {"type":"問答題","text":"請問您是否有對於本行的建議可以幫您轉接真人客服，請問需要轉接真人客服嗎？"}
+      ]},
+      {"code":"Q002","name":"信用卡服務滿意度調查","questions":[
+        {"type":"單選題","text":"您對本行信用卡客服人員的服務態度滿意程度1~5分"},
+        {"type":"單選題","text":"您對本行信用卡優惠活動的內容滿意程度1~5分"},
+        {"type":"單選題","text":"請問您最常使用本行信用卡的消費類別？","options":["1. 日常生活消費（超市、量販）","2. 網路購物","3. 旅遊交通","4. 餐飲娛樂"]}
+      ]}
+    ],
+    surveyCode: "Q001",
+    actions: ["進入問卷（主流程）","再聽一次（重複本區塊）","轉真人","轉inbound","留電","結束通話（播放感謝台詞後掛斷）"],
+    part1: {
+      blocks: [
+        {name:"開場白", lines:["S001"],
+          resps:[["是","進入問卷（主流程）"],["否","結束通話（播放感謝台詞後掛斷）"]],
+          checks:{"閒置":true,"抱怨負面情緒":false,"聽不懂":true,"結束":false,"其他時間再聯絡":true}}
+      ]
+    },
+    part2: {
+      kind: "survey",
+      title: "問卷套用區",
+      hint: "問卷代碼於基本資訊區輸入後自動對應題目與選項｜問卷內容若有修改時將即時更新，此處僅供預覽",
+      surveyScript: "S003",
+      endDone: "S025", endHuman: "S030", endSkill: "",
+      checks:{"閒置":true,"抱怨負面情緒":false,"聽不懂":true,"結束":false,"其他時間再聯絡":false}
+    },
+    part3: null
+  },
+
+  "客戶意願確認轉真人服務類": {
+    flowNo: "OB-2026-0001",
+    flowName: "電子帳單退件通知",
+    vars: [{"code":"p1","name":"客戶姓名"},{"code":"p2","name":"客戶帳單電子郵件地址"}],
+    scripts: [
+      {"code":"OBCCE001","text":"您好，這裡是華南銀行客服中心，請問您是{p1}先生/小姐嗎？"},
+      {"code":"OBCCE002","text":"{p1}先生/小姐您好，為保障您的權益，以下通話內容會全程錄音。感謝您對華南銀行的愛護及申請信用卡電子帳單服務，但因寄送電子帳單後有被退回的情形，為確保您的權益，再次與您確認資料的正確性，請問您電子帳單的E-mail是{p2}，資料正確嗎？"},
+      {"code":"OBCCE003","text":"抱歉！打擾您了，謝謝再見！"},
+      {"code":"OBCCE004","text":"為了不耽誤您寶貴時間，以下說明自行修改路徑：網路銀行/華南銀行+APP，請問需要轉真人服務或是再聽一次？"},
+      {"code":"OBCCE005","text":"謝謝您的回覆，請問是否需要再次寄送帳單到您的信箱？"},
+      {"code":"OBCCE006","text":"好的，謝謝您的回覆，日後請再留意是否有收到電子帳單，若有需要服務的地方，歡迎您隨時與我們聯繫，謝謝再見！"},
+      {"code":"OBCCE007","text":"馬上為您轉接線上智能客服開始申請流程"},
+      {"code":"OBCCE008","text":"馬上為您轉接專人服務"}
+    ],
+    surveys: [],
+    actions: null,
+    part1: {
+      blocks: [
+        {name:"開場白", lines:["OBCCE001"],
+          resps:[["是","進入主流程區"],["否","結束通話（進入結束台詞區）","OBCCE003"]],
+          checks:{"閒置":true,"抱怨負面情緒":false,"聽不懂":true,"結束":false,"其他時間再聯絡":false}}
+      ]
+    },
+    part2: {
+      kind: "blocks",
+      title: "主流程區",
+      hint: "依客戶回應分歧至不同區塊｜可新增區塊並更名，用於「前往指定區塊」選單",
+      resp: 1,
+      blocks: [
+        {name:"區塊1－確認Email正確性", lines:["OBCCE002"],
+          resps:[["是","前往指定區塊","區塊2－詢問是否補寄帳單"],["否","前往指定區塊","區塊3－說明自行修改路徑"]],
+          checks:{"閒置":true,"抱怨負面情緒":true,"聽不懂":true,"結束":true,"其他時間再聯絡":true}},
+        {name:"區塊2－詢問是否補寄帳單", lines:["OBCCE005"],
+          resps:[["是","轉inbound",""],["否","結束通話（進入結束台詞區）","OBCCE006"]],
+          checks:{"閒置":true,"抱怨負面情緒":true,"聽不懂":true,"結束":true,"其他時間再聯絡":true}},
+        {name:"區塊3－說明自行修改路徑", lines:["OBCCE004"],
+          resps:[["轉真人","轉真人","SK001"],["聽不懂","再聽一次（重複本區塊）"]],
+          checks:{"閒置":true,"抱怨負面情緒":true,"聽不懂":true,"結束":true,"其他時間再聯絡":true}}
+      ]
+    },
+    part3: {
+      blocks: [
+        {name:"非本人結束情境", lines:["OBCCE003"]},
+        {name:"一般結束情境", lines:["OBCCE006"]},
+        {name:"轉真人情境", lines:["OBCCE008"]}
+      ]
+    }
+  },
+
+  "業務資訊通知類": {
+    flowNo: "OB-2026-0002",
+    flowName: "信用卡年費到期",
+    vars: [
+      {"code":"p1","name":"客戶姓名"},{"code":"p2","name":"信用卡別中文名稱"},
+      {"code":"p3","name":"信用卡年費產生年"},{"code":"p4","name":"年費到期月"},
+      {"code":"p5","name":"繳費期限月"},{"code":"p6","name":"繳費期限日"},
+      {"code":"p7","name":"應消費筆數"}
+    ],
+    scripts: [
+      {"code":"S001","text":"您好，這裡是華南銀行客服中心，請問您是{p1}先生/小姐嗎？"},
+      {"code":"S011","text":"{p1}小姐/先生您好，為保障您的權益，以下通話全程錄音，感謝您對華南銀行的支持與愛護，提醒您持有的{p2}信用卡\\簽帳卡年費優惠即將於{p3}年{p4}月到期，請於{p5}月{p6}日前刷卡消費{p7}筆不限金額，即可繼續享有免年費及多項優惠權益，那再麻煩您留意在期限內刷卡消費。"},
+      {"code":"S018","text":"若日後有任何需要服務的地方，歡迎隨時撥打24小時客服專線，謝謝您，再見！"},
+      {"code":"S030","text":"請您稍候，將為您轉接線上智能客服，謝謝！"}
+    ],
+    surveys: [],
+    actions: ["播放通知內容（主流程）","再聽一次（重複本區塊）","轉真人","轉inbound","留電","結束通話（進入結束台詞區）"],
+    part1: {
+      blocks: [
+        {name:"開場白", lines:["S001"],
+          resps:[["是","播放通知內容（主流程）"],["否","結束通話（進入結束台詞區）"]],
+          checks:{"閒置":true,"抱怨負面情緒":false,"聽不懂":true,"結束":false,"其他時間再聯絡":false}}
+      ]
+    },
+    part2: {
+      kind: "notice",
+      title: "通知內容區",
+      hint: "確認本人後播放通知內容，逐行依序播放，播畢即進入結束台詞並掛斷｜固定單一內容區，無主流程區塊",
+      lines: ["S011"]
+    },
+    part3: {
+      blocks: [
+        {name:"結束台詞（播畢即掛斷）", lines:["S018"]}
+      ]
+    }
+  }
+};
+
+/* =====================================================================
+   共用互動邏輯
+   ===================================================================== */
+(function(){
+  function VARS(){return window.FLOW_VARS||[];}
+  function SCRIPTS(){return window.FLOW_SCRIPTS||[];}
+  function ACTIONS(){return window.FLOW_ACTIONS||['進入主流程區','前往指定區塊','再聽一次（重複本區塊）','轉真人','轉inbound','留電','結束通話（進入結束台詞區）'];}
+  var RESP_INTENTS=['是','否','轉真人','抱怨負面情緒','聽不懂','閒置','結束','再連絡','掛斷'];
+  var CHECK_KEYS=['閒置','抱怨負面情緒','聽不懂','結束','其他時間再聯絡'];
+  var INTENT_DEFAULTS={'轉真人':'轉真人','抱怨負面情緒':'轉真人','再連絡':'留電'};
+  function getEndAction(){var a=ACTIONS();for(var i=a.length-1;i>=0;i--){if(a[i].indexOf('結束通話')===0)return a[i];}return '結束通話（進入結束台詞區）';}
+  function resolveDefault(intent){if(intent==='結束'||intent==='掛斷')return getEndAction();return INTENT_DEFAULTS[intent]||'';}
+  var THRESHOLD_INTENTS=['聽不懂','閒置'];
+  var CHECK_TO_INTENT={'其他時間再聯絡':'再連絡'};
+
+  function flowNameNow(){var f=document.getElementById('flow-name');return f?f.value:'';}
+  function el(html){var t=document.createElement('template');t.innerHTML=html.trim();return t.content.firstChild;}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+
+  /* ---- 台詞 ---- */
+  function scriptOptions(sel){
+    return '<option value="" disabled'+(sel?'':' selected')+'>請選擇台詞</option>'+
+      SCRIPTS().map(function(s){
+        return '<option value="'+esc(s.code)+'"'+(s.code===sel?' selected':'')+' title="'+esc(s.text)+'">'+esc(s.code)+'｜'+esc(s.text)+'</option>';
+      }).join('');
+  }
+  function scriptLineHTML(code){
+    return '<div class="line" draggable="true"><span class="grip">&#x2807;</span><span class="tag tag-script">台詞</span>'+
+      '<select class="scriptsel">'+scriptOptions(code||'')+'</select>'+
+      '<button class="del" title="刪除">&times;</button></div>';
+  }
+  function scriptLine(code){return el(scriptLineHTML(code));}
+  function chipify(text){
+    return esc(text).replace(/\{(p\d+)\}/g,function(_,code){
+      var hit=VARS().filter(function(v){return v.code===code;})[0];
+      return '<span class="chip-var">{'+code+'}'+(hit?' '+esc(hit.name):'')+'</span>';
+    });
+  }
+
+  /* ---- 預覽 ---- */
+  function refreshPreview(scope){
+    var pv=scope.querySelector('.preview');
+    if(!pv)return;
+    var out=[];
+    scope.querySelectorAll('.line').forEach(function(l){
+      var ss=l.querySelector('.scriptsel');if(!ss)return;
+      var hit=SCRIPTS().filter(function(s){return s.code===ss.value;})[0];
+      if(hit)out.push(chipify(hit.text));
+    });
+    pv.innerHTML='<span class="pv-label">語音預覽</span>'+(out.length?out.join(' '):'<span class="pv-empty">尚未輸入內容</span>');
+  }
+  function refreshAllPreviews(){document.querySelectorAll('[data-preview-scope]').forEach(refreshPreview);}
+
+  /* ---- 每區塊最多一行台詞 ---- */
+  function refreshAddLineButtons(){
+    document.querySelectorAll('[data-lines-owner]').forEach(function(owner){
+      var btn=owner.querySelector('.btn-add');
+      if(!btn)return;
+      btn.style.display=(owner.querySelectorAll('.lines .line').length>=1)?'none':'';
+    });
+  }
+
+  /* ---- 拖拉排序 ---- */
+  var dragEl=null;
+  function bindDnD(container,itemSel){
+    if(!container||container.dataset.dnd)return;
+    container.dataset.dnd='1';
+    container.addEventListener('dragstart',function(e){
+      var it=e.target.closest(itemSel);if(!it||!container.contains(it))return;
+      dragEl=it;it.classList.add('dragging');e.dataTransfer.effectAllowed='move';
+      try{e.dataTransfer.setData('text/plain','');}catch(_){}
+    });
+    container.addEventListener('dragover',function(e){
+      if(!dragEl)return;var over=e.target.closest(itemSel);
+      if(!over||over===dragEl||!container.contains(over))return;
+      e.preventDefault();var r=over.getBoundingClientRect();var before=(e.clientY-r.top)<r.height/2;
+      container.querySelectorAll(itemSel).forEach(function(x){x.classList.remove('drop-above','drop-below');});
+      over.classList.add(before?'drop-above':'drop-below');
+      over.parentNode.insertBefore(dragEl,before?over:over.nextSibling);
+    });
+    ['drop','dragend'].forEach(function(ev){
+      container.addEventListener(ev,function(){
+        if(dragEl)dragEl.classList.remove('dragging');
+        container.querySelectorAll(itemSel).forEach(function(x){x.classList.remove('drop-above','drop-below');});
+        dragEl=null;refreshAllPreviews();refreshBlockOptions();
+      });
+    });
+  }
+  function bindAllDnD(){
+    document.querySelectorAll('.lines').forEach(function(c){bindDnD(c,'.line');});
+    document.querySelectorAll('[data-blocks]').forEach(function(c){bindDnD(c,'.block');});
+  }
+
+  /* ---- action options HTML ---- */
+  function actionOptions(sel){
+    return ACTIONS().map(function(a){return '<option'+(a===sel?' selected':'')+'>'+esc(a)+'</option>';}).join('');
+  }
+
+  /* ---- 回應設定列 ---- */
+  function isEndAct(v){return v&&v.indexOf('結束通話')===0;}
+  function respRow(label,action,extra,opts){
+    opts=opts||{};
+    var isThreshold=(THRESHOLD_INTENTS.indexOf(label)>=0);
+    var iopts='<option value="" disabled'+(label?'':' selected')+'>請選擇意圖</option>'+
+      RESP_INTENTS.map(function(x){return '<option'+(x===label?' selected':'')+'>'+esc(x)+'</option>';}).join('');
+    var isGoto=(action==='前往指定區塊'),isInbound=(action==='轉inbound'),isHuman=(action==='轉真人'),isEnd=isEndAct(action);
+    var cs=opts.checkSource?' data-check-source="'+esc(opts.checkSource)+'"':'';
+
+    var html='<div class="resp"'+cs+'><span style="font-size:13px;color:#8C9BA5">客戶回應</span>'+
+      '<select class="rintent">'+iopts+'</select><span class="arrow">&rarr;</span>';
+
+    if(isThreshold){
+      var sb=opts.subBefore||'再聽一次（重複本區塊）';
+      var sa=opts.subAfter||'轉真人';
+      var sk=opts.subSkill||'';
+      var saScript=opts.subAfterScript||'';
+      var l1=(label==='聽不懂')?'未達次數動作':'達閒置標準後動作';
+      var l2=(label==='聽不懂')?'達次數後動作':'達閒置次數後動作';
+      html+='<span style="font-size:13px;color:var(--ink-light)">依次數判斷</span>'+
+        '<button class="del" title="刪除">&times;</button>'+
+        '<div class="resp-sub"><div class="sub-row"><span class="sub-label">'+l1+'</span>'+
+          '<select class="sub-action-before">'+actionOptions(sb)+'</select>'+
+          '<span class="skillset hidden">skills代碼：<input class="skill-code" type="text" placeholder="如：SK001"></span>'+
+          '<span class="sub-script hidden">台詞：<select class="sub-script-sel">'+scriptOptions('')+'</select></span></div>'+
+        '<div class="sub-row"><span class="sub-label">'+l2+'</span>'+
+          '<select class="sub-action-after">'+actionOptions(sa)+'</select>'+
+          '<span class="skillset'+(sa==='轉真人'?'':' hidden')+'">skills代碼：'+
+            '<input class="skill-code" type="text" placeholder="如：SK001" value="'+esc(sk)+'"></span>'+
+          '<span class="sub-script'+(sa==='轉真人'||isEndAct(sa)?'':' hidden')+'">台詞：<select class="sub-script-sel">'+scriptOptions(saScript)+'</select></span></div></div>';
+    } else {
+      var humanExtra=isHuman?(extra||'').split('|'):['',''];
+      var showScript=isHuman||isEnd;
+      var scriptVal=isHuman?humanExtra[1]:(isEnd?(extra||''):'');
+      html+='<select class="resp-action">'+actionOptions(action)+'</select>'+
+        '<span class="goto'+(isGoto?'':' hidden')+'">目標區塊：<select class="goto-block" data-want="'+esc(isGoto?(extra||''):'')+'"></select></span>'+
+        '<span class="skillset'+(isHuman?'':' hidden')+'">skills代碼：<input class="skill-code" type="text" placeholder="如：SK001" value="'+esc(isHuman?humanExtra[0]:'')+'"></span>'+
+        '<span class="action-script'+(showScript?'':' hidden')+'">台詞：<select class="action-script-sel">'+scriptOptions(scriptVal)+'</select></span>'+
+        '<button class="del" title="刪除">&times;</button>'+
+        '<div class="inbound-set'+(isInbound?'':' hidden')+'"><label>轉inbound帶入語句</label>'+
+          '<input class="inbound-text" type="text" placeholder="將送至一案總機判斷流程走向" value="'+esc(isInbound?(extra||flowNameNow()):'')+'">'+
+          '<span class="note">預設帶入業務流程名稱，可修改</span></div>';
+    }
+    html+='</div>';
+    return el(html);
+  }
+
+  /* ---- 目標區塊選單 ---- */
+  function refreshBlockOptions(){
+    var names=[];
+    document.querySelectorAll('[data-blocks] .block .bname').forEach(function(n){if(n.value.trim())names.push(n.value.trim());});
+    document.querySelectorAll('select.goto-block').forEach(function(sel){
+      var want=sel.value||sel.dataset.want||'';
+      sel.innerHTML='<option value="" disabled'+(want?'':' selected')+'>請選擇目標區塊</option>'+
+        names.map(function(nm){return '<option'+(nm===want?' selected':'')+'>'+esc(nm)+'</option>';}).join('');
+    });
+  }
+
+  /* ---- 新增區塊 ---- */
+  function addBlock(partBody){
+    var count=partBody.querySelectorAll('.block').length+1;
+    var withResp=(partBody.dataset.resp==='1');
+    var b=el('<div class="block" draggable="true" data-lines-owner data-preview-scope'+(withResp?' data-resp-owner':'')+'>'+
+      '<div class="block-head"><span class="grip">&#x2807;</span><input class="bname" value="區塊'+count+'"><span class="sp"></span>'+
+      '<button class="del-block">刪除區塊 &times;</button></div>'+
+      '<div class="block-body"><div class="lines"></div>'+
+      '<div class="add-bar"><button class="btn-add" data-type="script">＋ 台詞</button></div>'+
+      (withResp?'<div class="resp-title">回應設定（依客戶回應決定下一步）</div><div class="resps"></div>'+
+        '<button class="btn-add-resp">＋ 新增回應選項</button>'+checksHTML({}):'')+
+      '<div class="preview"></div></div></div>');
+    partBody.insertBefore(b,partBody.querySelector('.btn-add-block'));
+    refreshPreview(b);bindDnD(b.querySelector('.lines'),'.line');refreshBlockOptions();refreshAddLineButtons();
+  }
+
+  /* ---- 問卷預覽（DTMF/非DTMF 雙頁籤） ---- */
+  function renderSurvey(){
+    var box=document.getElementById('survey-preview');if(!box)return;
+    var inp=document.getElementById('survey-code');
+    var code=(inp?inp.value:'').replace(/\s+/g,'');
+    if(!code){box.innerHTML='<div class="survey-empty">請於基本資訊區輸入「問卷代碼」</div>';return;}
+    var svy=(window.FLOW_SURVEYS||[]).filter(function(s){return s.code===code;})[0];
+    if(!svy){box.innerHTML='<div class="survey-empty">查無問卷代碼「'+esc(code)+'」（示意：Q001、Q002）</div>';return;}
+    var endAct=getEndAction();
+    var sopts=scriptOptions(window._surveyScriptSel||'');
+    function qHTML(q,i,dtmf){
+      var body='';
+      if(q.type==='單選題'){
+        if(q.options){
+          /* 有自訂選項的單選題 */
+          if(dtmf) body='<div class="qopts-radio">'+q.options.map(function(o){return '<label><input type="radio" disabled> '+o+'</label>';}).join('')+'</div>';
+          else body='<div class="qopts">'+q.options.map(function(o){return '<div>'+o+'</div>';}).join('')+'</div>';
+        } else {
+          /* 1~5分評分 */
+          if(dtmf) body='<div class="qopts-radio"><label><input type="radio" disabled> 1分</label><label><input type="radio" disabled> 2分</label><label><input type="radio" disabled> 3分</label><label><input type="radio" disabled> 4分</label><label><input type="radio" disabled> 5分</label></div>';
+          else body='<div class="qopts"><div>客戶以語音回答，系統判斷是否在選項範圍內</div></div>';
+        }
+      } else {
+        body='<div class="qopts"><div style="color:var(--blue)">→ 依客戶回應於下方「問卷處理機制」區對應處理</div></div>';
+      }
+      var tclass=(q.type==='單選題')?'rate':'choice';
+      return '<div class="sq"><span class="qno">Q'+(i+1)+'</span><div class="qbody"><span class="qtype '+tclass+'">'+q.type+'</span><span class="qtext">'+q.text+'</span>'+body+'</div></div>';
+    }
+    var dtmfQs=svy.questions.map(function(q,i){return qHTML(q,i,true);}).join('');
+    var nlQs=svy.questions.map(function(q,i){return qHTML(q,i,false);}).join('');
+    box.innerHTML='<div class="sp-head">'+svy.name+'<span class="cnt">問卷代碼 '+svy.code+'｜共 '+svy.questions.length+' 題</span></div>'+
+      '<div class="survey-tabs"><span class="tab active" data-tab="dtmf">DTMF開啟</span><span class="tab" data-tab="nl">DTMF未開啟</span></div>'+
+      '<div class="survey-tab-body" data-tab-body="dtmf">'+dtmfQs+'</div>'+
+      '<div class="survey-tab-body" data-tab-body="nl" style="display:none">'+nlQs+'</div>';
+  }
+
+  /* ---- 意圖連動 ---- */
+  function handleIntentChange(row,intentVal){
+    var isThreshold=(THRESHOLD_INTENTS.indexOf(intentVal)>=0);
+    var sub=row.querySelector('.resp-sub');
+    if(isThreshold){
+      var parent=row.parentNode;var cs=row.dataset.checkSource||'';
+      var nr=respRow(intentVal,'','',{subBefore:'再聽一次（重複本區塊）',subAfter:'轉真人',subSkill:'',subAfterScript:'S030',checkSource:cs||undefined});
+      parent.replaceChild(nr,row);refreshSubActionFields(nr);
+    } else if(sub){
+      var parent2=row.parentNode;var cs2=row.dataset.checkSource||'';
+      var da=resolveDefault(intentVal);
+      var nr2=respRow(intentVal,da,'',{checkSource:cs2||undefined});
+      parent2.replaceChild(nr2,row);syncActionFields(nr2);refreshBlockOptions();
+    } else {
+      var rd=resolveDefault(intentVal);
+      if(rd){
+        var as=row.querySelector('.resp-action');
+        if(as){as.value=rd;syncActionFields(row);}
+      }
+    }
+  }
+
+  function syncActionFields(row){
+    var as=row.querySelector('.resp-action');if(!as)return;
+    var v=as.value;
+    var sk=row.querySelector(':scope > .skillset');
+    var sc=row.querySelector('.action-script');
+    var ib=row.querySelector('.inbound-set');
+    var g=row.querySelector('.goto');
+    if(sk)sk.classList.toggle('hidden',v!=='轉真人');
+    if(sc)sc.classList.toggle('hidden',v!=='轉真人'&&!isEndAct(v));
+    if(ib){ib.classList.toggle('hidden',v!=='轉inbound');if(v==='轉inbound'){var it=ib.querySelector('.inbound-text');if(it&&!it.value)it.value=flowNameNow();}}
+    if(g){g.classList.toggle('hidden',v!=='前往指定區塊');refreshBlockOptions();}
+  }
+
+  function refreshSubActionFields(row){
+    var sub=row.querySelector('.resp-sub');if(!sub)return;
+    sub.querySelectorAll('.sub-row').forEach(function(sr){
+      var sel=sr.querySelector('select');
+      var sk=sr.querySelector('.skillset');
+      var sc=sr.querySelector('.sub-script');
+      var v=sel?sel.value:'';
+      if(sk)sk.classList.toggle('hidden',v!=='轉真人');
+      if(sc)sc.classList.toggle('hidden',v!=='轉真人'&&!isEndAct(v));
+    });
+  }
+
+  /* ---- 共用判斷勾選連動 ---- */
+  function handleCheckChange(checkbox,owner){
+    var rawText=checkbox.parentNode.textContent.trim();
+    var intent=CHECK_TO_INTENT[rawText]||rawText;
+    var resps=owner.querySelector('.resps');if(!resps)return;
+    if(checkbox.checked){
+      var exists=false;
+      resps.querySelectorAll('.rintent').forEach(function(sel){if(sel.value===intent)exists=true;});
+      if(exists)return;
+      var isT=(THRESHOLD_INTENTS.indexOf(intent)>=0);
+      var row;
+      if(isT) row=respRow(intent,'','',{subBefore:'再聽一次（重複本區塊）',subAfter:'轉真人',subSkill:'',subAfterScript:'S030',checkSource:rawText});
+      else{var da=resolveDefault(intent)||getEndAction();row=respRow(intent,da,'',{checkSource:rawText});}
+      resps.appendChild(row);syncActionFields(row);refreshSubActionFields(row);refreshBlockOptions();
+    } else {
+      resps.querySelectorAll('[data-check-source="'+rawText+'"]').forEach(function(r){r.remove();});
+    }
+  }
+
+  /* ---- 事件委派 ---- */
+  document.addEventListener('click',function(e){
+    var b;
+    if((b=e.target.closest('.btn-add'))){
+      var owner=b.closest('[data-lines-owner]');var lines=owner.querySelector('.lines');
+      lines.appendChild(scriptLine(''));refreshAllPreviews();refreshAddLineButtons();
+    }
+    if((b=e.target.closest('.line .del'))){b.closest('.line').remove();refreshAllPreviews();refreshAddLineButtons();}
+    if((b=e.target.closest('.del-block'))){if(confirm('確定要刪除此區塊？')){b.closest('.block').remove();refreshBlockOptions();}}
+    if((b=e.target.closest('.btn-add-block'))){addBlock(b.closest('.part-body'));}
+    if((b=e.target.closest('.btn-add-resp'))){
+      var resps=b.closest('[data-resp-owner]').querySelector('.resps');
+      resps.appendChild(respRow('',''));refreshBlockOptions();
+    }
+    if((b=e.target.closest('.resp .del'))){b.closest('.resp').remove();}
+    /* 問卷預覽頁籤切換 */
+    if((b=e.target.closest('.survey-tabs .tab'))&&!b.classList.contains('active')){
+      var tabs=b.parentNode;tabs.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+      b.classList.add('active');var key=b.dataset.tab;
+      var container=tabs.parentNode;
+      container.querySelectorAll('[data-tab-body]').forEach(function(tb){tb.style.display=(tb.dataset.tabBody===key)?'':'none';});
+    }
+    if((b=e.target.closest('#btn-save'))){
+      toast('已儲存設定（示意）');
+    }
+    if((b=e.target.closest('#btn-cancel'))){toast('已取消（示意）');}
+  });
+  document.addEventListener('input',function(e){
+    if(e.target.matches('.bname'))refreshBlockOptions();
+  });
+  document.addEventListener('change',function(e){
+    if(e.target.matches('.scriptsel'))refreshAllPreviews();
+    if(e.target.id==='tpl-type')renderTemplate(e.target.value);
+    if(e.target.id==='survey-code')renderSurvey();
+    if(e.target.id==='survey-script-sel'){window._surveyScriptSel=e.target.value;renderSurvey();}
+    if(e.target.matches('.rintent'))handleIntentChange(e.target.closest('.resp'),e.target.value);
+    if(e.target.matches('.resp-action'))syncActionFields(e.target.closest('.resp'));
+    if(e.target.matches('.sub-action-before')||e.target.matches('.sub-action-after'))refreshSubActionFields(e.target.closest('.resp'));
+    if(e.target.matches('.shared-checks input[type=checkbox]')){
+      var owner=e.target.closest('[data-resp-owner]');if(owner)handleCheckChange(e.target,owner);
+    }
+  });
+
+  /* ===================================================================
+     樣板渲染
+     =================================================================== */
+  function linesHTML(codes){return '<div class="lines">'+codes.map(scriptLineHTML).join('')+'</div>';}
+  function checksHTML(checks){
+    checks=checks||{};
+    return '<div class="shared-checks"><div class="sc-title">共用回應判斷<span class="sc-hint">勾選後自動新增對應意圖與預設處理方式</span></div>'+
+      '<div class="sc-items">'+CHECK_KEYS.map(function(k){return '<label><input type="checkbox"'+(checks[k]?' checked':'')+'> '+k+'</label>';}).join('')+'</div></div>';
+  }
+  function blockHTML(b,opt){
+    opt=opt||{};var hasLine=(b.lines&&b.lines.length>0);
+    return '<div class="block" draggable="true" data-lines-owner data-preview-scope'+(opt.withResp?' data-resp-owner':'')+'>'+
+      '<div class="block-head"><span class="grip">&#x2807;</span><input class="bname" value="'+esc(b.name)+'"><span class="sp"></span>'+
+      (opt.deletable?'<button class="del-block">刪除區塊 &times;</button>':'')+'</div>'+
+      '<div class="block-body">'+linesHTML(b.lines||[])+
+      '<div class="add-bar"><button class="btn-add" data-type="script" style="'+(hasLine?'display:none':'')+'">＋ 台詞</button></div>'+
+      (opt.withResp?'<div class="resp-title">'+(opt.respTitle||'回應設定（依客戶回應決定下一步）')+'</div>'+
+        '<div class="resps"'+(opt.respId?' id="'+opt.respId+'"':'')+'></div>'+
+        '<button class="btn-add-resp">＋ 新增回應選項</button>'+(b.checks!==undefined?checksHTML(b.checks):''):'')+
+      '<div class="preview"></div></div></div>';
+  }
+
+  function renderTemplate(typeName){
+    var t=TEMPLATES[typeName];if(!t)return;
+    window.FLOW_VARS=t.vars;window.FLOW_SCRIPTS=t.scripts;window.FLOW_SURVEYS=t.surveys;window.FLOW_ACTIONS=t.actions;
+
+    document.getElementById('crumb-cur').textContent='樣板設定－'+typeName;
+    document.getElementById('page-title').textContent='樣板設定－'+typeName;
+    document.title='樣板設定－'+typeName+'｜ChatManage';
+    document.getElementById('flow-no').value=t.flowNo;
+    document.getElementById('flow-name').value=t.flowName;
+    var typeSel=document.getElementById('tpl-type');if(typeSel.value!==typeName)typeSel.value=typeName;
+
+    var scField=document.getElementById('fld-survey-code');
+    scField.hidden=(t.part2.kind!=='survey');
+    if(t.part2.kind==='survey')document.getElementById('survey-code').value=t.surveyCode||'';
+
+    var html='';
+
+    /* 變數對照 */
+    html+='<div class="var-legend"><span class="vl-title">變數對照</span>'+
+      t.vars.map(function(v){return '<span class="vl-item"><b>{'+v.code+'}</b>'+esc(v.name)+'</span>';}).join('')+
+      '<span class="vl-note">變數以 {pX} 形式包含於台詞內容中，本頁僅下拉選用台詞。</span></div>';
+
+    /* Part 1 開場白區（多區塊） */
+    html+='<section class="part"><div class="part-head"><span class="no">PART 1</span><h2>開場白區</h2>'+
+      '<span class="hint">每個區塊一句台詞搭配一組回應設定，可新增多個區塊</span></div>'+
+      '<div class="part-body" data-blocks data-resp="1">'+
+      t.part1.blocks.map(function(b,i){
+        return blockHTML(b,{withResp:true,deletable:true,respId:'p1b'+(i+1)+'-resps',respTitle:b.respTitle});
+      }).join('')+
+      '<button class="btn-add-block">＋ 新增區塊</button></div></section>';
+
+    /* Part 2 */
+    if(t.part2.kind==='survey'){
+      window._surveyScriptSel=t.part2.surveyScript||'';
+      html+='<section class="part"><div class="part-head"><span class="no">PART 2</span><h2>'+esc(t.part2.title)+'</h2>'+
+        '<span class="hint">'+esc(t.part2.hint)+'</span></div>'+
+        '<div class="part-body" data-resp-owner><div class="field survey-pick"><label>評分前置台詞（可選可不選，播放於每題評分前）</label>'+
+        '<select id="survey-script-sel" style="width:100%;height:40px;border:1px solid var(--line);border-radius:5px;padding:0 12px;background:#F0F7FD">'+scriptOptions(t.part2.surveyScript||'')+'</select>'+
+        '<div class="src">單選題之語音互動方式（自然語言／DTMF）依<a href="#">系統參數管理</a>設定</div></div>'+
+        '<div id="survey-preview" class="survey-preview"></div>'+
+        '<div class="resp-title">問卷處理機制</div><div class="resps">'+
+          '<div class="resp"><span style="font-size:13px;color:#8C9BA5">完成通知（無問答題）</span><span class="arrow">&rarr;</span>'+
+            '<select class="scriptsel svy-end" data-role="done" style="flex:1;min-width:200px">'+scriptOptions(t.part2.endDone)+'</select>'+
+            '<span class="module">播畢掛斷</span></div>'+
+          '<div class="resp"><span style="font-size:13px;color:#8C9BA5">問答題轉真人</span><span class="arrow">&rarr;</span>'+
+            '<select class="scriptsel svy-end" data-role="human" style="flex:1;min-width:200px">'+scriptOptions(t.part2.endHuman)+'</select>'+
+            '<span class="skillset">skills代碼：<input class="skill-code" type="text" placeholder="如：SK001" value="'+esc(t.part2.endSkill||'')+'"></span>'+
+            '<span class="module">播畢轉接</span></div>'+
+          '<div class="resp"><span style="font-size:13px;color:#8C9BA5">問答題不轉真人</span><span class="arrow">&rarr;</span>'+
+            '<select class="scriptsel svy-end" data-role="nodone" style="flex:1;min-width:200px">'+scriptOptions(t.part2.endDone)+'</select>'+
+            '<span class="module">播畢掛斷</span></div>'+
+        '</div>'+
+        '<button class="btn-add-resp">＋ 新增回應選項</button>'+
+        checksHTML(t.part2.checks||{})+
+        '</div></section>';
+    } else if(t.part2.kind==='notice'){
+      html+='<section class="part"><div class="part-head"><span class="no">PART 2</span><h2>'+esc(t.part2.title)+'</h2>'+
+        '<span class="hint">'+esc(t.part2.hint)+'</span></div>'+
+        '<div class="part-body" data-lines-owner data-preview-scope>'+linesHTML(t.part2.lines)+
+        '<div class="add-bar"><button class="btn-add" data-type="script" style="'+(t.part2.lines.length>=1?'display:none':'')+'">＋ 台詞</button></div>'+
+        '<div class="preview"></div></div></section>';
+    } else {
+      html+='<section class="part"><div class="part-head"><span class="no">PART 2</span><h2>'+esc(t.part2.title)+'</h2>'+
+        '<span class="hint">'+esc(t.part2.hint)+'</span></div>'+
+        '<div class="part-body" data-blocks data-resp="'+t.part2.resp+'">'+
+        t.part2.blocks.map(function(b,i){return blockHTML(b,{withResp:t.part2.resp===1,deletable:true,respId:'b'+(i+1)+'-resps'});}).join('')+
+        '<button class="btn-add-block">＋ 新增區塊</button></div></section>';
+    }
+
+    /* Part 3 */
+    if(t.part3){
+      html+='<section class="part"><div class="part-head"><span class="no">PART 3</span><h2>結束台詞區</h2>'+
+        '<span class="hint">每個區塊一句台詞，可新增區塊</span></div>'+
+        '<div class="part-body" data-blocks data-resp="0">'+
+        t.part3.blocks.map(function(b){return blockHTML(b,{deletable:true});}).join('')+
+        '<button class="btn-add-block">＋ 新增區塊</button></div></section>';
+    }
+
+    document.getElementById('dyn').innerHTML=html;
+
+    /* 種子回應注入 */
+    var seeds=[];
+    t.part1.blocks.forEach(function(b,i){if(b.resps)seeds.push({sel:'#p1b'+(i+1)+'-resps',items:b.resps});});
+    if(t.part2.kind==='blocks'&&t.part2.resp===1){
+      t.part2.blocks.forEach(function(b,i){if(b.resps)seeds.push({sel:'#b'+(i+1)+'-resps',items:b.resps});});
+    }
+    seeds.forEach(function(seed){
+      var host=document.querySelector(seed.sel);if(!host)return;
+      seed.items.forEach(function(it){host.appendChild(respRow(it[0],it[1],it[2]||''));});
+    });
+
+    /* 共用判斷已勾選 → 自動產生列 */
+    document.querySelectorAll('.shared-checks').forEach(function(sc){
+      var owner=sc.closest('[data-resp-owner]');if(!owner)return;
+      sc.querySelectorAll('input[type=checkbox]:checked').forEach(function(cb){handleCheckChange(cb,owner);});
+    });
+
+    bindAllDnD();renderSurvey();refreshBlockOptions();refreshAllPreviews();refreshAddLineButtons();
+    document.querySelectorAll('.resp').forEach(function(r){syncActionFields(r);refreshSubActionFields(r);});
+  }
+
+  function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2200);}
+  window.renderTemplate=renderTemplate;
+})();
+
+renderTemplate('滿意度類');
+</script>
+</body>
+</html>
