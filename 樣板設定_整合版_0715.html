@@ -269,6 +269,9 @@ h1.page-title{text-align:center;font-size:28px;font-weight:400;color:#7C8790;mar
 .field-error input, .field-error select { border-color:var(--danger)!important }
 .error-msg { color:var(--danger); font-size:12px; margin-top:4px; display:block }
 
+/* ===== Locked selects (shared-check auto-generated) ===== */
+.resp select:disabled, .resp-sub select:disabled { background:var(--bg-soft); color:var(--ink); opacity:0.8; cursor:not-allowed; border-color:var(--line-soft) }
+
 @media (max-width:900px){
   .topnav{display:none}
   .meta{grid-template-columns:1fr}
@@ -350,12 +353,8 @@ h1.page-title{text-align:center;font-size:28px;font-weight:400;color:#7C8790;mar
     </div>
     <div class="field" id="fld-survey-code" hidden>
       <label><span class="star">★</span>問卷代碼</label>
-      <select id="survey-code">
-        <option value="" disabled>請選擇問卷代碼</option>
-        <option value="Q001">Q001｜財富管理客戶滿意度調查</option>
-        <option value="Q002">Q002｜信用卡服務滿意度調查</option>
-      </select>
-      <div class="src">用於對應本流程使用之問卷題目與選項（定期自IVR取回）｜切換時下方題目即時更新</div>
+      <input type="text" id="survey-code" class="readonly" value="" readonly placeholder="依流程編號自動對應">
+      <div class="src">依流程編號自動比對問卷代碼，不可手動修改</div>
     </div>
   </section>
 
@@ -556,7 +555,8 @@ window.PARAM_SCRIPTS=(function(){
     {contact:"非本人",type:"無人接聽",results:["無人接聽"]},
     {contact:"非本人",type:"無效電話",results:["無法受話","空號","手機已暫停使用","傳真機"]},
     {contact:"非本人",type:"聯絡不到先行結案",results:["聯絡不到先行結案"]},
-    {contact:"非本人",type:"無需外撥(非有效卡)",results:["非有效卡"]}
+    {contact:"非本人",type:"無需外撥(非有效卡)",results:["非有效卡"]},
+    {contact:"本人",type:"系統紀錄",results:["閒置","轉真人(聽不懂)","轉真人(敏感詞)","轉真人(意圖)"]}
   ];
   window.PARAM_INTERVIEW=PARAM_INTERVIEW;
 
@@ -676,10 +676,20 @@ window.PARAM_SCRIPTS=(function(){
       var l2=(label==='聽不懂')?'達次數後動作':'達閒置次數後動作';
       var showIvBefore=(sb==='轉真人'||isEndAct(sb)||sb==='轉inbound'||sb==='留電'||sb==='再聯絡');
       var showIvAfter=(sa==='轉真人'||isEndAct(sa)||sa==='轉inbound'||sa==='留電'||sa==='再聯絡');
+      var beforeDisabled=opts.lockBefore?' disabled':'';
+      var afterDisabled=opts.lockAfter?' disabled':'';
+      var afterReasonDisabled=opts.lockAfterReason?' disabled':'';
+      var lockedAfterIvHtml='';
+      if(opts.lockAfterIv){
+        lockedAfterIvHtml='<div class="interview-set"><span class="iv-label">訪談結果：</span>'+
+          '<select class="iv-contact" disabled><option selected>'+esc(opts.lockAfterIv.contact)+'</option></select>'+
+          '<select class="iv-type" disabled><option selected>'+esc(opts.lockAfterIv.type)+'</option></select>'+
+          '<select class="iv-result" disabled><option selected>'+esc(opts.lockAfterIv.result)+'</option></select></div>';
+      }
       html+='<span style="font-size:13px;color:var(--ink-light)">依次數判斷</span>'+
         '<button class="del" title="刪除">&times;</button>'+
         '<div class="resp-sub"><div class="sub-row"><span class="sub-label">'+l1+'</span>'+
-          '<select class="sub-action-before">'+actionOptions(sb)+'</select>'+
+          '<select class="sub-action-before"'+beforeDisabled+'>'+actionOptions(sb)+'</select>'+
           '<span class="skillset hidden">轉真人原因：<select class="reason-sel">'+reasonOptions('')+'</select></span>'+
           '<span class="sub-script hidden">台詞：<select class="sub-script-sel">'+scriptOptions('')+'</select></span>'+
           '<div class="sub-inbound-set'+(sb==='轉inbound'?'':' hidden')+'"><span style="font-size:13px;font-weight:600;color:var(--blue)">轉inbound帶入語句：</span><input class="inbound-text" type="text" placeholder="將送至一案總機判斷流程走向" value="" style="flex:1;height:34px;border:1px solid var(--line);border-radius:5px;padding:0 10px"></div>'+
@@ -688,23 +698,27 @@ window.PARAM_SCRIPTS=(function(){
           '<select class="iv-type"><option value="" disabled selected>請選擇訪談結果類型</option></select>'+
           '<select class="iv-result"><option value="" disabled selected>請選擇訪談結果</option></select></div></div>'+
         '<div class="sub-row"><span class="sub-label">'+l2+'</span>'+
-          '<select class="sub-action-after">'+actionOptions(sa)+'</select>'+
+          '<select class="sub-action-after"'+afterDisabled+'>'+actionOptions(sa)+'</select>'+
           '<span class="skillset'+(sa==='轉真人'?'':' hidden')+'">轉真人原因：'+
-            '<select class="reason-sel">'+reasonOptions(sk)+'</select></span>'+
+            '<select class="reason-sel"'+afterReasonDisabled+'>'+reasonOptions(sk)+'</select></span>'+
           '<span class="sub-script'+(sa==='轉真人'||isEndAct(sa)?'':' hidden')+'">台詞：<select class="sub-script-sel">'+scriptOptions(saScript)+'</select></span>'+
           '<div class="sub-inbound-set'+(sa==='轉inbound'?'':' hidden')+'"><span style="font-size:13px;font-weight:600;color:var(--blue)">轉inbound帶入語句：</span><input class="inbound-text" type="text" placeholder="將送至一案總機判斷流程走向" value="" style="flex:1;height:34px;border:1px solid var(--line);border-radius:5px;padding:0 10px"></div>'+
-          '<div class="interview-set'+(showIvAfter?'':' hidden')+'"><span class="iv-label">訪談結果：</span>'+
+          (lockedAfterIvHtml||('<div class="interview-set'+(showIvAfter?'':' hidden')+'"><span class="iv-label">訪談結果：</span>'+
           '<select class="iv-contact"><option value="" disabled selected>請選擇接觸結果</option><option>本人</option><option>非本人</option></select>'+
           '<select class="iv-type"><option value="" disabled selected>請選擇訪談結果類型</option></select>'+
-          '<select class="iv-result"><option value="" disabled selected>請選擇訪談結果</option></select></div></div></div>';
+          '<select class="iv-result"><option value="" disabled selected>請選擇訪談結果</option></select></div>'))+'</div></div>';
     } else {
       var humanExtra=isHuman?(extra||'').split('|'):['',''];
       var showScript=isHuman||isEnd;
       var scriptVal=isHuman?humanExtra[1]:(isEnd?(extra||''):'');
       var isCallback=(action==='再聯絡');
-      html+='<select class="resp-action">'+actionOptions(action)+'</select>'+
+      var actionDisabled=opts.lockAction?' disabled':'';
+      var reasonVal=isHuman?humanExtra[0]:'';
+      var reasonDisabled=(opts.lockReason!==undefined&&opts.lockReason!==false)?' disabled':'';
+      if(opts.lockReason)reasonVal=opts.lockReason;
+      html+='<select class="resp-action"'+actionDisabled+'>'+actionOptions(action)+'</select>'+
         '<span class="goto'+(isGoto?'':' hidden')+'">目標區塊：<select class="goto-block" data-want="'+esc(isGoto?(extra||''):'')+'"></select></span>'+
-        '<span class="skillset'+(isHuman?'':' hidden')+'">轉真人原因：<select class="reason-sel">'+reasonOptions(isHuman?humanExtra[0]:'')+'</select></span>'+
+        '<span class="skillset'+(isHuman?'':' hidden')+'">轉真人原因：<select class="reason-sel"'+reasonDisabled+'>'+reasonOptions(reasonVal)+'</select></span>'+
         '<span class="action-script'+(showScript?'':' hidden')+'">台詞：<select class="action-script-sel">'+scriptOptions(scriptVal)+'</select></span>'+
         '<button class="del" title="刪除">&times;</button>'+
         '<div class="inbound-set'+(isInbound?'':' hidden')+'"><label>轉inbound帶入語句</label>'+
@@ -717,12 +731,21 @@ window.PARAM_SCRIPTS=(function(){
           '<div class="cb-row"><span class="cb-label">結束台詞</span><select class="cb-sel">'+scriptOptions('')+'</select></div>'+
         '</div>';
       var showInterview=(isHuman||isEnd||isInbound||action==='留電'||isCallback);
-      html+='<div class="interview-set'+(showInterview?'':' hidden')+'">'+
-        '<span class="iv-label">訪談結果：</span>'+
-        '<select class="iv-contact"><option value="" disabled selected>請選擇接觸結果</option><option>本人</option><option>非本人</option></select>'+
-        '<select class="iv-type"><option value="" disabled selected>請選擇訪談結果類型</option></select>'+
-        '<select class="iv-result"><option value="" disabled selected>請選擇訪談結果</option></select>'+
-      '</div>';
+      if(opts.lockIv){
+        html+='<div class="interview-set">'+
+          '<span class="iv-label">訪談結果：</span>'+
+          '<select class="iv-contact" disabled><option selected>'+esc(opts.lockIv.contact)+'</option></select>'+
+          '<select class="iv-type" disabled><option selected>'+esc(opts.lockIv.type)+'</option></select>'+
+          '<select class="iv-result" disabled><option selected>'+esc(opts.lockIv.result)+'</option></select>'+
+        '</div>';
+      } else {
+        html+='<div class="interview-set'+(showInterview?'':' hidden')+'">'+
+          '<span class="iv-label">訪談結果：</span>'+
+          '<select class="iv-contact"><option value="" disabled selected>請選擇接觸結果</option><option>本人</option><option>非本人</option></select>'+
+          '<select class="iv-type"><option value="" disabled selected>請選擇訪談結果類型</option></select>'+
+          '<select class="iv-result"><option value="" disabled selected>請選擇訪談結果</option></select>'+
+        '</div>';
+      }
     }
     html+='</div>';
     return el(html);
@@ -759,57 +782,100 @@ window.PARAM_SCRIPTS=(function(){
   function renderSurvey(){
     var box=document.getElementById('survey-preview');if(!box)return;
     var inp=document.getElementById('survey-code');
-    var code=(inp?inp.value:'').replace(/\s+/g,'');
+    var code=inp?(inp.dataset.code||inp.value||'').replace(/\s+/g,'').split('｜')[0]:'';
     if(!code){box.innerHTML='<div class="survey-empty">請於基本資訊區輸入「問卷代碼」</div>';return;}
     var svy=(window.FLOW_SURVEYS||[]).filter(function(s){return s.code===code;})[0];
     if(!svy){box.innerHTML='<div class="survey-empty">查無問卷代碼「'+esc(code)+'」（示意：Q001、Q002）</div>';return;}
     var endAct=getEndAction();
     var sopts=scriptOptions(window._surveyScriptSel||'');
-    function qHTML(q,i,dtmf){
+    function qHTML(q,i){
       var body='';
       if(q.type==='單選題'){
         if(q.options){
-          /* 有自訂選項的單選題 */
-          if(dtmf) body='<div class="qopts-radio">'+q.options.map(function(o){return '<label><input type="radio" disabled> '+o+'</label>';}).join('')+'</div>';
-          else body='<div class="qopts">'+q.options.map(function(o){return '<div>'+o+'</div>';}).join('')+'</div>';
+          body='<div class="qopts" style="display:flex;gap:16px;flex-wrap:wrap">'+q.options.map(function(o,idx){return '<span><b style="color:var(--blue)">'+(idx+1)+'.</b> '+o+'</span>';}).join('')+'</div>';
         } else {
-          /* 1~5分評分 */
-          if(dtmf) body='<div class="qopts-radio"><label><input type="radio" disabled> 1分</label><label><input type="radio" disabled> 2分</label><label><input type="radio" disabled> 3分</label><label><input type="radio" disabled> 4分</label><label><input type="radio" disabled> 5分</label></div>';
-          else body='<div class="qopts"><div>客戶以語音回答，系統判斷是否在選項範圍內</div></div>';
+          body='<div class="qopts" style="display:flex;gap:16px;flex-wrap:wrap"><span><b style="color:var(--blue)">1.</b> 1分</span><span><b style="color:var(--blue)">2.</b> 2分</span><span><b style="color:var(--blue)">3.</b> 3分</span><span><b style="color:var(--blue)">4.</b> 4分</span><span><b style="color:var(--blue)">5.</b> 5分</span></div>';
         }
       } else {
-        body='<div class="qopts"><div style="color:var(--blue)">→ 依客戶回應於下方「問卷處理機制」區對應處理</div></div>';
+        body='<div class="qopts"><div style="color:var(--blue)">&rarr; 依客戶回應於下方「問卷處理機制」區對應處理</div></div>';
       }
       var tclass=(q.type==='單選題')?'rate':'choice';
       return '<div class="sq"><span class="qno">Q'+(i+1)+'</span><div class="qbody"><span class="qtype '+tclass+'">'+q.type+'</span><span class="qtext">'+q.text+'</span>'+body+'</div></div>';
     }
-    var dtmfQs=svy.questions.map(function(q,i){return qHTML(q,i,true);}).join('');
-    var nlQs=svy.questions.map(function(q,i){return qHTML(q,i,false);}).join('');
-    box.innerHTML='<div class="sp-head">'+svy.name+'<span class="cnt">問卷代碼 '+svy.code+'｜共 '+svy.questions.length+' 題</span></div>'+
-      '<div class="survey-tabs"><span class="tab active" data-tab="dtmf">DTMF開啟</span><span class="tab" data-tab="nl">DTMF未開啟</span></div>'+
-      '<div class="survey-tab-body" data-tab-body="dtmf">'+dtmfQs+'</div>'+
-      '<div class="survey-tab-body" data-tab-body="nl" style="display:none">'+nlQs+'</div>';
+    var qs=svy.questions.map(function(q,i){return qHTML(q,i);}).join('');
+    box.innerHTML='<div class="sp-head">問卷預覽<span class="cnt">'+svy.name+'｜問卷代碼 '+svy.code+'｜共 '+svy.questions.length+' 題</span></div>'+
+      '<div style="padding:8px 14px;background:#F0F7FD;border-bottom:1px solid #D7E9F8;font-size:13px;color:var(--ink-light);line-height:1.8">'+
+      '流程運行中依照DTMF開關開啟與否，切換並組成不同的台詞語音<br>'+
+      '範例：有開啟 &rarr; （題目）您對理專的服務態度滿意程度1~5分，1分請按1、2分請按2...以此類推<br>'+
+      '未開啟 &rarr; （題目）您對理專的服務態度滿意程度1~5分，請回答1~5以內的數字</div>'+qs;
   }
 
   /* ---- 意圖連動 ---- */
   function handleIntentChange(row,intentVal){
+    var cs=row.dataset.checkSource||'';
     var isThreshold=(THRESHOLD_INTENTS.indexOf(intentVal)>=0);
     var sub=row.querySelector('.resp-sub');
-    if(isThreshold){
-      var parent=row.parentNode;var cs=row.dataset.checkSource||'';
-      var sa=(intentVal==='閒置'||intentVal==='聽不懂')?getEndAction():'轉真人';
-      var nr=respRow(intentVal,'','',{subBefore:'再聽一次（重複本區塊）',subAfter:sa,subSkill:'',checkSource:cs||undefined});
-      parent.replaceChild(nr,row);refreshSubActionFields(nr);
+
+    /* Lock configs for shared-check intents */
+    var lockConfigs={
+      '閒置':'threshold',
+      '聽不懂':'threshold',
+      '轉真人':{action:'轉真人',reason:'NV01',iv:{contact:'本人',type:'系統紀錄',result:'轉真人(意圖)'}},
+      '抱怨負面情緒':{action:'轉真人',reason:'NV05',iv:{contact:'本人',type:'系統紀錄',result:'轉真人(敏感詞)'}},
+      '結束':{action:getEndAction(),reason:'',iv:{contact:'本人',type:'本人接聽',result:'無意願接受訪談'}},
+      '再連絡':{action:'再聯絡',reason:'',iv:{contact:'本人',type:'本人接聽',result:'忙碌中，再聯絡'}},
+      '掛斷':{action:getEndAction(),reason:'',iv:{contact:'本人',type:'本人接聽',result:'無意願接受訪談'}}
+    };
+
+    var lc=lockConfigs[intentVal];
+    var parent=row.parentNode;
+    var newRow;
+
+    if(lc==='threshold'){
+      if(intentVal==='閒置'){
+        newRow=respRow(intentVal,'','',{
+          subBefore:'再聽一次（重複本區塊）',subAfter:getEndAction(),subSkill:'',
+          lockBefore:true,lockAfter:true,
+          lockAfterIv:{contact:'本人',type:'系統紀錄',result:'閒置'},
+          checkSource:cs||undefined
+        });
+      } else {
+        newRow=respRow(intentVal,'','',{
+          subBefore:'再聯一次（重複本區塊）',subAfter:'轉真人',subSkill:'NV00',
+          lockBefore:true,lockAfter:true,lockAfterReason:'NV00',
+          lockAfterIv:{contact:'本人',type:'系統紀錄',result:'轉真人(聽不懂)'},
+          checkSource:cs||undefined
+        });
+      }
+      parent.replaceChild(newRow,row);
+      refreshSubActionFields(newRow);
+    } else if(lc&&typeof lc==='object'){
+      newRow=respRow(intentVal,lc.action,'',{lockAction:true,lockReason:lc.reason,lockIv:lc.iv,checkSource:cs||undefined});
+      parent.replaceChild(newRow,row);
+      syncActionFields(newRow);
+      refreshBlockOptions();
+    } else if(isThreshold){
+      var sa=getEndAction();
+      newRow=respRow(intentVal,'','',{subBefore:'再聽一次（重複本區塊）',subAfter:sa,subSkill:'',checkSource:cs||undefined});
+      parent.replaceChild(newRow,row);
+      refreshSubActionFields(newRow);
     } else if(sub){
-      var parent2=row.parentNode;var cs2=row.dataset.checkSource||'';
       var da=resolveDefault(intentVal);
-      var nr2=respRow(intentVal,da,'',{checkSource:cs2||undefined});
-      parent2.replaceChild(nr2,row);syncActionFields(nr2);refreshBlockOptions();
+      newRow=respRow(intentVal,da,'',{checkSource:cs||undefined});
+      parent.replaceChild(newRow,row);
+      syncActionFields(newRow);
+      refreshBlockOptions();
     } else {
       var rd=resolveDefault(intentVal);
-      if(rd){
-        var as=row.querySelector('.resp-action');
-        if(as){as.value=rd;syncActionFields(row);}
+      var as=row.querySelector('.resp-action');
+      if(as&&as.disabled){
+        /* Was locked config, rebuild as clean editable row */
+        newRow=respRow(intentVal,rd||'','',{checkSource:cs||undefined});
+        parent.replaceChild(newRow,row);
+        syncActionFields(newRow);
+        refreshBlockOptions();
+      } else if(rd&&as){
+        as.value=rd;syncActionFields(row);
       }
     }
   }
@@ -861,8 +927,34 @@ window.PARAM_SCRIPTS=(function(){
       if(exists)return;
       var isT=(THRESHOLD_INTENTS.indexOf(intent)>=0);
       var row;
-      if(isT){var sa=getEndAction();row=respRow(intent,'','',{subBefore:'再聽一次（重複本區塊）',subAfter:sa,subSkill:'',checkSource:rawText});}
-      else{var da=resolveDefault(intent)||getEndAction();row=respRow(intent,da,'',{checkSource:rawText});}
+      if(isT){
+        if(intent==='閒置'){
+          row=respRow(intent,'','',{subBefore:'再聽一次（重複本區塊）',subAfter:getEndAction(),subSkill:'',
+            lockBefore:true,lockAfter:true,
+            lockAfterIv:{contact:'本人',type:'系統紀錄',result:'閒置'},
+            checkSource:rawText});
+        } else {
+          row=respRow(intent,'','',{subBefore:'再聽一次（重複本區塊）',subAfter:'轉真人',subSkill:'NV00',
+            lockBefore:true,lockAfter:true,lockAfterReason:true,
+            lockAfterIv:{contact:'本人',type:'系統紀錄',result:'轉真人(聽不懂)'},
+            checkSource:rawText});
+        }
+      } else {
+        var lockConfigs={
+          '抱怨負面情緒':{action:'轉真人',reason:'NV05',iv:{contact:'本人',type:'系統紀錄',result:'轉真人(敏感詞)'}},
+          '結束':{action:getEndAction(),reason:'',iv:{contact:'本人',type:'本人接聽',result:'無意願接受訪談'}},
+          '再連絡':{action:'再聯絡',reason:'',iv:{contact:'本人',type:'本人接聽',result:'忙碌中，再聯絡'}},
+          '掛斷':{action:getEndAction(),reason:'',iv:{contact:'本人',type:'本人接聽',result:'無意願接受訪談'}}
+        };
+        var lc=lockConfigs[intent];
+        if(lc){
+          var extraVal=lc.reason?(lc.reason+'|'):'';
+          row=respRow(intent,lc.action,extraVal,{lockAction:true,lockReason:lc.reason,lockIv:lc.iv,checkSource:rawText});
+        } else {
+          var da=resolveDefault(intent)||getEndAction();
+          row=respRow(intent,da,'',{checkSource:rawText});
+        }
+      }
       resps.appendChild(row);syncActionFields(row);refreshSubActionFields(row);refreshBlockOptions();
     } else {
       resps.querySelectorAll('[data-check-source="'+rawText+'"]').forEach(function(r){r.remove();});
@@ -973,7 +1065,7 @@ window.PARAM_SCRIPTS=(function(){
 
     var scField=document.getElementById('fld-survey-code');
     scField.hidden=(t.part2.kind!=='survey');
-    if(t.part2.kind==='survey')document.getElementById('survey-code').value=t.surveyCode||'';
+    if(t.part2.kind==='survey'){var sci=document.getElementById('survey-code');sci.value='';sci.dataset.code='';}
 
     var html='';
 
@@ -1063,6 +1155,7 @@ window.PARAM_SCRIPTS=(function(){
 
   function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2200);}
   window.renderTemplate=renderTemplate;
+  window.renderSurvey=renderSurvey;
   window.bindAllDnD=bindAllDnD;
   window.refreshBlockOptions=refreshBlockOptions;
   window.refreshAllPreviews=refreshAllPreviews;
@@ -1117,7 +1210,7 @@ window.PARAM_SCRIPTS=(function(){
         document.getElementById('flow-no').value=f.no;
         document.getElementById('flow-name').value=f.name;
         if(f.skill&&tsel) tsel.value=f.skill;
-        if(f.surveyCode){var scc=document.getElementById('survey-code');if(scc)scc.value=f.surveyCode;}
+        if(f.surveyCode){var scc=document.getElementById('survey-code');if(scc){scc.value=f.surveyCode;scc.dataset.code=f.surveyCode.split('｜')[0];}}
         if(f.dynSnapshot){
           document.getElementById('dyn').innerHTML=f.dynSnapshot;
           window.bindAllDnD();
@@ -1141,13 +1234,14 @@ window.PARAM_SCRIPTS=(function(){
       document.getElementById('flow-name').value='';
       document.getElementById('tpl-type').selectedIndex=0;
       if(tsel) tsel.selectedIndex=0;
-      var sc=document.getElementById('survey-code'); if(sc) sc.selectedIndex=0;
+      var sc=document.getElementById('survey-code'); if(sc){sc.value='';sc.dataset.code='';}
+      document.getElementById('fld-survey-code').hidden=true;
       document.getElementById('dyn').innerHTML='';
     }
   }
 
   document.getElementById('btn-new-flow').addEventListener('click',function(){
-    showForm('滿意度類');
+    showForm(null);
   });
   document.getElementById('btn-search').addEventListener('click',function(){
     renderList(document.getElementById('search-input').value);
@@ -1161,6 +1255,35 @@ window.PARAM_SCRIPTS=(function(){
   },true);
   document.getElementById('crumb-back').addEventListener('click',function(e){
     e.preventDefault(); showList();
+  });
+  /* ---- 滿意度類：流程編號 blur 時自動檢核問卷代碼 ---- */
+  document.getElementById('flow-no').addEventListener('blur',function(){
+    var tpl=document.getElementById('tpl-type').value;
+    if(tpl!=='滿意度類') return;
+    var val=this.value.trim();
+    var scInput=document.getElementById('survey-code');
+    var scField=document.getElementById('fld-survey-code');
+    if(!scField||scField.hidden) return;
+    /* 清除先前錯誤 */
+    var prevErr=scField.querySelector('.error-msg');
+    if(prevErr) prevErr.remove();
+    scField.classList.remove('field-error');
+    if(!val){scInput.value='';return;}
+    var surveys=window.FLOW_SURVEYS||[];
+    var match=surveys.filter(function(s){return s.code===val;})[0];
+    if(match){
+      scInput.value=match.code+'｜'+match.name;
+      scInput.dataset.code=match.code;
+      if(window.renderSurvey) window.renderSurvey();
+    } else {
+      scInput.value='';
+      scInput.dataset.code='';
+      scField.classList.add('field-error');
+      var err=document.createElement('span');
+      err.className='error-msg';
+      err.textContent='不存在該問卷編號「'+val+'」';
+      scInput.parentNode.insertBefore(err,scInput.nextSibling);
+    }
   });
   document.getElementById('btn-save').addEventListener('click',function(e){
     e.stopPropagation();
@@ -1199,7 +1322,7 @@ window.PARAM_SCRIPTS=(function(){
     if(!skill) markError(document.getElementById('transfer-skill'),'請選擇轉真人Skills');
     var scField=document.getElementById('fld-survey-code');
     var scVal='';
-    if(scField&&!scField.hidden){var sc=document.getElementById('survey-code');scVal=sc.value;if(!scVal) markError(sc,'請選擇問卷代碼');}
+    if(scField&&!scField.hidden){var sc=document.getElementById('survey-code');scVal=sc.dataset.code||'';if(!scVal) markError(sc,'問卷代碼未對應（請確認流程編號）');}
     /* 檢核所有可見的回應設定列 */
     var allResps=document.querySelectorAll('#view-form .resp:not([style*="display:none"])');
     allResps.forEach(function(r){
