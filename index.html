@@ -1953,6 +1953,9 @@ if(!window.PARAM_SCRIPTS){
     if(isEdit && editNo){
       var f=FLOW_LIST.filter(function(x){return x.no===editNo;})[0];
       if(f){
+        /* Restore enabled radio */
+        var radios=document.querySelectorAll('input[name=enabled]');
+        if(radios.length>=2){radios[0].checked=f.enabled!==false;radios[1].checked=f.enabled===false;}
         if(f.formData){
           /* Structured restore */
           window.restoreFormData(f);
@@ -2135,6 +2138,7 @@ if(!window.PARAM_SCRIPTS){
         if(FLOW_LIST[i].no===window._editingNo){
           FLOW_LIST[i].name=name;
           FLOW_LIST[i].type=type;
+          FLOW_LIST[i].enabled=document.querySelector('input[name=enabled]:checked')===document.querySelectorAll('input[name=enabled]')[0];
           FLOW_LIST[i].skill=skill;
           FLOW_LIST[i].surveyCode=scVal;
           FLOW_LIST[i].formData=formData;
@@ -2147,7 +2151,8 @@ if(!window.PARAM_SCRIPTS){
     /* 新增模式：檢查編號重複 */
     var dup=FLOW_LIST.some(function(f){return f.no===no;});
     if(dup){markError(document.getElementById('flow-no'),'流程編號「'+no+'」已存在，請輸入不同編號');document.getElementById('flow-no').scrollIntoView({behavior:'smooth',block:'center'});return;}
-    var newFlow={no:no,name:name,type:type,enabled:true,skill:skill,surveyCode:scVal,formData:formData};
+    var isEnabled=document.querySelector('input[name=enabled]:checked')===document.querySelectorAll('input[name=enabled]')[0];
+    var newFlow={no:no,name:name,type:type,enabled:isEnabled,skill:skill,surveyCode:scVal,formData:formData};
     FLOW_LIST.push(newFlow);
     renderList('');showList();
     showErr('已儲存「'+name+'」');
