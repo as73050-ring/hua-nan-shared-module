@@ -1,0 +1,1 @@
+{"name":"hua-nan-shared-module","private":true,"scripts":{"test":"npx playwright test"},"devDependencies":{"@playwright/test":"^1.52.0"}}

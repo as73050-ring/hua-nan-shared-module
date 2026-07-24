@@ -1,0 +1,121 @@
+{"no": "OBCSI",
+  "name": "綜合對帳單",
+  "type": "客戶意願確認轉真人服務類",
+  "enabled": true,
+  "skill": "88005",
+  "surveyCode": "",
+  "sharedRules": {
+    "閒置": {
+      "script": ""
+    },
+    "聽不懂": {
+      "script": "ZZZ002"
+    },
+    "抱怨負面情緒": {
+      "script": "ZZZ002"
+    },
+    "轉真人": {
+      "script": "ZZZ002"
+    },
+    "結束": {},
+    "其他時間再聯絡": {
+      "callback": {
+        "script1": "ZZA001",
+        "script2": "ZZA002",
+        "script3": "ZZA003",
+        "script4": "ZZA004"
+      }
+    },
+    "掛斷": {}
+  },
+  "formData": {
+    "part1": {
+      "blocks": [
+        {
+          "name": "開場白",
+          "script": "OBCSI001",
+          "scriptText": "您好，這裡是華南銀行客服中心，請問您是{p1}先生/小姐嗎？",
+          "responses": [
+            {
+              "intent": "是",
+              "locked": false,
+              "hideScript": false,
+              "action": "進入主流程區",
+              "script": "",
+              "scriptText": "",
+              "reason": "",
+              "gotoBlock": "",
+              "inboundText": "",
+              "interview": {
+                "contact": "",
+                "type": "",
+                "result": ""
+              }
+            },
+            {
+              "intent": "否",
+              "locked": false,
+              "hideScript": false,
+              "action": "結束通話（送出以下結束台詞）",
+              "script": "ZZZ001",
+              "scriptText": "抱歉！打擾您了，謝謝再見！",
+              "reason": "",
+              "gotoBlock": "",
+              "inboundText": "",
+              "interview": {
+                "contact": "非本人",
+                "type": "非本人接聽",
+                "result": "非本人接聽"
+              }
+            }
+          ],
+          "applyRules": ["閒置","聽不懂","抱怨負面情緒","轉真人","結束","再聯絡","掛斷"]
+        }
+      ]
+    },
+    "part2": {
+      "blocks": [
+        {
+          "name": "區塊1－確認變更意願",
+          "script": "OBCSI002",
+          "scriptText": "{p1}先生小姐您好，為保障您的權益，以下通話全程錄音。您在華南銀行的○○分行有開立存款帳戶，當初約定為不用寄送對帳單，目前推廣電子綜合對帳單，如果您帳戶有使用電子化交易，例如電話銀行、網路銀行或行動銀行等服務，我們會在下個月的10日起以E-mail方式寄發給您對帳，多了一個對帳的管道，現在可以線上幫您申請，不知道您有沒有意願作變更呢？",
+          "responses": [
+            {
+              "intent": "是",
+              "locked": false,
+              "hideScript": false,
+              "action": "轉真人",
+              "script": "ZZZ002",
+              "scriptText": "馬上為您轉接專人服務",
+              "reason": "NV01",
+              "gotoBlock": "開場白",
+              "inboundText": "",
+              "interview": {
+                "contact": "本人",
+                "type": "系統紀錄",
+                "result": "轉真人(意圖)"
+              }
+            },
+            {
+              "intent": "否",
+              "locked": false,
+              "hideScript": false,
+              "action": "結束通話（送出以下結束台詞）",
+              "script": "ZZZ001",
+              "scriptText": "抱歉！打擾您了，謝謝再見！",
+              "reason": "",
+              "gotoBlock": "開場白",
+              "inboundText": "",
+              "interview": {
+                "contact": "本人",
+                "type": "本人接聽",
+                "result": "沒有興趣"
+              }
+            }
+          ],
+          "applyRules": ["閒置","聽不懂","抱怨負面情緒","轉真人","結束","再聯絡","掛斷"]
+        }
+      ]
+    }
+  }
+}

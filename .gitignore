@@ -4,3 +4,12 @@ CLAUDE.md
 
 # 歷史檔案（整併前原始版本）
 history/
+
+# 開發用原始檔（不上版，僅 index.html 上版）
+樣板設定_整合版_0722.html
+
+# 測試與開發工具
+node_modules/
+test-results/
+playwright-report/
+package-lock.json
