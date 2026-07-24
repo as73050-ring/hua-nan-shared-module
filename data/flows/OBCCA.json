@@ -1,0 +1,80 @@
+{"no": "OBCCA",
+  "name": "信用卡年費到期通知",
+  "type": "業務資訊通知類",
+  "enabled": true,
+  "skill": "88003",
+  "surveyCode": "",
+  "sharedRules": {
+    "閒置": {
+      "script": ""
+    },
+    "聽不懂": {
+      "script": "ZZZ002"
+    },
+    "抱怨負面情緒": {
+      "script": "ZZZ002"
+    },
+    "轉真人": {
+      "script": "ZZZ002"
+    },
+    "結束": {},
+    "其他時間再聯絡": {
+      "callback": {
+        "script1": "ZZA001",
+        "script2": "ZZA002",
+        "script3": "ZZA003",
+        "script4": "ZZA004"
+      }
+    },
+    "掛斷": {}
+  },
+  "formData": {
+    "part1": {
+      "blocks": [
+        {
+          "name": "開場白",
+          "script": "OBCCA001",
+          "scriptText": "您好，這裡是華南銀行客服中心，請問您是{p1}先生/小姐嗎？",
+          "responses": [
+            {
+              "intent": "是",
+              "locked": false,
+              "hideScript": false,
+              "action": "播放通知內容（主流程）",
+              "script": "",
+              "scriptText": "",
+              "reason": "",
+              "gotoBlock": "",
+              "inboundText": "",
+              "interview": {
+                "contact": "",
+                "type": "",
+                "result": ""
+              }
+            },
+            {
+              "intent": "否",
+              "locked": false,
+              "hideScript": false,
+              "action": "結束通話（送出以下結束台詞）",
+              "script": "ZZZ001",
+              "scriptText": "抱歉！打擾您了，謝謝再見！",
+              "reason": "",
+              "gotoBlock": "",
+              "inboundText": "",
+              "interview": {
+                "contact": "非本人",
+                "type": "非本人接聽",
+                "result": "非本人接聽"
+              }
+            }
+          ],
+          "applyRules": ["閒置","聽不懂","抱怨負面情緒","轉真人","結束","再聯絡","掛斷"]
+        }
+      ]
+    },
+    "part2Notice": {
+      "script": "OBCCA002"
+    }
+  }
+}

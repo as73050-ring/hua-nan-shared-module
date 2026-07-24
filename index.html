@@ -108,8 +108,9 @@ h1.page-title{text-align:center;font-size:28px;font-weight:400;color:#7C8790;mar
 .block.drop-above{box-shadow:0 -2px 0 var(--blue)}
 .block.drop-below{box-shadow:0 2px 0 var(--blue)}
 .block-head{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg-soft);border-bottom:1px solid var(--line-soft);border-radius:8px 8px 0 0}
-.block-head .bname{font-weight:700;color:var(--blue);border:none;background:transparent;font-size:15px;width:200px}
-.block-head .bname:focus{outline:1px solid var(--line);border-radius:4px;background:#fff}
+.block-head .bname{font-weight:700;color:var(--blue);border:1px solid transparent;background:transparent;font-size:15px;flex:1;min-width:120px;padding:2px 6px;border-radius:4px;transition:border-color .2s}
+.block-head .bname:hover{border-color:var(--line)}
+.block-head .bname:focus{outline:none;border-color:var(--blue);background:#fff}
 .block-head .sp{flex:1}
 .block-head .del-block{border:none;background:transparent;color:#B9C1C9;font-size:14px}
 .block-head .del-block:hover{color:var(--danger)}
@@ -161,6 +162,19 @@ h1.page-title{text-align:center;font-size:28px;font-weight:400;color:#7C8790;mar
 .shared-checks .sc-title .sc-hint{font-weight:400;color:var(--ink-light);margin-left:8px;font-size:12px}
 .shared-checks .sc-items{display:flex;gap:22px;flex-wrap:wrap}
 .shared-checks label{display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer}
+.shared-rules{border:1px solid var(--line-soft);border-radius:8px;margin-bottom:26px;background:#fff;overflow:hidden}
+.shared-rules .sr-head{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--bg-soft);border-bottom:1px solid var(--line-soft);cursor:pointer}
+.shared-rules .sr-head h2{font-size:16px;color:var(--blue);font-weight:700;margin:0}
+.shared-rules .sr-head .sr-toggle{font-size:13px;color:var(--ink-light)}
+.shared-rules .sr-body{padding:14px 20px}
+.shared-rules .sr-body.collapsed{display:none}
+.shared-rules .sr-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.shared-rules .sr-item:last-child{border-bottom:none}
+.shared-rules .sr-item .sr-intent{font-weight:600;color:var(--ink);min-width:110px}
+.shared-rules .sr-item .sr-config{flex:1;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--ink-light)}
+.shared-rules .sr-item .sr-config select{height:30px;border:1px solid var(--line);border-radius:4px;padding:0 6px;font-size:13px;max-width:220px}
+.shared-rules .sr-item .sr-config .sr-lbl{font-weight:600;color:var(--blue);white-space:nowrap}
+.shared-rules .sr-item .sr-fixed{color:var(--ink);font-size:13px}
 
 /* ===== 變數對照表 ===== */
 .var-legend{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding:10px 16px;background:var(--var-bg);border:1px solid var(--var-line);border-radius:8px;margin:-12px 0 26px;font-size:13px}
@@ -213,6 +227,14 @@ h1.page-title{text-align:center;font-size:28px;font-weight:400;color:#7C8790;mar
 .resp .callback-set{flex-basis:100%;display:flex;flex-direction:column;gap:8px;margin-top:4px;padding:8px 10px;background:#fff;border:1px dashed var(--line);border-radius:6px}
 .resp .callback-set .cb-row{display:flex;align-items:center;gap:8px}
 .resp .callback-set .cb-label{font-size:13px;font-weight:600;color:var(--blue);white-space:nowrap;min-width:140px}
+
+/* ===== notify-set (SMS/EMAIL/LINE/APP推播) ===== */
+.resp .notify-set{flex-basis:100%;display:flex;flex-direction:column;gap:8px;margin-top:4px;padding:10px;background:#fff;border:1px dashed var(--line);border-radius:6px}
+.resp .notify-set .nf-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.resp .notify-set .nf-label{font-size:13px;font-weight:600;color:var(--blue);white-space:nowrap;min-width:120px}
+.resp .notify-set input[type=text]{height:34px;border:1px solid var(--line);border-radius:5px;padding:0 10px;font-size:13px}
+.resp .notify-set textarea{border:1px solid var(--line);border-radius:5px;padding:8px 10px;font-size:13px;min-height:60px;resize:vertical;width:100%}
+.resp .notify-set .nf-note{font-size:12px;color:var(--ink-light);margin-top:4px;padding:6px 10px;background:var(--bg-soft);border-radius:4px}
 
 /* ===== interview-set (訪談結果三層連動) ===== */
 .resp .interview-set{flex-basis:100%;display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap}
@@ -272,6 +294,11 @@ h1.page-title{text-align:center;font-size:28px;font-weight:400;color:#7C8790;mar
 /* ===== Locked selects (shared-check auto-generated) ===== */
 .resp select:disabled, .resp-sub select:disabled { background:var(--bg-soft); color:var(--ink); opacity:0.8; cursor:not-allowed; border-color:var(--line-soft) }
 
+/* ===== Script searchable dropdown ===== */
+.sc-dropdown-panel .sc-dd-item{padding:6px 10px;font-size:13px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc-dropdown-panel .sc-dd-item:hover{background:var(--bg-soft)}
+.sc-dropdown-panel .sc-dd-item.active{background:#E8F2FC;color:var(--blue);font-weight:600}
+
 @media (max-width:900px){
   .topnav{display:none}
   .meta{grid-template-columns:1fr}
@@ -304,7 +331,12 @@ h1.page-title{text-align:center;font-size:28px;font-weight:400;color:#7C8790;mar
         <input type="text" id="search-input" placeholder="輸入流程編號或名稱搜尋...">
         <button id="btn-search">搜尋</button>
       </div>
-      <button class="btn-new" id="btn-new-flow">＋ 新增流程</button>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn-new" id="btn-import-flow" style="background:var(--blue-dark)">匯入流程</button>
+        <button class="btn-new" id="btn-export-all" style="background:#2E8B57">匯出全部</button>
+        <button class="btn-new" id="btn-new-flow">＋ 新增流程</button>
+      </div>
+      <input type="file" id="import-flow-input" accept=".json" style="display:none" multiple>
     </div>
     <table class="flow-table">
       <thead><tr><th>流程編號</th><th>業務流程名稱</th><th>樣板類型</th><th>狀態</th><th>操作</th></tr></thead>
@@ -402,7 +434,7 @@ var TEMPLATES = {
       {"code":"S030","text":"請您稍候，將為您轉接線上智能客服，謝謝！"}
     ],
     surveys: [
-      {"code":"Q001","name":"財富管理客戶滿意度調查","questions":[
+      {"code":"Q001","name":"財富管理客戶滿意度調查","flow_no":"OBFMS","enabled":true,"questions":[
         {"type":"單選題","text":"您對理專的服務態度滿意程度1~5分"},
         {"type":"單選題","text":"您對理專的專業能力滿意程度1~5分"},
         {"type":"單選題","text":"您對理專說明商品內容與風險的清楚程度滿意程度1~5分"},
@@ -410,7 +442,7 @@ var TEMPLATES = {
         {"type":"單選題","text":"整體而言，您對本行財富管理服務滿意程度1~5分"},
         {"type":"問答題","text":"請問您是否有對於本行的建議可以幫您轉接真人客服，請問需要轉接真人客服嗎？"}
       ]},
-      {"code":"Q002","name":"信用卡服務滿意度調查","questions":[
+      {"code":"Q002","name":"信用卡服務滿意度調查","flow_no":"OBFMS","enabled":false,"questions":[
         {"type":"單選題","text":"您對本行信用卡客服人員的服務態度滿意程度1~5分"},
         {"type":"單選題","text":"您對本行信用卡優惠活動的內容滿意程度1~5分"},
         {"type":"單選題","text":"請問您最常使用本行信用卡的消費類別？","options":["1. 日常生活消費（超市、量販）","2. 網路購物","3. 旅遊交通","4. 餐飲娛樂"]}
@@ -422,7 +454,7 @@ var TEMPLATES = {
       blocks: [
         {name:"開場白", lines:["S001"],
           resps:[["是","進入問卷（主流程）"],["否","結束通話（送出以下結束台詞）"]],
-          checks:{"閒置":true,"抱怨負面情緒":false,"聽不懂":true,"結束":false,"其他時間再聯絡":true,"掛斷":false}}
+          checks:{"閒置":true,"抱怨負面情緒":false,"聽不懂":true,"結束":false,"再聯絡":true,"轉真人":false,"掛斷":false}}
       ]
     },
     part2: {
@@ -431,7 +463,7 @@ var TEMPLATES = {
       hint: "問卷代碼於基本資訊區輸入後自動對應題目與選項｜問卷內容若有修改時將即時更新，此處僅供預覽",
       surveyScript: "S003",
       endDone: "S025", endHuman: "S030", endSkill: "",
-      checks:{"閒置":true,"抱怨負面情緒":false,"聽不懂":true,"結束":false,"其他時間再聯絡":false,"掛斷":false}
+      checks:{"閒置":true,"抱怨負面情緒":false,"聽不懂":true,"結束":false,"再聯絡":false,"轉真人":false,"掛斷":false}
     },
     part3: null
   },
@@ -454,9 +486,9 @@ var TEMPLATES = {
     actions: null,
     part1: {
       blocks: [
-        {name:"開場白", lines:["OBCCE001"],
-          resps:[["是","進入主流程區"],["否","結束通話（送出以下結束台詞）","OBCCE003"]],
-          checks:{"閒置":true,"抱怨負面情緒":false,"聽不懂":true,"結束":false,"其他時間再聯絡":false,"掛斷":false}}
+        {name:"開場白", lines:[],
+          resps:[["是","前往指定區塊","區塊1"],["否","結束通話（送出以下結束台詞）"]],
+          checks:{"閒置":true,"聽不懂":true,"抱怨負面情緒":false,"轉真人":false,"結束":false,"再聯絡":false,"掛斷":false}}
       ]
     },
     part2: {
@@ -465,15 +497,9 @@ var TEMPLATES = {
       hint: "依客戶回應分歧至不同區塊｜可新增區塊並更名，用於「前往指定區塊」選單",
       resp: 1,
       blocks: [
-        {name:"區塊1－確認Email正確性", lines:["OBCCE002"],
-          resps:[["是","前往指定區塊","區塊2－詢問是否補寄帳單"],["否","前往指定區塊","區塊3－說明自行修改路徑"]],
-          checks:{"閒置":true,"抱怨負面情緒":true,"聽不懂":true,"結束":true,"其他時間再聯絡":true,"掛斷":false}},
-        {name:"區塊2－詢問是否補寄帳單", lines:["OBCCE005"],
-          resps:[["是","轉inbound",""],["否","結束通話（送出以下結束台詞）","OBCCE006"]],
-          checks:{"閒置":true,"抱怨負面情緒":true,"聽不懂":true,"結束":true,"其他時間再聯絡":true,"掛斷":false}},
-        {name:"區塊3－說明自行修改路徑", lines:["OBCCE004"],
-          resps:[["轉真人","轉真人","SK001"],["聽不懂","再聽一次（重複本區塊）"]],
-          checks:{"閒置":true,"抱怨負面情緒":true,"聽不懂":true,"結束":true,"其他時間再聯絡":true,"掛斷":false}}
+        {name:"區塊1", lines:[],
+          resps:[],
+          checks:{"閒置":true,"聽不懂":true,"抱怨負面情緒":true,"轉真人":false,"結束":true,"再聯絡":true,"掛斷":false}}
       ]
     },
     part3: null
@@ -500,7 +526,7 @@ var TEMPLATES = {
       blocks: [
         {name:"開場白", lines:["S001"],
           resps:[["是","播放通知內容（主流程）"],["否","結束通話（送出以下結束台詞）"]],
-          checks:{"閒置":true,"抱怨負面情緒":false,"聽不懂":true,"結束":false,"其他時間再聯絡":false,"掛斷":false}}
+          checks:{"閒置":true,"抱怨負面情緒":false,"聽不懂":true,"結束":false,"再聯絡":false,"轉真人":false,"掛斷":false}}
       ]
     },
     part2: {
@@ -514,24 +540,133 @@ var TEMPLATES = {
 };
 
 /* =====================================================================
+   CSV 載入工具
+   ===================================================================== */
+function parseCSV(text){
+  var lines=text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').trim().split('\n');
+  if(lines.length<2)return[];
+  var headers=lines[0].split(',');
+  return lines.slice(1).map(function(line){
+    var vals=[];var cur='';var inQuote=false;
+    for(var i=0;i<line.length;i++){
+      var c=line[i];
+      if(c==='"'){inQuote=!inQuote;}
+      else if(c===','&&!inQuote){vals.push(cur);cur='';}
+      else{cur+=c;}
+    }
+    vals.push(cur);
+    var obj={};
+    headers.forEach(function(h,idx){obj[h.trim()]=(vals[idx]||'').trim();});
+    return obj;
+  });
+}
+
+async function loadData(){
+  var base='data/';
+  var [scriptsR,skillsR,reasonsR,interviewR,surveysR,questionsR,flowsR,actionsR,intentsR,checksR,varsR] = await Promise.all([
+    fetch(base+'scripts.csv').then(function(r){return r.text();}),
+    fetch(base+'skills.csv').then(function(r){return r.text();}),
+    fetch(base+'reasons.csv').then(function(r){return r.text();}),
+    fetch(base+'interview.csv').then(function(r){return r.text();}),
+    fetch(base+'surveys.csv').then(function(r){return r.text();}),
+    fetch(base+'survey_questions.csv').then(function(r){return r.text();}),
+    fetch(base+'flows.csv').then(function(r){return r.text();}),
+    fetch(base+'actions.csv').then(function(r){return r.text();}),
+    fetch(base+'intents.csv').then(function(r){return r.text();}),
+    fetch(base+'checks.csv').then(function(r){return r.text();}),
+    fetch(base+'variables.csv').then(function(r){return r.text();})
+  ]);
+
+  window.PARAM_SCRIPTS = parseCSV(scriptsR);
+  window.PARAM_SKILLS = parseCSV(skillsR).map(function(r){return r.code;});
+  window.PARAM_REASONS = parseCSV(reasonsR);
+  window.PARAM_INTERVIEW = (function(){
+    var rows=parseCSV(interviewR);
+    var map={};
+    rows.forEach(function(r){
+      var key=r.contact+'|'+r.type;
+      if(!map[key]) map[key]={contact:r.contact,type:r.type,results:[]};
+      map[key].results.push(r.result);
+    });
+    return Object.values(map);
+  })();
+
+  var svyList=parseCSV(surveysR);
+  var qList=parseCSV(questionsR);
+  window.FLOW_SURVEYS = svyList.map(function(s){
+    var qs=qList.filter(function(q){return q.survey_code===s.code;}).sort(function(a,b){return a.seq-b.seq;});
+    return {code:s.code, name:s.name, flow_no:s.flow_no||'', enabled:s.enabled!=='false', questions:qs.map(function(q){
+      var obj={type:q.type, text:q.text};
+      if(q.options) obj.options=q.options.split('|');
+      return obj;
+    })};
+  });
+
+  var flowRows=parseCSV(flowsR);
+  window._CSV_FLOWS = flowRows.map(function(f){
+    return {no:f.no, name:f.name, type:f.type, enabled:f.enabled==='true', skill:f.skill||'', surveyCode:'', formData:null};
+  });
+
+  var actRows=parseCSV(actionsR);
+  window._CSV_ACTIONS_DEFAULT = actRows.filter(function(r){return r.template==='_default';}).map(function(r){return r.action;});
+  window._CSV_ACTIONS_MAP = {};
+  actRows.forEach(function(r){
+    if(r.template!=='_default'){
+      if(!window._CSV_ACTIONS_MAP[r.template]) window._CSV_ACTIONS_MAP[r.template]=[];
+      window._CSV_ACTIONS_MAP[r.template].push(r.action);
+    }
+  });
+
+  window._CSV_INTENTS = parseCSV(intentsR).map(function(r){return r.intent;});
+  window._CSV_CHECKS = parseCSV(checksR).map(function(r){return r.key;});
+
+  var varRows=parseCSV(varsR);
+  window._CSV_VARS = {};
+  varRows.forEach(function(r){
+    if(!window._CSV_VARS[r.template]) window._CSV_VARS[r.template]=[];
+    window._CSV_VARS[r.template].push({code:r.code, name:r.name});
+  });
+
+  /* ---- 載入 JSON 流程檔 ---- */
+  try{
+    var manifestR=await fetch(base+'flows/index.json').then(function(r){return r.text();});
+    var flowIds=JSON.parse(manifestR);
+    if(flowIds.length){
+      var flowJsons=await Promise.all(flowIds.map(function(id){
+        return fetch(base+'flows/'+id+'.json').then(function(r){return r.json();}).catch(function(){return null;});
+      }));
+      var loadedFlows=flowJsons.filter(function(f){return f&&f.no;});
+      if(loadedFlows.length) window._JSON_FLOWS=loadedFlows;
+    }
+  }catch(e){/* no manifest or parse error, use CSV fallback */}
+}
+
+/* =====================================================================
    共用互動邏輯
    ===================================================================== */
-/* 全域台詞池：合併所有樣板的 scripts（去重） */
-window.PARAM_SCRIPTS=(function(){
-  var all=[],seen={};
-  Object.keys(TEMPLATES).forEach(function(k){
-    TEMPLATES[k].scripts.forEach(function(s){
-      if(!seen[s.code]){seen[s.code]=1;all.push({code:s.code,text:s.text});}
+/* 全域台詞池：合併所有樣板的 scripts（去重）- 作為 CSV 載入失敗時的 fallback */
+if(!window.PARAM_SCRIPTS){
+  window.PARAM_SCRIPTS=(function(){
+    var all=[],seen={};
+    Object.keys(TEMPLATES).forEach(function(k){
+      TEMPLATES[k].scripts.forEach(function(s){
+        if(!seen[s.code]){seen[s.code]=1;all.push({code:s.code,text:s.text});}
+      });
     });
-  });
-  return all;
-})();
+    return all;
+  })();
+}
 
 (function(){
-  var PARAM_REASONS=[{code:'NV00',name:'聽不懂轉真人'},{code:'NV01',name:'直接意圖轉真人'},{code:'NV03',name:'系統異常'},{code:'NV05',name:'敏感詞轉真人'},{code:'NV07',name:'意見反饋'}];
-  var PARAM_SKILLS=['88001','88002','88003','88004','88005','88006'];
-  window.PARAM_REASONS=PARAM_REASONS;
-  window.PARAM_SKILLS=PARAM_SKILLS;
+  /* Fallback: only set if not already loaded from CSV */
+  if(!window.PARAM_REASONS){
+    window.PARAM_REASONS=[{code:'NV00',name:'聽不懂轉真人'},{code:'NV01',name:'直接意圖轉真人'},{code:'NV03',name:'系統異常'},{code:'NV05',name:'敏感詞轉真人'},{code:'NV07',name:'意見反饋'}];
+  }
+  if(!window.PARAM_SKILLS){
+    window.PARAM_SKILLS=['88001','88002','88003','88004','88005','88006'];
+  }
+  var PARAM_REASONS=window.PARAM_REASONS;
+  var PARAM_SKILLS=window.PARAM_SKILLS;
 
   var PARAM_INTERVIEW=[
     {contact:"本人",type:"本人接聽",results:["考慮中，再聯絡","忙碌中，再聯絡","無意願接受訪談","尚未申辦","線上申辦分期","卡片註銷","毋需對帳單","自行查詢","自行變更","郵寄","e-mail","分行親取","沒有興趣","考慮中，再聯絡","有意願消費，有意願申辦","無意願消費，無意願申辦","已申請調額"]},
@@ -558,18 +693,21 @@ window.PARAM_SCRIPTS=(function(){
     {contact:"非本人",type:"無需外撥(非有效卡)",results:["非有效卡"]},
     {contact:"本人",type:"系統紀錄",results:["閒置","轉真人(聽不懂)","轉真人(敏感詞)","轉真人(意圖)"]}
   ];
-  window.PARAM_INTERVIEW=PARAM_INTERVIEW;
+  if(!window.PARAM_INTERVIEW) window.PARAM_INTERVIEW=PARAM_INTERVIEW;
 
   function VARS(){return window.FLOW_VARS||[];}
   function SCRIPTS(){return window.PARAM_SCRIPTS||window.FLOW_SCRIPTS||[];}
-  function ACTIONS(){return window.FLOW_ACTIONS||['進入主流程區','前往指定區塊','再聽一次（重複本區塊）','轉真人','轉inbound','留電','再聯絡','結束通話（送出以下結束台詞）'];}
-  var RESP_INTENTS=['是','否','轉真人','抱怨負面情緒','聽不懂','閒置','結束','再連絡','掛斷'];
-  var CHECK_KEYS=['閒置','抱怨負面情緒','聽不懂','結束','其他時間再聯絡','掛斷'];
+  function ACTIONS(){
+    if(window.FLOW_ACTIONS) return window.FLOW_ACTIONS;
+    return window._CSV_ACTIONS_DEFAULT||['進入主流程區','前往指定區塊','再聽一次（重複本區塊）','轉真人','轉inbound','SMS','EMAIL','LINE','APP推播','留電','再聯絡','結束通話（送出以下結束台詞）'];
+  }
+  var RESP_INTENTS=window._CSV_INTENTS||['是','否','轉真人','抱怨負面情緒','聽不懂','閒置','結束','再連絡','掛斷'];
+  var CHECK_KEYS=window._CSV_CHECKS||['閒置','聽不懂','抱怨負面情緒','轉真人','結束','再聯絡','掛斷'];
   var INTENT_DEFAULTS={'轉真人':'轉真人','抱怨負面情緒':'轉真人','再連絡':'再聯絡'};
   function getEndAction(){var a=ACTIONS();for(var i=a.length-1;i>=0;i--){if(a[i].indexOf('結束通話')===0)return a[i];}return '結束通話（送出以下結束台詞）';}
   function resolveDefault(intent){if(intent==='結束'||intent==='掛斷')return getEndAction();return INTENT_DEFAULTS[intent]||'';}
   var THRESHOLD_INTENTS=['聽不懂','閒置'];
-  var CHECK_TO_INTENT={'其他時間再聯絡':'再連絡'};
+  var CHECK_TO_INTENT={'再聯絡':'再連絡'};
 
   function flowNameNow(){var f=document.getElementById('flow-name');return f?f.value:'';}
   function el(html){var t=document.createElement('template');t.innerHTML=html.trim();return t.content.firstChild;}
@@ -656,6 +794,35 @@ window.PARAM_SCRIPTS=(function(){
 
   /* ---- 回應設定列 ---- */
   function isEndAct(v){return v&&v.indexOf('結束通話')===0;}
+  function notifyFields(type){
+    var h='';
+    if(type==='SMS'){
+      h='<div class="nf-row"><span class="nf-label">業務性質代號</span><input type="text" class="nf-input" maxlength="10" style="width:140px" placeholder="限10字元"></div>'+
+        '<div class="nf-row"><span class="nf-label">系統代號</span><input type="text" class="nf-input" maxlength="10" style="width:140px" placeholder="限10字元"></div>'+
+        '<div class="nf-row"><span class="nf-label">簡訊內容</span><textarea class="nf-input" placeholder="簡訊內容"></textarea></div>'+
+        '<div class="nf-note">另需由外撥清單中提供核身資料：手機號碼{:DAl}</div>';
+    } else if(type==='EMAIL'){
+      h='<div class="nf-row"><span class="nf-label">專業類別代碼</span><input type="text" class="nf-input" maxlength="10" style="width:140px" placeholder="限10字元"></div>'+
+        '<div class="nf-row"><span class="nf-label">信件主旨</span><textarea class="nf-input" placeholder="信件主旨"></textarea></div>'+
+        '<div class="nf-row"><span class="nf-label">郵件內文</span><textarea class="nf-input" placeholder="郵件內文"></textarea></div>'+
+        '<div class="nf-note">另需由外撥清單中提供核身資料：寄送至Email地址{:To_Mail}</div>';
+    } else if(type==='LINE'){
+      h='<div class="nf-row"><span class="nf-label">交易序號</span><input type="text" class="nf-input" maxlength="10" style="width:140px" placeholder="限10字元"></div>'+
+        '<div class="nf-row"><span class="nf-label">推播樣版代號</span><input type="text" class="nf-input" maxlength="10" style="width:140px" placeholder="限10字元"></div>'+
+        '<div class="nf-row"><span class="nf-label">通路代號</span><input type="text" class="nf-input" maxlength="10" style="width:140px" placeholder="限10字元"></div>'+
+        '<div class="nf-row"><span class="nf-label">LINE訊息內文</span><textarea class="nf-input" placeholder="LINE訊息內文"></textarea></div>'+
+        '<div class="nf-note">另需由外撥清單中提供核身資料：身分證號{:nationalID}、Line ID{:UID}</div>';
+    } else if(type==='APP推播'){
+      h='<div class="nf-row"><span class="nf-label">產品序號(appID)</span><input type="text" class="nf-input" maxlength="100" style="width:200px" placeholder="限100字元"></div>'+
+        '<div class="nf-row"><span class="nf-label">訊息種類</span><input type="text" class="nf-input" maxlength="10" style="width:140px" placeholder="限10字元"></div>'+
+        '<div class="nf-row"><span class="nf-label">來源序號</span><input type="text" class="nf-input" maxlength="10" style="width:140px" placeholder="限10字元"></div>'+
+        '<div class="nf-row"><span class="nf-label">發送方式</span><input type="text" class="nf-input" maxlength="10" style="width:140px" placeholder="限10字元"></div>'+
+        '<div class="nf-row"><span class="nf-label">訊息標題</span><textarea class="nf-input" placeholder="訊息標題"></textarea></div>'+
+        '<div class="nf-row"><span class="nf-label">訊息內文</span><textarea class="nf-input" placeholder="訊息內文"></textarea></div>'+
+        '<div class="nf-note">另需由外撥清單中提供核身資料：身分證字號{:ID}、裝置編號{:device_id}、綁定帳號{:domain_key}</div>';
+    }
+    return h;
+  }
   function respRow(label,action,extra,opts){
     opts=opts||{};
     var isThreshold=(THRESHOLD_INTENTS.indexOf(label)>=0);
@@ -663,8 +830,9 @@ window.PARAM_SCRIPTS=(function(){
       RESP_INTENTS.map(function(x){return '<option'+(x===label?' selected':'')+'>'+esc(x)+'</option>';}).join('');
     var isGoto=(action==='前往指定區塊'),isInbound=(action==='轉inbound'),isHuman=(action==='轉真人'),isEnd=isEndAct(action);
     var cs=opts.checkSource?' data-check-source="'+esc(opts.checkSource)+'"':'';
+    var hs=opts.hideScript?' data-hide-script="1"':'';
 
-    var html='<div class="resp"'+cs+'><span style="font-size:13px;color:#8C9BA5">客戶回應</span>'+
+    var html='<div class="resp"'+cs+hs+'><span style="font-size:13px;color:#8C9BA5">客戶回應</span>'+
       '<select class="rintent">'+iopts+'</select><span class="arrow">&rarr;</span>';
 
     if(isThreshold){
@@ -709,7 +877,7 @@ window.PARAM_SCRIPTS=(function(){
           '<select class="iv-result"><option value="" disabled selected>請選擇訪談結果</option></select></div>'))+'</div></div>';
     } else {
       var humanExtra=isHuman?(extra||'').split('|'):['',''];
-      var showScript=isHuman||isEnd;
+      var showScript=(isHuman||isEnd||isInbound)&&!opts.hideScript;
       var scriptVal=isHuman?humanExtra[1]:(isEnd?(extra||''):'');
       var isCallback=(action==='再聯絡');
       var actionDisabled=opts.lockAction?' disabled':'';
@@ -730,7 +898,11 @@ window.PARAM_SCRIPTS=(function(){
           '<div class="cb-row"><span class="cb-label">覆述辨識結果</span><select class="cb-sel">'+scriptOptions('')+'</select></div>'+
           '<div class="cb-row"><span class="cb-label">結束台詞</span><select class="cb-sel">'+scriptOptions('')+'</select></div>'+
         '</div>';
-      var showInterview=(isHuman||isEnd||isInbound||action==='留電'||isCallback);
+      var isNotify=(action==='SMS'||action==='EMAIL'||action==='LINE'||action==='APP推播');
+      html+='<div class="notify-set'+(isNotify?'':' hidden')+'">';
+      if(isNotify) html+=notifyFields(action);
+      html+='</div>';
+      var showInterview=(isHuman||isEnd||isInbound||action==='留電'||isCallback||isNotify);
       if(opts.lockIv){
         html+='<div class="interview-set">'+
           '<span class="iv-label">訪談結果：</span>'+
@@ -824,7 +996,7 @@ window.PARAM_SCRIPTS=(function(){
       '抱怨負面情緒':{action:'轉真人',reason:'NV05',iv:{contact:'本人',type:'系統紀錄',result:'轉真人(敏感詞)'}},
       '結束':{action:getEndAction(),reason:'',iv:{contact:'本人',type:'本人接聽',result:'無意願接受訪談'}},
       '再連絡':{action:'再聯絡',reason:'',iv:{contact:'本人',type:'本人接聽',result:'忙碌中，再聯絡'}},
-      '掛斷':{action:getEndAction(),reason:'',iv:{contact:'本人',type:'本人接聽',result:'無意願接受訪談'}}
+      '掛斷':{action:getEndAction(),reason:'',iv:{contact:'本人',type:'本人接聽',result:'無意願接受訪談'},hideScript:true}
     };
 
     var lc=lockConfigs[intentVal];
@@ -850,7 +1022,7 @@ window.PARAM_SCRIPTS=(function(){
       parent.replaceChild(newRow,row);
       refreshSubActionFields(newRow);
     } else if(lc&&typeof lc==='object'){
-      newRow=respRow(intentVal,lc.action,'',{lockAction:true,lockReason:lc.reason,lockIv:lc.iv,checkSource:cs||undefined});
+      newRow=respRow(intentVal,lc.action,'',{lockAction:true,lockReason:lc.reason,lockIv:lc.iv,hideScript:lc.hideScript,checkSource:cs||undefined});
       parent.replaceChild(newRow,row);
       syncActionFields(newRow);
       refreshBlockOptions();
@@ -883,18 +1055,21 @@ window.PARAM_SCRIPTS=(function(){
   function syncActionFields(row){
     var as=row.querySelector('.resp-action');if(!as)return;
     var v=as.value;
+    var hideScript=row.dataset.hideScript==='1';
     var sk=row.querySelector(':scope > .skillset');
     var sc=row.querySelector('.action-script');
     var ib=row.querySelector('.inbound-set');
     var g=row.querySelector('.goto');
     var cb=row.querySelector('.callback-set');
     if(sk)sk.classList.toggle('hidden',v!=='轉真人');
-    if(sc)sc.classList.toggle('hidden',v!=='轉真人'&&!isEndAct(v));
+    if(sc)sc.classList.toggle('hidden',(v!=='轉真人'&&!isEndAct(v)&&v!=='轉inbound')||hideScript);
     if(ib){ib.classList.toggle('hidden',v!=='轉inbound');if(v==='轉inbound'){var it=ib.querySelector('.inbound-text');if(it&&!it.value)it.value=flowNameNow();}}
     if(g){g.classList.toggle('hidden',v!=='前往指定區塊');refreshBlockOptions();}
     if(cb)cb.classList.toggle('hidden',v!=='再聯絡');
+    var nf=row.querySelector('.notify-set');
+    if(nf){var isNotify=(v==='SMS'||v==='EMAIL'||v==='LINE'||v==='APP推播');nf.classList.toggle('hidden',!isNotify);if(isNotify&&nf.dataset.notifyType!==v){nf.dataset.notifyType=v;nf.innerHTML=notifyFields(v);}}
     var iv=row.querySelector('.interview-set');
-    if(iv){var showIv=(v==='轉真人'||isEndAct(v)||v==='轉inbound'||v==='留電'||v==='再聯絡');iv.classList.toggle('hidden',!showIv);}
+    if(iv){var showIv=(v==='轉真人'||isEndAct(v)||v==='轉inbound'||v==='留電'||v==='再聯絡'||v==='SMS'||v==='EMAIL'||v==='LINE'||v==='APP推播');iv.classList.toggle('hidden',!showIv);}
   }
 
   function refreshSubActionFields(row){
@@ -906,7 +1081,7 @@ window.PARAM_SCRIPTS=(function(){
       var iv=sr.querySelector('.interview-set');
       var v=sel?sel.value:'';
       if(sk)sk.classList.toggle('hidden',v!=='轉真人');
-      if(sc)sc.classList.toggle('hidden',v!=='轉真人'&&!isEndAct(v));
+      if(sc)sc.classList.toggle('hidden',v!=='轉真人'&&!isEndAct(v)&&v!=='轉inbound');
       var ib=sr.querySelector('.sub-inbound-set');
       if(ib) ib.classList.toggle('hidden', v!=='轉inbound');
       if(iv){
@@ -918,47 +1093,7 @@ window.PARAM_SCRIPTS=(function(){
 
   /* ---- 共用判斷勾選連動 ---- */
   function handleCheckChange(checkbox,owner){
-    var rawText=checkbox.parentNode.textContent.trim();
-    var intent=CHECK_TO_INTENT[rawText]||rawText;
-    var resps=owner.querySelector('.resps');if(!resps)return;
-    if(checkbox.checked){
-      var exists=false;
-      resps.querySelectorAll('.rintent').forEach(function(sel){if(sel.value===intent)exists=true;});
-      if(exists)return;
-      var isT=(THRESHOLD_INTENTS.indexOf(intent)>=0);
-      var row;
-      if(isT){
-        if(intent==='閒置'){
-          row=respRow(intent,'','',{subBefore:'再聽一次（重複本區塊）',subAfter:getEndAction(),subSkill:'',
-            lockBefore:true,lockAfter:true,
-            lockAfterIv:{contact:'本人',type:'系統紀錄',result:'閒置'},
-            checkSource:rawText});
-        } else {
-          row=respRow(intent,'','',{subBefore:'再聽一次（重複本區塊）',subAfter:'轉真人',subSkill:'NV00',
-            lockBefore:true,lockAfter:true,lockAfterReason:true,
-            lockAfterIv:{contact:'本人',type:'系統紀錄',result:'轉真人(聽不懂)'},
-            checkSource:rawText});
-        }
-      } else {
-        var lockConfigs={
-          '抱怨負面情緒':{action:'轉真人',reason:'NV05',iv:{contact:'本人',type:'系統紀錄',result:'轉真人(敏感詞)'}},
-          '結束':{action:getEndAction(),reason:'',iv:{contact:'本人',type:'本人接聽',result:'無意願接受訪談'}},
-          '再連絡':{action:'再聯絡',reason:'',iv:{contact:'本人',type:'本人接聽',result:'忙碌中，再聯絡'}},
-          '掛斷':{action:getEndAction(),reason:'',iv:{contact:'本人',type:'本人接聽',result:'無意願接受訪談'}}
-        };
-        var lc=lockConfigs[intent];
-        if(lc){
-          var extraVal=lc.reason?(lc.reason+'|'):'';
-          row=respRow(intent,lc.action,extraVal,{lockAction:true,lockReason:lc.reason,lockIv:lc.iv,checkSource:rawText});
-        } else {
-          var da=resolveDefault(intent)||getEndAction();
-          row=respRow(intent,da,'',{checkSource:rawText});
-        }
-      }
-      resps.appendChild(row);syncActionFields(row);refreshSubActionFields(row);refreshBlockOptions();
-    } else {
-      resps.querySelectorAll('[data-check-source="'+rawText+'"]').forEach(function(r){r.remove();});
-    }
+    /* 共用判斷已獨立為全流程規則區，checkbox僅記錄套用狀態 */
   }
 
   /* ---- 事件委派 ---- */
@@ -970,6 +1105,12 @@ window.PARAM_SCRIPTS=(function(){
     }
     if((b=e.target.closest('.line .del'))){b.closest('.line').remove();refreshAllPreviews();refreshAddLineButtons();}
     if((b=e.target.closest('.del-block'))){if(confirm('確定要刪除此區塊？')){b.closest('.block').remove();refreshBlockOptions();}}
+    if((b=e.target.closest('#sr-toggle-head'))){
+      var srBody=document.getElementById('sr-body');
+      var toggle=b.querySelector('.sr-toggle');
+      if(srBody.classList.contains('collapsed')){srBody.classList.remove('collapsed');toggle.textContent='收起 ▲';}
+      else{srBody.classList.add('collapsed');toggle.textContent='展開 ▼';}
+    }
     if((b=e.target.closest('.del-part3'))){if(confirm('確定要刪除結束台詞區？'))b.closest('.part').remove();}
     if((b=e.target.closest('.btn-add-block'))){addBlock(b.closest('.part-body'));}
     if((b=e.target.closest('.btn-add-resp'))){
@@ -1036,9 +1177,11 @@ window.PARAM_SCRIPTS=(function(){
      =================================================================== */
   function linesHTML(codes){return '<div class="lines">'+codes.map(scriptLineHTML).join('')+'</div>';}
   function checksHTML(checks){
-    checks=checks||{};
-    return '<div class="shared-checks"><div class="sc-title">共用回應判斷<span class="sc-hint">勾選後自動新增對應意圖與預設處理方式</span></div>'+
-      '<div class="sc-items">'+CHECK_KEYS.map(function(k){return '<label><input type="checkbox"'+(checks[k]?' checked':'')+'> '+k+'</label>';}).join('')+'</div></div>';
+    var applyArr=Array.isArray(checks)?checks:[];
+    var applySet={};applyArr.forEach(function(k){applySet[k]=true;});
+    if(!Array.isArray(checks)&&checks&&typeof checks==='object'){Object.keys(checks).forEach(function(k){if(checks[k])applySet[k]=true;});}
+    return '<div class="shared-checks"><div class="sc-title">套用共用判斷<span class="sc-hint">勾選要在此節點套用的規則</span></div>'+
+      '<div class="sc-items">'+CHECK_KEYS.map(function(k){return '<label><input type="checkbox"'+(applySet[k]?' checked':'')+'> '+k+'</label>';}).join('')+'</div></div>';
   }
   function blockHTML(b,opt){
     opt=opt||{};var hasLine=(b.lines&&b.lines.length>0);
@@ -1049,13 +1192,16 @@ window.PARAM_SCRIPTS=(function(){
       '<div class="add-bar"><button class="btn-add" data-type="script" style="'+(hasLine?'display:none':'')+'">＋ 台詞</button></div>'+
       (opt.withResp?'<div class="resp-title">'+(opt.respTitle||'回應設定（依客戶回應決定下一步）')+'</div>'+
         '<div class="resps"'+(opt.respId?' id="'+opt.respId+'"':'')+'></div>'+
-        '<button class="btn-add-resp">＋ 新增回應選項</button>'+(b.checks!==undefined?checksHTML(b.checks):''):'')+
+        '<button class="btn-add-resp">＋ 新增回應選項</button>'+checksHTML(b.applyRules||b.checks||[]):'')+
       '<div class="preview"></div></div></div>';
   }
 
   function renderTemplate(typeName){
     var t=TEMPLATES[typeName];if(!t)return;
-    window.FLOW_VARS=t.vars;window.FLOW_SCRIPTS=t.scripts;window.FLOW_SURVEYS=t.surveys;window.FLOW_ACTIONS=t.actions;
+    window.FLOW_VARS=(window._CSV_VARS&&window._CSV_VARS[typeName])||t.vars;
+    window.FLOW_SCRIPTS=t.scripts;
+    window.FLOW_SURVEYS=window.FLOW_SURVEYS||t.surveys;
+    window.FLOW_ACTIONS=window._CSV_ACTIONS_MAP&&window._CSV_ACTIONS_MAP[typeName]?window._CSV_ACTIONS_MAP[typeName]:(window._CSV_ACTIONS_DEFAULT||t.actions);
 
     document.getElementById('crumb-cur').textContent='樣板設定－'+typeName;
     document.getElementById('page-title').textContent='樣板設定－'+typeName;
@@ -1073,6 +1219,18 @@ window.PARAM_SCRIPTS=(function(){
     html+='<div class="var-legend"><span class="vl-title">變數對照</span>'+
       t.vars.map(function(v){return '<span class="vl-item"><b>{'+v.code+'}</b>'+esc(v.name)+'</span>';}).join('')+
       '<span class="vl-note">變數以 {pX} 形式包含於台詞內容中，本頁僅下拉選用台詞。</span></div>';
+
+    /* 共用回應處理規則（全流程共用） */
+    html+='<div class="shared-rules"><div class="sr-head" id="sr-toggle-head"><h2>共用回應處理規則（全流程共用）</h2><span class="sr-toggle">收起 ▲</span></div>';
+    html+='<div class="sr-body" id="sr-body">';
+    html+='<div class="sr-item" data-rule="閒置"><span class="sr-intent">閒置</span><div class="sr-config"><span class="sr-fixed">達標準後：再聽一次｜達次數後：結束通話</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ001')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 系統紀錄 / 閒置</span></div></div>';
+    html+='<div class="sr-item" data-rule="聽不懂"><span class="sr-intent">聽不懂</span><div class="sr-config"><span class="sr-fixed">未達次數：再聽一次｜達次數後：轉真人(NV00)</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ002')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 系統紀錄 / 轉真人(聽不懂)</span></div></div>';
+    html+='<div class="sr-item" data-rule="抱怨負面情緒"><span class="sr-intent">抱怨負面情緒</span><div class="sr-config"><span class="sr-fixed">轉真人(NV05)</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ002')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 系統紀錄 / 轉真人(敏感詞)</span></div></div>';
+    html+='<div class="sr-item" data-rule="轉真人"><span class="sr-intent">轉真人</span><div class="sr-config"><span class="sr-fixed">轉真人(NV01)</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ002')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 系統紀錄 / 轉真人(意圖)</span></div></div>';
+    html+='<div class="sr-item" data-rule="結束"><span class="sr-intent">結束</span><div class="sr-config"><span class="sr-fixed">結束通話</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ001')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 本人接聽 / 無意願接受訪談</span></div></div>';
+    html+='<div class="sr-item" data-rule="再聯絡"><span class="sr-intent">再聯絡</span><div class="sr-config"><span class="sr-fixed">再聯絡</span> <span class="sr-lbl">詢問可再聯絡日期：</span><select class="sr-cb1 scriptsel">'+scriptOptions('ZZA001')+'</select> <span class="sr-lbl">確認聯絡時段：</span><select class="sr-cb2 scriptsel">'+scriptOptions('ZZA002')+'</select> <span class="sr-lbl">覆述辨識結果：</span><select class="sr-cb3 scriptsel">'+scriptOptions('ZZA003')+'</select> <span class="sr-lbl">結束台詞：</span><select class="sr-cb4 scriptsel">'+scriptOptions('ZZA004')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 本人接聽 / 忙碌中，再聯絡</span></div></div>';
+    html+='<div class="sr-item" data-rule="掛斷"><span class="sr-intent">掛斷</span><div class="sr-config"><span class="sr-fixed">結束通話（不需台詞）</span> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 本人接聽 / 無意願接受訪談</span></div></div>';
+    html+='</div></div>';
 
     /* Part 1 開場白區（多區塊） */
     html+='<section class="part"><div class="part-head"><span class="no">PART 1</span><h2>開場白區</h2>'+
@@ -1093,15 +1251,12 @@ window.PARAM_SCRIPTS=(function(){
         '<div class="src">單選題之語音互動方式（自然語言／DTMF）依<a href="#">系統參數管理</a>設定</div></div>'+
         '<div id="survey-preview" class="survey-preview"></div>'+
         '<div class="resp-title">問卷處理機制</div><div class="resps">'+
-          '<div class="resp"><span style="font-size:13px;color:#8C9BA5">完成通知（無問答題）</span><span class="arrow">&rarr;</span>'+
+          '<div class="resp"><span style="font-size:13px;color:#8C9BA5">完成通知（無問答題或不轉真人）</span><span class="arrow">&rarr;</span>'+
             '<select class="scriptsel svy-end" data-role="done" style="flex:1;min-width:200px">'+scriptOptions(t.part2.endDone)+'</select>'+
             '<span class="module">播畢掛斷</span></div>'+
           '<div class="resp"><span style="font-size:13px;color:#8C9BA5">問答題轉真人</span><span class="arrow">&rarr;</span>'+
             '<select class="scriptsel svy-end" data-role="human" style="flex:1;min-width:200px">'+scriptOptions(t.part2.endHuman)+'</select>'+
             '<span class="module">播畢轉接</span></div>'+
-          '<div class="resp"><span style="font-size:13px;color:#8C9BA5">問答題不轉真人</span><span class="arrow">&rarr;</span>'+
-            '<select class="scriptsel svy-end" data-role="nodone" style="flex:1;min-width:200px">'+scriptOptions(t.part2.endDone)+'</select>'+
-            '<span class="module">播畢掛斷</span></div>'+
         '</div>'+
         '<button class="btn-add-resp">＋ 新增回應選項</button>'+
         checksHTML(t.part2.checks||{})+
@@ -1109,7 +1264,7 @@ window.PARAM_SCRIPTS=(function(){
     } else if(t.part2.kind==='notice'){
       html+='<section class="part"><div class="part-head"><span class="no">PART 2</span><h2>'+esc(t.part2.title)+'</h2>'+
         '<span class="hint">'+esc(t.part2.hint)+'</span></div>'+
-        '<div class="part-body" data-lines-owner data-preview-scope>'+linesHTML(t.part2.lines)+
+        '<div class="part-body" id="notice-body" data-lines-owner data-preview-scope>'+linesHTML(t.part2.lines)+
         '<div class="add-bar"><button class="btn-add" data-type="script" style="'+(t.part2.lines.length>=1?'display:none':'')+'">＋ 台詞</button></div>'+
         '<div class="preview"></div></div></section>';
     } else {
@@ -1143,17 +1298,76 @@ window.PARAM_SCRIPTS=(function(){
       seed.items.forEach(function(it){host.appendChild(respRow(it[0],it[1],it[2]||''));});
     });
 
-    /* 共用判斷已勾選 → 自動產生列 */
-    document.querySelectorAll('.shared-checks').forEach(function(sc){
-      var owner=sc.closest('[data-resp-owner]');if(!owner)return;
-      sc.querySelectorAll('input[type=checkbox]:checked').forEach(function(cb){handleCheckChange(cb,owner);});
-    });
+    /* 共用判斷已勾選 → 僅記錄狀態，不再自動產生列 */
 
     bindAllDnD();renderSurvey();refreshBlockOptions();refreshAllPreviews();refreshAddLineButtons();
     document.querySelectorAll('.resp').forEach(function(r){syncActionFields(r);refreshSubActionFields(r);});
   }
 
   function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2200);}
+  /* ---- 台詞可搜尋選單 ---- */
+  var scriptDropdown=null;
+  function showScriptDropdown(sel){
+    closeScriptDropdown();
+    var scripts=window.PARAM_SCRIPTS||[];
+    var rect=sel.getBoundingClientRect();
+    var dd=document.createElement('div');
+    dd.className='sc-dropdown-panel';
+    dd.style.cssText='position:fixed;top:'+(rect.bottom+2)+'px;left:'+rect.left+'px;width:'+Math.max(rect.width,300)+'px;max-height:220px;overflow-y:auto;background:#fff;border:1px solid var(--line);border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:9999;padding:4px 0';
+    var searchInput=document.createElement('input');
+    searchInput.type='text';
+    searchInput.placeholder='\u8F38\u5165\u7BE9\u9078...';
+    searchInput.style.cssText='width:calc(100% - 16px);margin:4px 8px 6px;height:30px;border:1px solid var(--line);border-radius:4px;padding:0 8px;font-size:13px';
+    dd.appendChild(searchInput);
+    var list=document.createElement('div');
+    list.className='sc-list';
+    dd.appendChild(list);
+    var defaultKw='';
+    if(sel.closest('.callback-set')) defaultKw='ZZA';
+    function renderList(kw){
+      var k=(kw||'').toLowerCase();
+      var html='';
+      scripts.forEach(function(s){
+        var txt=s.code+'\uff5c'+s.text;
+        if(k && txt.toLowerCase().indexOf(k)<0) return;
+        var isActive=(s.code===sel.value);
+        html+='<div class="sc-dd-item'+(isActive?' active':'')+'" data-code="'+s.code+'" title="'+s.text.replace(/"/g,'&quot;')+'">'+s.code+'\uff5c'+s.text+'</div>';
+      });
+      if(!html) html='<div style="padding:8px 10px;color:#B9C1C9;font-size:13px">\u7121\u7B26\u5408\u7D50\u679C</div>';
+      list.innerHTML=html;
+    }
+    searchInput.value=defaultKw;
+    renderList(defaultKw);
+    searchInput.addEventListener('input',function(){renderList(this.value);});
+    list.addEventListener('click',function(e2){
+      var item=e2.target.closest('.sc-dd-item');
+      if(!item) return;
+      sel.value=item.dataset.code;
+      sel.dispatchEvent(new Event('change',{bubbles:true}));
+      closeScriptDropdown();
+    });
+    document.body.appendChild(dd);
+    scriptDropdown={el:dd,sel:sel};
+    searchInput.focus();
+  }
+  function closeScriptDropdown(){
+    if(scriptDropdown){scriptDropdown.el.remove();scriptDropdown=null;}
+  }
+  document.addEventListener('mousedown',function(e){
+    var sel=e.target.closest('select.scriptsel, select.action-script-sel, select.sub-script-sel, select.cb-sel, select.svy-end, select.human-script-sel');
+    if(sel){
+      e.preventDefault();
+      showScriptDropdown(sel);
+      return;
+    }
+    if(scriptDropdown && !e.target.closest('.sc-dropdown-panel')){
+      closeScriptDropdown();
+    }
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape' && scriptDropdown) closeScriptDropdown();
+  });
+
   window.renderTemplate=renderTemplate;
   window.renderSurvey=renderSurvey;
   window.bindAllDnD=bindAllDnD;
@@ -1163,13 +1377,532 @@ window.PARAM_SCRIPTS=(function(){
 })();
 
 /* =====================================================================
+   formData capture / restore（取代 dynSnapshot）
+   ===================================================================== */
+(function(){
+
+  function captureInterview(ivSet){
+    if(!ivSet) return {contact:'',type:'',result:''};
+    var c=ivSet.querySelector('.iv-contact');
+    var t=ivSet.querySelector('.iv-type');
+    var r=ivSet.querySelector('.iv-result');
+    return {contact:c?c.value:'', type:t?t.value:'', result:r?r.value:''};
+  }
+
+  function getScriptText(code){
+    if(!code)return '';
+    var scripts=window.PARAM_SCRIPTS||[];
+    var hit=scripts.filter(function(s){return s.code===code;})[0];
+    return hit?hit.text:'';
+  }
+
+  function captureResp(r){
+    var resp={};
+    var intentSel=r.querySelector('.rintent');
+    resp.intent=intentSel?intentSel.value:'';
+    resp.locked=!!(r.querySelector('.resp-action[disabled]'));
+    resp.hideScript=r.dataset&&r.dataset.hideScript==='1';
+
+    /* Threshold row (聽不懂/閒置) */
+    var sub=r.querySelector('.resp-sub');
+    if(sub){
+      resp.threshold={};
+      var rows=sub.querySelectorAll('.sub-row');
+      if(rows[0]){
+        var bSel=rows[0].querySelector('.sub-action-before');
+        resp.threshold.beforeAction=bSel?bSel.value:'';
+        var bScript=rows[0].querySelector('.sub-script-sel');
+        resp.threshold.beforeScript=bScript?bScript.value:'';
+        resp.threshold.beforeScriptText=getScriptText(resp.threshold.beforeScript);
+        var bReason=rows[0].querySelector('.reason-sel');
+        resp.threshold.beforeReason=bReason?bReason.value:'';
+        var bIb=rows[0].querySelector('.sub-inbound-set:not(.hidden) .inbound-text');
+        resp.threshold.beforeInbound=bIb?bIb.value:'';
+        resp.threshold.beforeInterview=captureInterview(rows[0].querySelector('.interview-set:not(.hidden)'));
+      }
+      if(rows[1]){
+        var aSel=rows[1].querySelector('.sub-action-after');
+        resp.threshold.afterAction=aSel?aSel.value:'';
+        var aScript=rows[1].querySelector('.sub-script-sel');
+        resp.threshold.afterScript=aScript?aScript.value:'';
+        resp.threshold.afterScriptText=getScriptText(resp.threshold.afterScript);
+        var aReason=rows[1].querySelector('.reason-sel');
+        resp.threshold.afterReason=aReason?aReason.value:'';
+        var aIb=rows[1].querySelector('.sub-inbound-set:not(.hidden) .inbound-text');
+        resp.threshold.afterInbound=aIb?aIb.value:'';
+        resp.threshold.afterInterview=captureInterview(rows[1].querySelector('.interview-set:not(.hidden)'));
+      }
+      return resp;
+    }
+
+    /* Normal resp */
+    var actionSel=r.querySelector('.resp-action');
+    resp.action=actionSel?actionSel.value:'';
+    var scriptSel=r.querySelector('.action-script-sel');
+    resp.script=scriptSel?scriptSel.value:'';
+    resp.scriptText=getScriptText(resp.script);
+    var reasonSel=r.querySelector(':scope > .skillset .reason-sel');
+    resp.reason=reasonSel?reasonSel.value:'';
+    var gotoSel=r.querySelector('.goto-block');
+    resp.gotoBlock=gotoSel?gotoSel.value:'';
+    var ibText=r.querySelector('.inbound-set:not(.hidden) .inbound-text');
+    resp.inboundText=ibText?ibText.value:'';
+    resp.interview=captureInterview(r.querySelector('.interview-set:not(.hidden)'));
+
+    /* Callback */
+    var cbSet=r.querySelector('.callback-set:not(.hidden)');
+    if(cbSet){
+      resp.callback={};
+      var cbSels=cbSet.querySelectorAll('.cb-sel');
+      resp.callback.script1=cbSels[0]?cbSels[0].value:'';resp.callback.script1Text=getScriptText(resp.callback.script1);
+      resp.callback.script2=cbSels[1]?cbSels[1].value:'';resp.callback.script2Text=getScriptText(resp.callback.script2);
+      resp.callback.script3=cbSels[2]?cbSels[2].value:'';resp.callback.script3Text=getScriptText(resp.callback.script3);
+      resp.callback.script4=cbSels[3]?cbSels[3].value:'';resp.callback.script4Text=getScriptText(resp.callback.script4);
+    }
+
+    /* Notify */
+    var nfSet=r.querySelector('.notify-set:not(.hidden)');
+    if(nfSet){
+      resp.notify={type:resp.action||'',fields:{}};
+      nfSet.querySelectorAll('.nf-row').forEach(function(row){
+        var lbl=row.querySelector('.nf-label');
+        var inp=row.querySelector('.nf-input');
+        if(lbl&&inp) resp.notify.fields[lbl.textContent.trim()]=inp.value;
+      });
+    }
+
+    return resp;
+  }
+
+  function captureBlock(block){
+    var obj={};
+    var nameInput=block.querySelector('.bname');
+    obj.name=nameInput?nameInput.value:'';
+    var scriptSel=block.querySelector('.block-body > .lines .scriptsel, .block-body .scriptsel');
+    if(!scriptSel) scriptSel=block.querySelector('.scriptsel');
+    obj.script=scriptSel?scriptSel.value:'';
+    obj.scriptText=getScriptText(obj.script);
+    obj.responses=[];
+    var resps=block.querySelector('.resps');
+    if(resps){
+      resps.querySelectorAll(':scope > .resp').forEach(function(r){
+        obj.responses.push(captureResp(r));
+      });
+    }
+    obj.applyRules=[];
+    block.querySelectorAll('.shared-checks input[type=checkbox]').forEach(function(cb){
+      var label=cb.parentNode.textContent.trim();
+      if(cb.checked) obj.applyRules.push(label);
+    });
+    return obj;
+  }
+
+  function captureFormData(){
+    var data={};
+    /* Capture shared rules */
+    var srBody=document.getElementById('sr-body');
+    if(srBody){
+      data.sharedRules={};
+      srBody.querySelectorAll('.sr-item').forEach(function(item){
+        var key=item.dataset.rule;
+        var rule={};
+        var script=item.querySelector('.sr-script');
+        if(script) rule.script=script.value||'';
+        var cb1=item.querySelector('.sr-cb1');
+        if(cb1) rule.callback={script1:cb1.value||'',script2:(item.querySelector('.sr-cb2')||{value:''}).value,script3:(item.querySelector('.sr-cb3')||{value:''}).value,script4:(item.querySelector('.sr-cb4')||{value:''}).value};
+        data.sharedRules[key]=rule;
+      });
+    }
+    var tpl=document.getElementById('tpl-type').value;
+
+    /* Part 1: first [data-blocks] section inside #dyn */
+    var allBlockSections=document.querySelectorAll('#dyn [data-blocks]');
+    var p1Blocks=[];
+    if(allBlockSections.length>=1){
+      allBlockSections[0].querySelectorAll(':scope > .block').forEach(function(block){
+        p1Blocks.push(captureBlock(block));
+      });
+    }
+    data.part1={blocks:p1Blocks};
+
+    /* Part 2 depends on template type */
+    if(tpl==='客戶意願確認轉真人服務類'){
+      var p2Blocks=[];
+      if(allBlockSections.length>=2){
+        allBlockSections[1].querySelectorAll(':scope > .block').forEach(function(block){
+          p2Blocks.push(captureBlock(block));
+        });
+      }
+      data.part2={blocks:p2Blocks};
+    } else if(tpl==='滿意度類'){
+      data.part2Survey={};
+      var svyScript=document.getElementById('survey-script-sel');
+      if(svyScript) data.part2Survey.surveyScript=svyScript.value||'';
+      /* Fixed rows: capture done/human scripts */
+      var respOwner=document.querySelector('#dyn [data-resp-owner]');
+      if(respOwner){
+        var doneSel=respOwner.querySelector('[data-role="done"]');
+        var humanSel=respOwner.querySelector('[data-role="human"]');
+        data.part2Survey.endDone=doneSel?doneSel.value:'';
+        data.part2Survey.endHuman=humanSel?humanSel.value:'';
+      }
+      /* Additional response rows (beyond fixed) */
+      var svyResps=[];
+      if(respOwner){
+        respOwner.querySelectorAll('.resps .resp').forEach(function(r){
+          if(r.querySelector('.svy-end')) return; /* skip fixed rows */
+          svyResps.push(captureResp(r));
+        });
+      }
+      data.part2Survey.responses=svyResps;
+      /* applyRules for survey part */
+      var svyApply=[];
+      if(respOwner){
+        respOwner.querySelectorAll('.shared-checks input[type=checkbox]').forEach(function(cb){
+          var label=cb.parentNode.textContent.trim();
+          if(cb.checked) svyApply.push(label);
+        });
+      }
+      data.part2Survey.applyRules=svyApply;
+    } else if(tpl==='業務資訊通知類'){
+      var noticeScript='';
+      var noticeSel=document.querySelector('#notice-body .scriptsel');
+      if(noticeSel) noticeScript=noticeSel.value||'';
+      data.part2Notice={script:noticeScript};
+    }
+
+    /* Part 3 (optional) */
+    var part3Sec=document.getElementById('part3-section');
+    if(part3Sec){
+      var p3Blocks=[];
+      var p3Body=part3Sec.querySelector('[data-blocks]');
+      if(p3Body){
+        p3Body.querySelectorAll(':scope > .block').forEach(function(block){
+          p3Blocks.push(captureBlock(block));
+        });
+      }
+      data.part3={blocks:p3Blocks};
+    }
+
+    return data;
+  }
+
+  /* ---- Restore ---- */
+
+  function restoreInterview(row, ivData, delay){
+    if(!ivData||!ivData.contact) return;
+    var ivC=row.querySelector('.iv-contact');
+    if(!ivC) return;
+    var doRestore=function(){
+      ivC.value=ivData.contact;
+      ivC.dispatchEvent(new Event('change',{bubbles:true}));
+      setTimeout(function(){
+        var ivT=row.querySelector('.iv-type');
+        if(ivT&&ivData.type){
+          ivT.value=ivData.type;
+          ivT.dispatchEvent(new Event('change',{bubbles:true}));
+          setTimeout(function(){
+            var ivR=row.querySelector('.iv-result');
+            if(ivR&&ivData.result) ivR.value=ivData.result;
+          },60);
+        }
+      },60);
+    };
+    if(delay) setTimeout(doRestore, delay);
+    else doRestore();
+  }
+
+  function restoreResp(row, rData){
+    if(!row||!rData) return;
+    var parent=row.parentNode;
+    var idx=Array.from(parent.children).indexOf(row);
+    var intentSel=row.querySelector('.rintent');
+    if(intentSel&&rData.intent){
+      intentSel.value=rData.intent;
+      intentSel.dispatchEvent(new Event('change',{bubbles:true}));
+    }
+    /* Row may have been replaced by handleIntentChange - re-acquire */
+    row=parent.children[idx]||row;
+
+    /* Threshold rows handled by checks auto-generation; fill sub-values */
+    if(rData.threshold){
+      /* Re-acquire row */
+      row=parent.children[idx]||row;
+      var sub=row.querySelector('.resp-sub');
+      if(sub){
+        var rows=sub.querySelectorAll('.sub-row');
+        if(rows[0]&&rData.threshold.beforeAction){
+          var bSel=rows[0].querySelector('.sub-action-before');
+          if(bSel){bSel.value=rData.threshold.beforeAction;bSel.dispatchEvent(new Event('change',{bubbles:true}));}
+          setTimeout(function(){
+            var bScript=rows[0].querySelector('.sub-script-sel');
+            if(bScript&&rData.threshold.beforeScript) bScript.value=rData.threshold.beforeScript;
+            var bReason=rows[0].querySelector('.reason-sel');
+            if(bReason&&rData.threshold.beforeReason) bReason.value=rData.threshold.beforeReason;
+            var bIb=rows[0].querySelector('.sub-inbound-set .inbound-text');
+            if(bIb&&rData.threshold.beforeInbound) bIb.value=rData.threshold.beforeInbound;
+            restoreInterview(rows[0], rData.threshold.beforeInterview, 0);
+          },80);
+        }
+        if(rows[1]&&rData.threshold.afterAction){
+          var aSel=rows[1].querySelector('.sub-action-after');
+          if(aSel&&!aSel.disabled){aSel.value=rData.threshold.afterAction;aSel.dispatchEvent(new Event('change',{bubbles:true}));}
+          setTimeout(function(){
+            var aScript=rows[1].querySelector('.sub-script-sel');
+            if(aScript&&rData.threshold.afterScript) aScript.value=rData.threshold.afterScript;
+            var aReason=rows[1].querySelector('.reason-sel');
+            if(aReason&&rData.threshold.afterReason&&!aReason.disabled) aReason.value=rData.threshold.afterReason;
+            var aIb=rows[1].querySelector('.sub-inbound-set .inbound-text');
+            if(aIb&&rData.threshold.afterInbound) aIb.value=rData.threshold.afterInbound;
+            restoreInterview(rows[1], rData.threshold.afterInterview, 0);
+          },80);
+        }
+      }
+      return;
+    }
+
+    /* Normal resp */
+    var actionSel=row.querySelector('.resp-action');
+    if(actionSel&&rData.action&&!actionSel.disabled){
+      actionSel.value=rData.action;
+      actionSel.dispatchEvent(new Event('change',{bubbles:true}));
+    }
+    setTimeout(function(){
+      /* Re-acquire row in case it was rebuilt */
+      row=parent.children[idx]||row;
+      var scriptSel=row.querySelector('.action-script-sel');
+      if(scriptSel&&rData.script) scriptSel.value=rData.script;
+      var reasonSel=row.querySelector(':scope > .skillset .reason-sel');
+      if(reasonSel&&rData.reason&&!reasonSel.disabled) reasonSel.value=rData.reason;
+      var gotoSel=row.querySelector('.goto-block');
+      if(gotoSel&&rData.gotoBlock) gotoSel.value=rData.gotoBlock;
+      var ibText=row.querySelector('.inbound-set .inbound-text');
+      if(ibText&&rData.inboundText) ibText.value=rData.inboundText;
+      /* Callback */
+      if(rData.callback){
+        var cbSels=row.querySelectorAll('.cb-sel');
+        if(cbSels[0]&&rData.callback.script1) cbSels[0].value=rData.callback.script1;
+        if(cbSels[1]&&rData.callback.script2) cbSels[1].value=rData.callback.script2;
+        if(cbSels[2]&&rData.callback.script3) cbSels[2].value=rData.callback.script3;
+        if(cbSels[3]&&rData.callback.script4) cbSels[3].value=rData.callback.script4;
+      }
+      /* Notify */
+      if(rData.notify&&rData.notify.fields){
+        var nfSet=row.querySelector('.notify-set');
+        if(nfSet){
+          Object.keys(rData.notify.fields).forEach(function(key){
+            nfSet.querySelectorAll('.nf-row').forEach(function(nfRow){
+              var lbl=nfRow.querySelector('.nf-label');
+              if(lbl&&lbl.textContent.trim()===key){
+                var inp=nfRow.querySelector('.nf-input');
+                if(inp) inp.value=rData.notify.fields[key];
+              }
+            });
+          });
+        }
+      }
+      /* Interview */
+      restoreInterview(row, rData.interview, 0);
+    },80);
+  }
+
+  function restoreBlock(block, bData){
+    var nameInput=block.querySelector('.bname');
+    if(nameInput) nameInput.value=bData.name||'';
+
+    /* Set script - create a line first if needed */
+    if(bData.script){
+      var scriptSel=block.querySelector('.scriptsel');
+      if(!scriptSel){
+        var addLineBtn=block.querySelector('.btn-add');
+        if(addLineBtn){addLineBtn.click();window.refreshAddLineButtons();}
+        scriptSel=block.querySelector('.scriptsel');
+      }
+      if(scriptSel){
+        scriptSel.value=bData.script;
+        scriptSel.dispatchEvent(new Event('change',{bubbles:true}));
+      }
+    }
+
+    /* Restore applyRules */
+    var applySet={};
+    if(bData.applyRules){
+      bData.applyRules.forEach(function(k){applySet[k]=true;});
+    }
+    block.querySelectorAll('.shared-checks input[type=checkbox]').forEach(function(cb){
+      var label=cb.parentNode.textContent.trim();
+      cb.checked=!!applySet[label];
+    });
+
+    /* Restore ALL responses in original order */
+    if(bData.responses){
+      var resps=block.querySelector('.resps');
+      if(!resps) return;
+      /* Clear any existing rows */
+      resps.querySelectorAll(':scope > .resp').forEach(function(r){r.remove();});
+      bData.responses.forEach(function(rData){
+        var addBtn=block.querySelector('.btn-add-resp');
+        if(addBtn) addBtn.click();
+        var allRows=resps.querySelectorAll(':scope > .resp');
+        restoreResp(allRows[allRows.length-1], rData);
+      });
+    }
+  }
+
+  function restoreFormData(flow){
+    /* Set basic fields */
+    document.getElementById('flow-no').value=flow.no||'';
+    document.getElementById('flow-name').value=flow.name||'';
+    document.getElementById('tpl-type').value=flow.type||'';
+
+    /* Render template (creates the base structure) */
+    window.renderTemplate(flow.type);
+
+    /* Set skill */
+    var tsel=document.getElementById('transfer-skill');
+    if(tsel&&flow.skill) tsel.value=flow.skill;
+
+    /* Set survey code */
+    if(flow.surveyCode){
+      var sc=document.getElementById('survey-code');
+      if(sc){sc.value=flow.surveyCode;sc.dataset.code=flow.surveyCode.split('\uff5c')[0];}
+    }
+
+    /* Restore shared rules */
+    if(flow.formData&&flow.formData.sharedRules){
+      var srBody=document.getElementById('sr-body');
+      if(srBody){
+        Object.keys(flow.formData.sharedRules).forEach(function(key){
+          var item=srBody.querySelector('[data-rule="'+key+'"]');
+          if(!item) return;
+          var rule=flow.formData.sharedRules[key];
+          var script=item.querySelector('.sr-script');
+          if(script&&rule.script) script.value=rule.script;
+          if(rule.callback){
+            var cb1=item.querySelector('.sr-cb1');if(cb1&&rule.callback.script1)cb1.value=rule.callback.script1;
+            var cb2=item.querySelector('.sr-cb2');if(cb2&&rule.callback.script2)cb2.value=rule.callback.script2;
+            var cb3=item.querySelector('.sr-cb3');if(cb3&&rule.callback.script3)cb3.value=rule.callback.script3;
+            var cb4=item.querySelector('.sr-cb4');if(cb4&&rule.callback.script4)cb4.value=rule.callback.script4;
+          }
+        });
+      }
+    }
+
+    if(!flow.formData) return;
+    var fd=flow.formData;
+
+    /* Restore Part 1 */
+    var allBlockSections=document.querySelectorAll('#dyn [data-blocks]');
+    if(fd.part1&&fd.part1.blocks&&allBlockSections.length>=1){
+      var p1Body=allBlockSections[0];
+      /* Remove default blocks */
+      p1Body.querySelectorAll(':scope > .block').forEach(function(b){b.remove();});
+      fd.part1.blocks.forEach(function(bData){
+        var addBtn=p1Body.querySelector('.btn-add-block');
+        if(addBtn) addBtn.click();
+        var blocks=p1Body.querySelectorAll(':scope > .block');
+        restoreBlock(blocks[blocks.length-1], bData);
+      });
+    }
+
+    /* Restore Part 2 based on type */
+    if(flow.type==='\u5ba2\u6236\u610f\u9858\u78ba\u8a8d\u8f49\u771f\u4eba\u670d\u52d9\u985e'&&fd.part2&&fd.part2.blocks){
+      if(allBlockSections.length>=2){
+        var p2Body=allBlockSections[1];
+        p2Body.querySelectorAll(':scope > .block').forEach(function(b){b.remove();});
+        fd.part2.blocks.forEach(function(bData){
+          var addBtn=p2Body.querySelector('.btn-add-block');
+          if(addBtn) addBtn.click();
+          var blocks=p2Body.querySelectorAll(':scope > .block');
+          restoreBlock(blocks[blocks.length-1], bData);
+        });
+      }
+    }
+
+    if(flow.type==='\u6eff\u610f\u5ea6\u985e'&&fd.part2Survey){
+      /* 還原問卷代碼 - 觸發查詢 */
+      if(flow.surveyCode){
+        var scInput=document.getElementById('survey-code');
+        if(scInput){scInput.value=flow.surveyCode;scInput.dataset.code=flow.surveyCode.split('\uff5c')[0]||flow.surveyCode;}
+        if(window.renderSurvey) window.renderSurvey();
+      }
+      var svySel=document.getElementById('survey-script-sel');
+      if(svySel&&fd.part2Survey.surveyScript) svySel.value=fd.part2Survey.surveyScript;
+      /* Restore survey mechanism rows */
+      if(fd.part2Survey.endDone||fd.part2Survey.endHuman||fd.part2Survey.responses){
+        var doneSel=document.querySelector('#dyn [data-role="done"]');
+        var humanSel=document.querySelector('#dyn [data-role="human"]');
+        if(doneSel&&fd.part2Survey.endDone) doneSel.value=fd.part2Survey.endDone;
+        if(humanSel&&fd.part2Survey.endHuman) humanSel.value=fd.part2Survey.endHuman;
+        /* Restore additional response rows */
+        if(fd.part2Survey.responses&&fd.part2Survey.responses.length){
+          var svyResps=doneSel?doneSel.closest('.resps'):null;
+          if(svyResps){
+            fd.part2Survey.responses.forEach(function(rData){
+              var addBtn=svyResps.closest('[data-resp-owner]').querySelector('.btn-add-resp');
+              if(addBtn) addBtn.click();
+              var allRows=svyResps.querySelectorAll(':scope > .resp');
+              restoreResp(allRows[allRows.length-1], rData);
+            });
+          }
+        }
+      }
+      /* Restore survey section applyRules */
+      if(fd.part2Survey.applyRules){
+        var svyChecksOwner=document.querySelector('#dyn [data-role="done"]');
+        if(svyChecksOwner){
+          var svyOwner=svyChecksOwner.closest('[data-resp-owner]');
+          if(svyOwner){
+            var applySet={};fd.part2Survey.applyRules.forEach(function(k){applySet[k]=true;});
+            svyOwner.querySelectorAll('.shared-checks input[type=checkbox]').forEach(function(cb){
+              var label=cb.parentNode.textContent.trim();
+              cb.checked=!!applySet[label];
+            });
+          }
+        }
+      }
+    }
+
+    if(flow.type==='\u696d\u52d9\u8cc7\u8a0a\u901a\u77e5\u985e'&&fd.part2Notice){
+      var noticeSel=document.querySelector('#notice-body .scriptsel');
+      if(noticeSel&&fd.part2Notice.script) noticeSel.value=fd.part2Notice.script;
+    }
+
+    /* Part 3 */
+    if(fd.part3&&fd.part3.blocks){
+      var p3Sec=document.getElementById('part3-section');
+      if(p3Sec){
+        var p3Body=p3Sec.querySelector('[data-blocks]');
+        if(p3Body){
+          p3Body.querySelectorAll(':scope > .block').forEach(function(b){b.remove();});
+          fd.part3.blocks.forEach(function(bData){
+            var addBtn=p3Body.querySelector('.btn-add-block');
+            if(addBtn) addBtn.click();
+            var blocks=p3Body.querySelectorAll(':scope > .block');
+            restoreBlock(blocks[blocks.length-1], bData);
+          });
+        }
+      }
+    }
+
+    /* Refresh all */
+    window.refreshBlockOptions();
+    window.refreshAllPreviews();
+    window.refreshAddLineButtons();
+  }
+
+  window.captureFormData=captureFormData;
+  window.restoreFormData=restoreFormData;
+})();
+
+/* =====================================================================
    列表頁邏輯
    ===================================================================== */
 (function(){
   var FLOW_LIST=[
-    {no:'OB-2026-0001',name:'電子帳單退件通知',type:'客戶意願確認轉真人服務類',enabled:true,skill:'',surveyCode:'',dynSnapshot:''},
-    {no:'OB-2026-0002',name:'信用卡年費到期',type:'業務資訊通知類',enabled:true,skill:'',surveyCode:'',dynSnapshot:''},
-    {no:'OB-2026-0003',name:'財富管理客戶滿意度調查',type:'滿意度類',enabled:true,skill:'',surveyCode:'',dynSnapshot:''}
+    {no:'OB-2026-0001',name:'電子帳單退件通知',type:'客戶意願確認轉真人服務類',enabled:true,skill:'',surveyCode:'',formData:null},
+    {no:'OB-2026-0002',name:'信用卡年費到期',type:'業務資訊通知類',enabled:true,skill:'',surveyCode:'',formData:null},
+    {no:'OB-2026-0003',name:'財富管理客戶滿意度調查',type:'滿意度類',enabled:true,skill:'',surveyCode:'',formData:null}
   ];
 
   function renderList(keyword){
@@ -1184,8 +1917,21 @@ window.PARAM_SCRIPTS=(function(){
       return '<tr><td>'+f.no+'</td><td>'+f.name+'</td><td>'+f.type+'</td>'+
         '<td class="'+(f.enabled?'status-on':'status-off')+'">'+(f.enabled?'啟用':'停用')+'</td>'+
         '<td><button class="act-btn" data-act="edit" data-type="'+f.type+'" data-no="'+f.no+'">編輯</button>'+
+        '<button class="act-btn" data-act="export" data-no="'+f.no+'">匯出</button>'+
         '<button class="act-btn del" data-act="del" data-no="'+f.no+'">刪除</button></td></tr>';
     }).join('');
+  }
+
+  /* ---- JSON 匯出 ---- */
+  function downloadFlowJSON(data){
+    var json=JSON.stringify(data,null,2);
+    var blob=new Blob([json],{type:'application/json'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url;
+    a.download=data.no+'.json';
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   function showList(){
@@ -1207,16 +1953,26 @@ window.PARAM_SCRIPTS=(function(){
     if(isEdit && editNo){
       var f=FLOW_LIST.filter(function(x){return x.no===editNo;})[0];
       if(f){
-        document.getElementById('flow-no').value=f.no;
-        document.getElementById('flow-name').value=f.name;
-        if(f.skill&&tsel) tsel.value=f.skill;
-        if(f.surveyCode){var scc=document.getElementById('survey-code');if(scc){scc.value=f.surveyCode;scc.dataset.code=f.surveyCode.split('｜')[0];}}
-        if(f.dynSnapshot){
+        if(f.formData){
+          /* Structured restore */
+          window.restoreFormData(f);
+          if(f.skill&&tsel) tsel.value=f.skill;
+        } else if(f.dynSnapshot){
+          /* Legacy fallback */
+          document.getElementById('flow-no').value=f.no;
+          document.getElementById('flow-name').value=f.name;
+          if(f.skill&&tsel) tsel.value=f.skill;
+          if(f.surveyCode){var scc=document.getElementById('survey-code');if(scc){scc.value=f.surveyCode;scc.dataset.code=f.surveyCode.split('\uff5c')[0];}}
           document.getElementById('dyn').innerHTML=f.dynSnapshot;
           window.bindAllDnD();
           window.refreshBlockOptions();
           window.refreshAllPreviews();
           window.refreshAddLineButtons();
+        } else {
+          document.getElementById('flow-no').value=f.no;
+          document.getElementById('flow-name').value=f.name;
+          if(f.skill&&tsel) tsel.value=f.skill;
+          if(f.surveyCode){var scc2=document.getElementById('survey-code');if(scc2){scc2.value=f.surveyCode;scc2.dataset.code=f.surveyCode.split('\uff5c')[0];}}
         }
       }
     }
@@ -1257,10 +2013,11 @@ window.PARAM_SCRIPTS=(function(){
     e.preventDefault(); showList();
   });
   /* ---- 滿意度類：流程編號 blur 時自動檢核問卷代碼 ---- */
-  document.getElementById('flow-no').addEventListener('blur',function(){
+  function checkSurveyCode(){
     var tpl=document.getElementById('tpl-type').value;
     if(tpl!=='滿意度類') return;
-    var val=this.value.trim();
+    var el=document.getElementById('flow-no');
+    var val=el.value.trim();
     var scInput=document.getElementById('survey-code');
     var scField=document.getElementById('fld-survey-code');
     if(!scField||scField.hidden) return;
@@ -1270,7 +2027,8 @@ window.PARAM_SCRIPTS=(function(){
     scField.classList.remove('field-error');
     if(!val){scInput.value='';return;}
     var surveys=window.FLOW_SURVEYS||[];
-    var match=surveys.filter(function(s){return s.code===val;})[0];
+    var matches=surveys.filter(function(s){return s.flow_no===val && s.enabled;});
+    var match=matches.length?matches[matches.length-1]:null;
     if(match){
       scInput.value=match.code+'｜'+match.name;
       scInput.dataset.code=match.code;
@@ -1281,10 +2039,12 @@ window.PARAM_SCRIPTS=(function(){
       scField.classList.add('field-error');
       var err=document.createElement('span');
       err.className='error-msg';
-      err.textContent='不存在該問卷編號「'+val+'」';
+      err.textContent='不存在該流程編號對應的啟用問卷';
       scInput.parentNode.insertBefore(err,scInput.nextSibling);
     }
-  });
+  }
+  document.getElementById('flow-no').addEventListener('input',checkSurveyCode);
+  document.getElementById('flow-no').addEventListener('blur',checkSurveyCode);
   document.getElementById('btn-save').addEventListener('click',function(e){
     e.stopPropagation();
     var toastEl=document.getElementById('toast');
@@ -1322,7 +2082,7 @@ window.PARAM_SCRIPTS=(function(){
     if(!skill) markError(document.getElementById('transfer-skill'),'請選擇轉真人Skills');
     var scField=document.getElementById('fld-survey-code');
     var scVal='';
-    if(scField&&!scField.hidden){var sc=document.getElementById('survey-code');scVal=sc.dataset.code||'';if(!scVal) markError(sc,'問卷代碼未對應（請確認流程編號）');}
+    if(scField&&!scField.hidden){var sc=document.getElementById('survey-code');scVal=sc.dataset.code||'';if(!scVal) markError(sc,'流程編號未對應啟用的問卷代碼');}
     /* 檢核所有可見的回應設定列 */
     var allResps=document.querySelectorAll('#view-form .resp:not([style*="display:none"])');
     allResps.forEach(function(r){
@@ -1344,6 +2104,12 @@ window.PARAM_SCRIPTS=(function(){
         else if(ivT&&!ivT.value) markRespError(ivT,'訪談結果類型不可為空');
         else if(ivR&&!ivR.value) markRespError(ivR,'訪談結果不可為空');
       }
+      var nfSet=r.querySelector('.notify-set:not(.hidden)');
+      if(nfSet){
+        nfSet.querySelectorAll('.nf-input').forEach(function(inp){
+          if(!inp.value.trim()) markRespError(inp, inp.closest('.nf-row').querySelector('.nf-label').textContent+'不可為空');
+        });
+      }
     });
     document.querySelectorAll('#view-form .resp-sub .sub-row').forEach(function(sr){
       var scriptSpan=sr.querySelector('.sub-script:not(.hidden)');
@@ -1361,14 +2127,8 @@ window.PARAM_SCRIPTS=(function(){
       }
     });
     if(firstErr){firstErr.scrollIntoView({behavior:'smooth',block:'center'});return;}
-    /* 將 select/input 的 runtime 值寫入 HTML attribute 以便 snapshot 保留 */
-    document.querySelectorAll('#dyn select').forEach(function(sel){
-      Array.from(sel.options).forEach(function(opt){if(opt.selected)opt.setAttribute('selected','selected');else opt.removeAttribute('selected');});
-    });
-    document.querySelectorAll('#dyn input[type=text]').forEach(function(inp){inp.setAttribute('value',inp.value);});
-    document.querySelectorAll('#dyn input[type=checkbox]').forEach(function(cb){if(cb.checked)cb.setAttribute('checked','checked');else cb.removeAttribute('checked');});
-    document.querySelectorAll('#dyn input[type=radio]').forEach(function(rb){if(rb.checked)rb.setAttribute('checked','checked');else rb.removeAttribute('checked');});
-    var dynSnap=document.getElementById('dyn').innerHTML;
+    /* Capture structured form data */
+    var formData=window.captureFormData();
     /* 編輯模式：更新原有流程 */
     if(window._isEditMode && window._editingNo){
       for(var i=0;i<FLOW_LIST.length;i++){
@@ -1377,7 +2137,8 @@ window.PARAM_SCRIPTS=(function(){
           FLOW_LIST[i].type=type;
           FLOW_LIST[i].skill=skill;
           FLOW_LIST[i].surveyCode=scVal;
-          FLOW_LIST[i].dynSnapshot=dynSnap;
+          FLOW_LIST[i].formData=formData;
+          delete FLOW_LIST[i].dynSnapshot;
           break;
         }
       }
@@ -1386,14 +2147,65 @@ window.PARAM_SCRIPTS=(function(){
     /* 新增模式：檢查編號重複 */
     var dup=FLOW_LIST.some(function(f){return f.no===no;});
     if(dup){markError(document.getElementById('flow-no'),'流程編號「'+no+'」已存在，請輸入不同編號');document.getElementById('flow-no').scrollIntoView({behavior:'smooth',block:'center'});return;}
-    FLOW_LIST.push({no:no,name:name,type:type,enabled:true,skill:skill,surveyCode:scVal,dynSnapshot:dynSnap});
+    var newFlow={no:no,name:name,type:type,enabled:true,skill:skill,surveyCode:scVal,formData:formData};
+    FLOW_LIST.push(newFlow);
     renderList('');showList();
     showErr('已儲存「'+name+'」');
   },true);
 
+  /* ---- 匯入流程 ---- */
+  document.getElementById('btn-import-flow').addEventListener('click',function(){
+    document.getElementById('import-flow-input').click();
+  });
+  document.getElementById('import-flow-input').addEventListener('change',function(e){
+    var files=e.target.files;
+    var count=0;
+    Array.from(files).forEach(function(file){
+      var reader=new FileReader();
+      reader.onload=function(evt){
+        try{
+          var data=JSON.parse(evt.target.result);
+          /* 支援單筆或多筆（陣列） */
+          var items=Array.isArray(data)?data:[data];
+          items.forEach(function(d){
+            if(!d.no||!d.name||!d.type){alert('無效的流程檔案：'+file.name);return;}
+            var exists=FLOW_LIST.findIndex(function(f){return f.no===d.no;});
+            if(exists>=0) FLOW_LIST[exists]=d;
+            else FLOW_LIST.push(d);
+            count++;
+          });
+          renderList('');
+          var toastEl=document.getElementById('toast');
+          toastEl.textContent='已匯入 '+count+' 個流程';
+          toastEl.classList.add('show');
+          setTimeout(function(){toastEl.classList.remove('show');},2200);
+        }catch(err){alert('解析失敗：'+file.name);}
+      };
+      reader.readAsText(file);
+    });
+    e.target.value='';
+  });
+
+  /* ---- 匯出全部 ---- */
+  document.getElementById('btn-export-all').addEventListener('click',function(){
+    if(!FLOW_LIST.length){alert('目前沒有流程可匯出');return;}
+    var json=JSON.stringify(FLOW_LIST,null,2);
+    var blob=new Blob([json],{type:'application/json'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url;
+    a.download='all_flows.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
   document.getElementById('flow-tbody').addEventListener('click',function(e){
     var btn=e.target.closest('.act-btn');if(!btn)return;
     if(btn.dataset.act==='edit') showForm(btn.dataset.type, true, btn.dataset.no);
+    if(btn.dataset.act==='export'){
+      var f=FLOW_LIST.filter(function(x){return x.no===btn.dataset.no;})[0];
+      if(f) downloadFlowJSON(f);
+    }
     if(btn.dataset.act==='del'){
       if(!confirm('確定刪除？'))return;
       FLOW_LIST=FLOW_LIST.filter(function(f){return f.no!==btn.dataset.no;});
@@ -1401,7 +2213,12 @@ window.PARAM_SCRIPTS=(function(){
     }
   });
 
-  renderList('');
+  /* Expose init for async CSV loading */
+  window._initList = function(){
+    if(window._JSON_FLOWS && window._JSON_FLOWS.length) FLOW_LIST = window._JSON_FLOWS;
+    else if(window._CSV_FLOWS) FLOW_LIST = window._CSV_FLOWS;
+    renderList('');
+  };
 })();
 
 /* =====================================================================
@@ -1603,6 +2420,16 @@ window.PARAM_SCRIPTS=(function(){
     }
   });
 })();
+
+/* =====================================================================
+   啟動：先嘗試載入 CSV，失敗則使用 inline fallback
+   ===================================================================== */
+loadData().then(function(){
+  if(window._initList) window._initList();
+}).catch(function(e){
+  console.warn('CSV load failed, using inline data:', e);
+  if(window._initList) window._initList();
+});
 </script>
 </body>
 </html>

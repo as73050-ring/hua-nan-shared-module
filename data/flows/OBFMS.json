@@ -1,0 +1,199 @@
+{
+  "no": "OBFMS",
+  "name": "財富管理客戶季理財滿意度調查",
+  "type": "滿意度類",
+  "enabled": true,
+  "skill": "88006",
+  "surveyCode": "Q001",
+  "formData": {
+    "sharedRules": {
+      "閒置": {
+        "script": "ZZZ001"
+      },
+      "聽不懂": {
+        "script": "ZZZ002"
+      },
+      "抱怨負面情緒": {
+        "script": "ZZZ002"
+      },
+      "轉真人": {
+        "script": "ZZZ002"
+      },
+      "結束": {
+        "script": "ZZZ001"
+      },
+      "再聯絡": {
+        "callback": {
+          "script1": "ZZA001",
+          "script2": "ZZA002",
+          "script3": "ZZA003",
+          "script4": "ZZA004"
+        }
+      },
+      "掛斷": {}
+    },
+    "part1": {
+      "blocks": [
+        {
+          "name": "開場白",
+          "script": "OBFMS010",
+          "scriptText": "您好，這裡是華南銀行客服中心，請問您是{p1}先生/小姐嗎？",
+          "responses": [
+            {
+              "intent": "是",
+              "locked": false,
+              "hideScript": false,
+              "action": "前往指定區塊",
+              "script": "",
+              "scriptText": "",
+              "reason": "",
+              "gotoBlock": "確認認識理專",
+              "inboundText": "",
+              "interview": {
+                "contact": "",
+                "type": "",
+                "result": ""
+              }
+            },
+            {
+              "intent": "否",
+              "locked": false,
+              "hideScript": false,
+              "action": "結束通話（送出以下結束台詞）",
+              "script": "OBFMS002",
+              "scriptText": "抱歉！打擾您了，謝謝再見！",
+              "reason": "",
+              "gotoBlock": "",
+              "inboundText": "",
+              "interview": {
+                "contact": "非本人",
+                "type": "非本人接聽",
+                "result": "非本人接聽"
+              }
+            }
+          ],
+          "applyRules": [
+            "閒置",
+            "聽不懂",
+            "抱怨負面情緒",
+            "轉真人",
+            "結束",
+            "再聯絡",
+            "掛斷"
+          ]
+        },
+        {
+          "name": "確認認識理專",
+          "script": "OBFMS011",
+          "scriptText": "{p1}先生小姐您好，請問是否認識{:理專姓名}理專呢？",
+          "responses": [
+            {
+              "intent": "是",
+              "locked": false,
+              "hideScript": false,
+              "action": "前往指定區塊",
+              "script": "",
+              "scriptText": "",
+              "reason": "",
+              "gotoBlock": "確認問卷意願",
+              "inboundText": "",
+              "interview": {
+                "contact": "",
+                "type": "",
+                "result": ""
+              }
+            },
+            {
+              "intent": "否",
+              "locked": false,
+              "hideScript": false,
+              "action": "結束通話（送出以下結束台詞）",
+              "script": "OBFMS002",
+              "scriptText": "抱歉！打擾您了，謝謝再見！",
+              "reason": "",
+              "gotoBlock": "",
+              "inboundText": "",
+              "interview": {
+                "contact": "本人",
+                "type": "無法確認理專",
+                "result": "無法確認理專"
+              }
+            }
+          ],
+          "applyRules": [
+            "閒置",
+            "聽不懂",
+            "抱怨負面情緒",
+            "轉真人",
+            "結束",
+            "再聯絡",
+            "掛斷"
+          ]
+        },
+        {
+          "name": "確認問卷意願",
+          "script": "OBFMS001",
+          "scriptText": "首先非常感謝您長期以來對華南銀行的支持，為了回饋給您更好的服務，可否耽誤您幾分鐘進行「財富管理客戶滿意度調查」呢？",
+          "responses": [
+            {
+              "intent": "是",
+              "locked": false,
+              "hideScript": false,
+              "action": "進入問卷（主流程）",
+              "script": "",
+              "scriptText": "",
+              "reason": "",
+              "gotoBlock": "",
+              "inboundText": "",
+              "interview": {
+                "contact": "",
+                "type": "",
+                "result": ""
+              }
+            },
+            {
+              "intent": "否",
+              "locked": false,
+              "hideScript": false,
+              "action": "結束通話（送出以下結束台詞）",
+              "script": "OBFMS002",
+              "scriptText": "抱歉！打擾您了，謝謝再見！",
+              "reason": "",
+              "gotoBlock": "",
+              "inboundText": "",
+              "interview": {
+                "contact": "本人",
+                "type": "本人接聽",
+                "result": "無意願接受訪談"
+              }
+            }
+          ],
+          "applyRules": [
+            "閒置",
+            "聽不懂",
+            "抱怨負面情緒",
+            "轉真人",
+            "結束",
+            "再聯絡",
+            "掛斷"
+          ]
+        }
+      ]
+    },
+    "part2Survey": {
+      "surveyScript": "OBFMS004",
+      "endDone": "OBFMS009",
+      "endHuman": "ZZZ002",
+      "responses": [],
+      "applyRules": [
+        "閒置",
+        "聽不懂",
+        "抱怨負面情緒",
+        "轉真人",
+        "結束",
+        "再聯絡",
+        "掛斷"
+      ]
+    }
+  }
+}
