@@ -701,7 +701,7 @@ if(!window.PARAM_SCRIPTS){
     if(window.FLOW_ACTIONS) return window.FLOW_ACTIONS;
     return window._CSV_ACTIONS_DEFAULT||['進入主流程區','前往指定區塊','再聽一次（重複本區塊）','轉真人','轉inbound','SMS','EMAIL','LINE','APP推播','留電','再聯絡','結束通話（送出以下結束台詞）'];
   }
-  var RESP_INTENTS=window._CSV_INTENTS||['是','否','轉真人','抱怨負面情緒','聽不懂','閒置','結束','再連絡','掛斷'];
+  var RESP_INTENTS=window._CSV_INTENTS||['是','否'];
   var CHECK_KEYS=window._CSV_CHECKS||['閒置','聽不懂','抱怨負面情緒','轉真人','結束','再聯絡','掛斷'];
   var INTENT_DEFAULTS={'轉真人':'轉真人','抱怨負面情緒':'轉真人','再連絡':'再聯絡'};
   function getEndAction(){var a=ACTIONS();for(var i=a.length-1;i>=0;i--){if(a[i].indexOf('結束通話')===0)return a[i];}return '結束通話（送出以下結束台詞）';}
@@ -1220,15 +1220,15 @@ if(!window.PARAM_SCRIPTS){
       t.vars.map(function(v){return '<span class="vl-item"><b>{'+v.code+'}</b>'+esc(v.name)+'</span>';}).join('')+
       '<span class="vl-note">變數以 {pX} 形式包含於台詞內容中，本頁僅下拉選用台詞。</span></div>';
 
-    /* 共用回應處理規則（全流程共用） */
-    html+='<div class="shared-rules"><div class="sr-head" id="sr-toggle-head"><h2>共用回應處理規則（全流程共用）</h2><span class="sr-toggle">收起 ▲</span></div>';
+    /* 共用回應處理規則（此流程共用） */
+    html+='<div class="shared-rules"><div class="sr-head" id="sr-toggle-head"><h2>共用回應處理規則（此流程共用）</h2><span class="sr-toggle">收起 ▲</span></div>';
     html+='<div class="sr-body" id="sr-body">';
     html+='<div class="sr-item" data-rule="閒置"><span class="sr-intent">閒置</span><div class="sr-config"><span class="sr-fixed">達標準後：再聽一次｜達次數後：結束通話</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ001')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 系統紀錄 / 閒置</span></div></div>';
     html+='<div class="sr-item" data-rule="聽不懂"><span class="sr-intent">聽不懂</span><div class="sr-config"><span class="sr-fixed">未達次數：再聽一次｜達次數後：轉真人(NV00)</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ002')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 系統紀錄 / 轉真人(聽不懂)</span></div></div>';
     html+='<div class="sr-item" data-rule="抱怨負面情緒"><span class="sr-intent">抱怨負面情緒</span><div class="sr-config"><span class="sr-fixed">轉真人(NV05)</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ002')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 系統紀錄 / 轉真人(敏感詞)</span></div></div>';
     html+='<div class="sr-item" data-rule="轉真人"><span class="sr-intent">轉真人</span><div class="sr-config"><span class="sr-fixed">轉真人(NV01)</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ002')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 系統紀錄 / 轉真人(意圖)</span></div></div>';
     html+='<div class="sr-item" data-rule="結束"><span class="sr-intent">結束</span><div class="sr-config"><span class="sr-fixed">結束通話</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ001')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 本人接聽 / 無意願接受訪談</span></div></div>';
-    html+='<div class="sr-item" data-rule="再聯絡"><span class="sr-intent">再聯絡</span><div class="sr-config"><span class="sr-fixed">再聯絡</span> <span class="sr-lbl">詢問可再聯絡日期：</span><select class="sr-cb1 scriptsel">'+scriptOptions('ZZA001')+'</select> <span class="sr-lbl">確認聯絡時段：</span><select class="sr-cb2 scriptsel">'+scriptOptions('ZZA002')+'</select> <span class="sr-lbl">覆述辨識結果：</span><select class="sr-cb3 scriptsel">'+scriptOptions('ZZA003')+'</select> <span class="sr-lbl">結束台詞：</span><select class="sr-cb4 scriptsel">'+scriptOptions('ZZA004')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 本人接聽 / 忙碌中，再聯絡</span></div></div>';
+    html+='<div class="sr-item" data-rule="再聯絡"><span class="sr-intent">再聯絡</span><div class="sr-config"><span class="sr-fixed">再聯絡</span><span class="sr-note" style="font-size:12px;color:var(--ink-light);margin-left:8px">（覆述辨識結果用戶按鍵回覆2(錯誤)時，流程回到詢問可再聯絡日期）</span><div class="sr-cb-list" style="display:flex;flex-direction:column;gap:4px;flex-basis:100%;margin-top:6px"><div><span class="sr-lbl">詢問可再聯絡日期：</span><select class="sr-cb1 scriptsel">'+scriptOptions('ZZA001')+'</select></div><div><span class="sr-lbl">確認聯絡時段：</span><select class="sr-cb2 scriptsel">'+scriptOptions('ZZA002')+'</select></div><div><span class="sr-lbl">覆述辨識結果：</span><select class="sr-cb3 scriptsel">'+scriptOptions('ZZA003')+'</select></div><div><span class="sr-lbl">結束台詞：</span><select class="sr-cb4 scriptsel">'+scriptOptions('ZZA004')+'</select></div></div><span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 本人接聯 / 忙碌中，再聯絡</span></div></div>';
     html+='<div class="sr-item" data-rule="掛斷"><span class="sr-intent">掛斷</span><div class="sr-config"><span class="sr-fixed">結束通話（不需台詞）</span> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 本人接聽 / 無意願接受訪談</span></div></div>';
     html+='</div></div>';
 
@@ -1258,7 +1258,6 @@ if(!window.PARAM_SCRIPTS){
             '<select class="scriptsel svy-end" data-role="human" style="flex:1;min-width:200px">'+scriptOptions(t.part2.endHuman)+'</select>'+
             '<span class="module">播畢轉接</span></div>'+
         '</div>'+
-        '<button class="btn-add-resp">＋ 新增回應選項</button>'+
         checksHTML(t.part2.checks||{})+
         '</div></section>';
     } else if(t.part2.kind==='notice'){

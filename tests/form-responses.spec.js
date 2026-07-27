@@ -17,23 +17,21 @@ test.describe('回應設定', () => {
     expect(after).toBe(before + 1);
   });
 
-  test('意圖選轉真人：連動動作+原因+台詞', async ({ page }) => {
+  test('動作選轉真人：顯示原因+台詞', async ({ page }) => {
     await page.locator('.btn-add-resp').first().click();
     const lastResp = page.locator('#dyn .resps .resp').last();
-    await lastResp.locator('.rintent').selectOption('轉真人');
+    await lastResp.locator('.rintent').selectOption('否');
+    await lastResp.locator('.resp-action').selectOption('轉真人');
     await page.waitForTimeout(100);
-    const action = await lastResp.locator('.resp-action').inputValue();
-    expect(action).toBe('轉真人');
     await expect(lastResp.locator('.skillset')).toBeVisible();
     await expect(lastResp.locator('.action-script')).toBeVisible();
   });
 
-  test('意圖選掛斷：無台詞欄位', async ({ page }) => {
+  test('意圖下拉僅有是否兩選項', async ({ page }) => {
     await page.locator('.btn-add-resp').first().click();
     const lastResp = page.locator('#dyn .resps .resp').last();
-    await lastResp.locator('.rintent').selectOption('掛斷');
-    await page.waitForTimeout(100);
-    await expect(lastResp.locator('.action-script')).toBeHidden();
+    const options = await lastResp.locator('.rintent option:not([disabled])').allTextContents();
+    expect(options).toEqual(['是', '否']);
   });
 
   test('動作選結束通話：顯示台詞+訪談結果', async ({ page }) => {
@@ -59,7 +57,8 @@ test.describe('回應設定', () => {
   test('動作選再聯絡：顯示4個台詞欄位', async ({ page }) => {
     await page.locator('.btn-add-resp').first().click();
     const lastResp = page.locator('#dyn .resps .resp').last();
-    await lastResp.locator('.rintent').selectOption('再連絡');
+    await lastResp.locator('.rintent').selectOption('否');
+    await lastResp.locator('.resp-action').selectOption('再聯絡');
     await page.waitForTimeout(100);
     await expect(lastResp.locator('.callback-set')).toBeVisible();
     const cbSels = await lastResp.locator('.cb-sel').count();
