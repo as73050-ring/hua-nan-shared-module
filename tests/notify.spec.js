@@ -1,4 +1,4 @@
-// @ts-check
+﻿// @ts-check
 const { test, expect } = require('@playwright/test');
 
 test.describe('通知動作', () => {
@@ -13,7 +13,7 @@ test.describe('通知動作', () => {
 
   test('動作選SMS：顯示3個欄位+備註', async ({ page }) => {
     const lastResp = page.locator('#dyn .resps .resp').last();
-    await lastResp.locator('.rintent').selectOption('是');
+    await lastResp.locator('.rintent').selectOption('是(意圖)');
     await lastResp.locator('.resp-action').selectOption('SMS');
     await page.waitForTimeout(100);
     await expect(lastResp.locator('.notify-set')).toBeVisible();
@@ -25,7 +25,7 @@ test.describe('通知動作', () => {
 
   test('動作選EMAIL：顯示3個欄位+備註', async ({ page }) => {
     const lastResp = page.locator('#dyn .resps .resp').last();
-    await lastResp.locator('.rintent').selectOption('是');
+    await lastResp.locator('.rintent').selectOption('是(意圖)');
     await lastResp.locator('.resp-action').selectOption('EMAIL');
     await page.waitForTimeout(100);
     await expect(lastResp.locator('.notify-set')).toBeVisible();
@@ -35,7 +35,7 @@ test.describe('通知動作', () => {
 
   test('動作選LINE：顯示4個欄位+備註', async ({ page }) => {
     const lastResp = page.locator('#dyn .resps .resp').last();
-    await lastResp.locator('.rintent').selectOption('是');
+    await lastResp.locator('.rintent').selectOption('是(意圖)');
     await lastResp.locator('.resp-action').selectOption('LINE');
     await page.waitForTimeout(100);
     await expect(lastResp.locator('.notify-set')).toBeVisible();
@@ -47,7 +47,7 @@ test.describe('通知動作', () => {
 
   test('動作選APP推播：顯示6個欄位+備註', async ({ page }) => {
     const lastResp = page.locator('#dyn .resps .resp').last();
-    await lastResp.locator('.rintent').selectOption('是');
+    await lastResp.locator('.rintent').selectOption('是(意圖)');
     await lastResp.locator('.resp-action').selectOption('APP推播');
     await page.waitForTimeout(100);
     await expect(lastResp.locator('.notify-set')).toBeVisible();

@@ -1,4 +1,4 @@
-// @ts-check
+﻿// @ts-check
 const { test, expect } = require('@playwright/test');
 
 test.describe('回應設定', () => {
@@ -20,7 +20,7 @@ test.describe('回應設定', () => {
   test('動作選轉真人：顯示原因+台詞', async ({ page }) => {
     await page.locator('.btn-add-resp').first().click();
     const lastResp = page.locator('#dyn .resps .resp').last();
-    await lastResp.locator('.rintent').selectOption('否');
+    await lastResp.locator('.rintent').selectOption('否(意圖)');
     await lastResp.locator('.resp-action').selectOption('轉真人');
     await page.waitForTimeout(100);
     await expect(lastResp.locator('.skillset')).toBeVisible();
@@ -31,13 +31,13 @@ test.describe('回應設定', () => {
     await page.locator('.btn-add-resp').first().click();
     const lastResp = page.locator('#dyn .resps .resp').last();
     const options = await lastResp.locator('.rintent option:not([disabled])').allTextContents();
-    expect(options).toEqual(['是', '否']);
+    expect(options).toEqual(['是(意圖)', '否(意圖)']);
   });
 
   test('動作選結束通話：顯示台詞+訪談結果', async ({ page }) => {
     await page.locator('.btn-add-resp').first().click();
     const lastResp = page.locator('#dyn .resps .resp').last();
-    await lastResp.locator('.rintent').selectOption('否');
+    await lastResp.locator('.rintent').selectOption('否(意圖)');
     await lastResp.locator('.resp-action').selectOption('結束通話（送出以下結束台詞）');
     await page.waitForTimeout(100);
     await expect(lastResp.locator('.action-script')).toBeVisible();
@@ -47,7 +47,7 @@ test.describe('回應設定', () => {
   test('動作選轉inbound：顯示帶入語句+台詞', async ({ page }) => {
     await page.locator('.btn-add-resp').first().click();
     const lastResp = page.locator('#dyn .resps .resp').last();
-    await lastResp.locator('.rintent').selectOption('是');
+    await lastResp.locator('.rintent').selectOption('是(意圖)');
     await lastResp.locator('.resp-action').selectOption('轉inbound');
     await page.waitForTimeout(100);
     await expect(lastResp.locator('.inbound-set')).toBeVisible();
@@ -57,7 +57,7 @@ test.describe('回應設定', () => {
   test('動作選再聯絡：顯示4個台詞欄位', async ({ page }) => {
     await page.locator('.btn-add-resp').first().click();
     const lastResp = page.locator('#dyn .resps .resp').last();
-    await lastResp.locator('.rintent').selectOption('否');
+    await lastResp.locator('.rintent').selectOption('否(意圖)');
     await lastResp.locator('.resp-action').selectOption('再聯絡');
     await page.waitForTimeout(100);
     await expect(lastResp.locator('.callback-set')).toBeVisible();

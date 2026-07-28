@@ -701,7 +701,7 @@ if(!window.PARAM_SCRIPTS){
     if(window.FLOW_ACTIONS) return window.FLOW_ACTIONS;
     return window._CSV_ACTIONS_DEFAULT||['進入主流程區','前往指定區塊','再聽一次（重複本區塊）','轉真人','轉inbound','SMS','EMAIL','LINE','APP推播','留電','再聯絡','結束通話（送出以下結束台詞）'];
   }
-  var RESP_INTENTS=window._CSV_INTENTS||['是','否'];
+  var RESP_INTENTS=window._CSV_INTENTS||['是(意圖)','否(意圖)'];
   var CHECK_KEYS=window._CSV_CHECKS||['閒置','聽不懂','抱怨負面情緒','轉真人','結束','再聯絡','掛斷'];
   var INTENT_DEFAULTS={'轉真人':'轉真人','抱怨負面情緒':'轉真人','再連絡':'再聯絡'};
   function getEndAction(){var a=ACTIONS();for(var i=a.length-1;i>=0;i--){if(a[i].indexOf('結束通話')===0)return a[i];}return '結束通話（送出以下結束台詞）';}
@@ -1211,6 +1211,9 @@ if(!window.PARAM_SCRIPTS){
 
     var scField=document.getElementById('fld-survey-code');
     scField.hidden=(t.part2.kind!=='survey');
+    /* 清除先前的錯誤狀態 */
+    scField.classList.remove('field-error');
+    var prevErr=scField.querySelector('.error-msg');if(prevErr)prevErr.remove();
     if(t.part2.kind==='survey'){var sci=document.getElementById('survey-code');sci.value='';sci.dataset.code='';}
 
     var html='';

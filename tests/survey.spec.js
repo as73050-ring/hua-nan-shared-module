@@ -55,4 +55,24 @@ test.describe('問卷功能', () => {
     expect(doneVal).toBe('OBFMS009');
     expect(humanVal).toBe('ZZZ002');
   });
+
+  test('新增無效編號取消後編輯OBFMS不殘留錯誤', async ({ page }) => {
+    /* 新增 → 輸入不存在編號 → 觸發錯誤 → 取消 */
+    await page.click('#btn-new-flow');
+    await page.selectOption('#tpl-type', '滿意度類');
+    await page.waitForTimeout(300);
+    await page.fill('#flow-no', 'NOTEXIST');
+    await page.locator('#flow-no').blur();
+    await page.waitForTimeout(300);
+    await expect(page.locator('#fld-survey-code .error-msg')).toBeVisible();
+    /* 取消回列表 */
+    await page.click('#btn-cancel');
+    await page.waitForTimeout(300);
+    /* 編輯 OBFMS */
+    await page.locator('[data-no="OBFMS"][data-act="edit"]').click();
+    await page.waitForTimeout(600);
+    /* 不應出現錯誤 */
+    await expect(page.locator('#fld-survey-code')).not.toHaveClass(/field-error/);
+    await expect(page.locator('#fld-survey-code .error-msg')).toHaveCount(0);
+  });
 });

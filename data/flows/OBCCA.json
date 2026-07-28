@@ -37,7 +37,7 @@
           "scriptText": "您好，這裡是華南銀行客服中心，請問您是{p1}先生/小姐嗎？",
           "responses": [
             {
-              "intent": "是",
+              "intent": "是(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "播放通知內容（主流程）",
@@ -53,7 +53,7 @@
               }
             },
             {
-              "intent": "否",
+              "intent": "否(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "結束通話（送出以下結束台詞）",

@@ -64,7 +64,7 @@
           "scriptText": "您好，這裡是華南銀行客服中心，請問您是{p1}先生/小姐嗎？",
           "responses": [
             {
-              "intent": "是",
+              "intent": "是(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "進入主流程區",
@@ -80,7 +80,7 @@
               }
             },
             {
-              "intent": "否",
+              "intent": "否(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "結束通話（送出以下結束台詞）",
@@ -116,7 +116,7 @@
           "scriptText": "僅為範例：您好，百貨XXX檔期將至，若您預計有大額刷卡消費需求，為了讓您到時候購物更順暢，建議您可以提前申請調整信用卡額度。請問您目前是否有申請調整信用卡額度需求？",
           "responses": [
             {
-              "intent": "是",
+              "intent": "是(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "轉inbound",
@@ -132,7 +132,7 @@
               }
             },
             {
-              "intent": "否",
+              "intent": "否(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "結束通話（送出以下結束台詞）",

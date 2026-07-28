@@ -40,7 +40,7 @@
           "scriptText": "您好，這裡是華南銀行客服中心，請問您是{p1}先生/小姐嗎？",
           "responses": [
             {
-              "intent": "是",
+              "intent": "是(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "前往指定區塊",
@@ -56,7 +56,7 @@
               }
             },
             {
-              "intent": "否",
+              "intent": "否(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "結束通話（送出以下結束台詞）",
@@ -88,7 +88,7 @@
           "scriptText": "{p1}先生小姐您好，請問是否認識{:理專姓名}理專呢？",
           "responses": [
             {
-              "intent": "是",
+              "intent": "是(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "前往指定區塊",
@@ -104,7 +104,7 @@
               }
             },
             {
-              "intent": "否",
+              "intent": "否(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "結束通話（送出以下結束台詞）",
@@ -136,7 +136,7 @@
           "scriptText": "首先非常感謝您長期以來對華南銀行的支持，為了回饋給您更好的服務，可否耽誤您幾分鐘進行「財富管理客戶滿意度調查」呢？",
           "responses": [
             {
-              "intent": "是",
+              "intent": "是(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "進入問卷（主流程）",
@@ -152,7 +152,7 @@
               }
             },
             {
-              "intent": "否",
+              "intent": "否(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "結束通話（送出以下結束台詞）",
