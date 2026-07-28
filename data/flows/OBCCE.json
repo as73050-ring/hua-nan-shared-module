@@ -64,7 +64,7 @@
           "scriptText": "您好，這裡是華南銀行客服中心，請問您是{p1}先生/小姐嗎？",
           "responses": [
             {
-              "intent": "是",
+              "intent": "是(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "進入主流程區",
@@ -80,7 +80,7 @@
               }
             },
             {
-              "intent": "否",
+              "intent": "否(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "結束通話（送出以下結束台詞）",
@@ -116,7 +116,7 @@
           "scriptText": "{p1}先生/小姐您好，為保障您的權益，以下通話內容會全程錄音。 感謝您對華南銀行的愛護及申請信用卡電子帳單服務，但因寄送電子帳單後有被退回的情形，為確保您的權益，再次與您確認資料的正確性，請問您電子帳單的E-mail是XXX@XXX.com.tw，資料正確嗎？",
           "responses": [
             {
-              "intent": "是",
+              "intent": "是(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "前往指定區塊",
@@ -132,7 +132,7 @@
               }
             },
             {
-              "intent": "否",
+              "intent": "否(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "前往指定區塊",
@@ -164,7 +164,7 @@
           "scriptText": "謝謝您的回覆，請問是否需要再次寄送帳單到您的信箱？",
           "responses": [
             {
-              "intent": "是",
+              "intent": "是(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "轉inbound",
@@ -180,7 +180,7 @@
               }
             },
             {
-              "intent": "否",
+              "intent": "否(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "結束通話（送出以下結束台詞）",
@@ -212,7 +212,7 @@
           "scriptText": "為了不耽誤您寶貴時間，以下說明自行修改路徑:網路銀行/華南銀行+APP，請問需要專人服務或是再聽一次?",
           "responses": [
             {
-              "intent": "是",
+              "intent": "是(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "轉真人",
@@ -228,7 +228,7 @@
               }
             },
             {
-              "intent": "否",
+              "intent": "否(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "結束通話（送出以下結束台詞）",

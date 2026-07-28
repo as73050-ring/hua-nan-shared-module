@@ -64,7 +64,7 @@
           "scriptText": "您好，這裡是華南銀行客服中心，請問您是{p1}先生/小姐嗎？",
           "responses": [
             {
-              "intent": "是",
+              "intent": "是(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "進入主流程區",
@@ -80,7 +80,7 @@
               }
             },
             {
-              "intent": "否",
+              "intent": "否(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "結束通話（送出以下結束台詞）",
@@ -116,7 +116,7 @@
           "scriptText": "{p1}先生/小姐您好，為保障您的權益，以下通話全程錄音，為感謝客戶對華南銀行的支持與愛護，我們持續開辦「刷卡分期付款」活動，只要單筆刷卡金額達新臺幣1",
           "responses": [
             {
-              "intent": "是",
+              "intent": "是(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "轉inbound",
@@ -132,7 +132,7 @@
               }
             },
             {
-              "intent": "否",
+              "intent": "否(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "結束通話（送出以下結束台詞）",

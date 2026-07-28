@@ -37,7 +37,7 @@
           "scriptText": "您好，這裡是華南銀行客服中心，請問您是{p1}先生/小姐嗎？",
           "responses": [
             {
-              "intent": "是",
+              "intent": "是(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "進入主流程區",
@@ -53,7 +53,7 @@
               }
             },
             {
-              "intent": "否",
+              "intent": "否(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "結束通話（送出以下結束台詞）",
@@ -81,7 +81,7 @@
           "scriptText": "{p1}先生小姐您好，為保障您的權益，以下通話全程錄音。您在華南銀行的○○分行有開立存款帳戶，當初約定為不用寄送對帳單，目前推廣電子綜合對帳單，如果您帳戶有使用電子化交易，例如電話銀行、網路銀行或行動銀行等服務，我們會在下個月的10日起以E-mail方式寄發給您對帳，多了一個對帳的管道，現在可以線上幫您申請，不知道您有沒有意願作變更呢？",
           "responses": [
             {
-              "intent": "是",
+              "intent": "是(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "轉真人",
@@ -97,7 +97,7 @@
               }
             },
             {
-              "intent": "否",
+              "intent": "否(意圖)",
               "locked": false,
               "hideScript": false,
               "action": "結束通話（送出以下結束台詞）",
