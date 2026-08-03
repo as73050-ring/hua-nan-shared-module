@@ -60,7 +60,7 @@ test.describe('表單基本操作', () => {
     const existingNo = await page.locator('#flow-tbody tr td').first().textContent();
     await page.fill('#flow-no', existingNo);
     await page.fill('#flow-name', '重複測試');
-    await page.selectOption('#transfer-skill', '88001');
+    await page.fill('#transfer-skill', '88001');
     // Uncheck shared checks to avoid other validation
     const checks = page.locator('#dyn .shared-checks input[type=checkbox]:checked');
     const count = await checks.count();
