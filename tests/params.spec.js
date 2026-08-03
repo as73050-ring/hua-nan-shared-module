@@ -9,20 +9,14 @@ test.describe('參數管理', () => {
     await page.waitForTimeout(300);
   });
 
-  test('4個分頁存在', async ({ page }) => {
+  test('3個分頁存在', async ({ page }) => {
     const tabs = await page.locator('.ptab').count();
-    expect(tabs).toBe(4);
+    expect(tabs).toBe(3);
   });
 
   test('台詞管理：顯示台詞列表', async ({ page }) => {
     const rows = await page.locator('.param-table tbody tr').count();
     expect(rows).toBeGreaterThan(0);
-  });
-
-  test('切換到轉真人Skills分頁', async ({ page }) => {
-    await page.locator('.ptab[data-ptab="skills"]').click();
-    const rows = await page.locator('.param-table tbody tr').count();
-    expect(rows).toBeGreaterThanOrEqual(6);
   });
 
   test('切換到轉真人原因分頁', async ({ page }) => {

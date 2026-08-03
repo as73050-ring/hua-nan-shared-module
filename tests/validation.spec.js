@@ -22,9 +22,10 @@ test.describe('儲存檢核', () => {
     await expect(page.locator('.error-msg').first()).toBeVisible();
   });
 
-  test('未選轉真人Skills：紅框', async ({ page }) => {
+  test('未輸入轉真人Skills：紅框', async ({ page }) => {
     await page.fill('#flow-no', 'TEST999');
     await page.fill('#flow-name', '測試');
+    await page.fill('#transfer-skill', '');
     await page.click('#btn-save');
     const errorMsgs = await page.locator('.error-msg').allTextContents();
     const hasSkillError = errorMsgs.some(m => m.includes('Skills'));
@@ -37,7 +38,7 @@ test.describe('儲存檢核', () => {
     await page.waitForTimeout(300);
     await page.fill('#flow-no', 'TESTOK');
     await page.fill('#flow-name', '完整測試');
-    await page.selectOption('#transfer-skill', '88001');
+    await page.fill('#transfer-skill', '88001');
     // Remove response rows that trigger validation
     await page.evaluate(() => {
       document.querySelectorAll('#dyn .shared-checks input[type=checkbox]').forEach(cb=>{cb.checked=false;});

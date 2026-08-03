@@ -380,8 +380,8 @@ h1.page-title{text-align:center;font-size:28px;font-weight:400;color:#7C8790;mar
     </div>
     <div class="field">
       <label><span class="star">★</span>轉真人Skills</label>
-      <select id="transfer-skill"><option>88001</option><option>88002</option><option>88003</option><option>88004</option><option>88005</option><option>88006</option></select>
-      <div class="src">轉真人時使用的skills代碼（路由至指定技能組）</div>
+      <input type="text" id="transfer-skill" value="" placeholder="請輸入Skills代碼（數字）" inputmode="numeric">
+      <div class="src">轉真人時使用的skills代碼（路由至指定技能組），僅接受數字</div>
     </div>
     <div class="field" id="fld-survey-code" hidden>
       <label><span class="star">★</span>問卷代碼</label>
@@ -405,7 +405,6 @@ h1.page-title{text-align:center;font-size:28px;font-weight:400;color:#7C8790;mar
     <h1 class="page-title">參數管理</h1>
     <div class="param-tabs">
       <span class="ptab active" data-ptab="scripts">台詞管理</span>
-      <span class="ptab" data-ptab="skills">轉真人Skills</span>
       <span class="ptab" data-ptab="reasons">轉真人原因</span>
       <span class="ptab" data-ptab="interview">訪談結果</span>
     </div>
@@ -1948,9 +1947,8 @@ if(!window.PARAM_SCRIPTS){
     window._isEditMode=!!isEdit;
     window._editingNo=editNo||'';
     if(typeName) window.renderTemplate(typeName);
-    /* rebuild transfer-skill select from PARAM_SKILLS */
     var tsel=document.getElementById('transfer-skill');
-    if(tsel){tsel.innerHTML='<option value="" disabled>請選擇轉真人Skills</option>'+window.PARAM_SKILLS.map(function(s){return '<option>'+s+'</option>';}).join('');}
+    if(tsel) tsel.value='';
     /* 編輯模式首次進入時帶入流程資料 */
     if(isEdit && editNo){
       var f=FLOW_LIST.filter(function(x){return x.no===editNo;})[0];
@@ -2050,6 +2048,10 @@ if(!window.PARAM_SCRIPTS){
   }
   document.getElementById('flow-no').addEventListener('input',checkSurveyCode);
   document.getElementById('flow-no').addEventListener('blur',checkSurveyCode);
+  /* 轉真人Skills 僅接受數字輸入 */
+  document.getElementById('transfer-skill').addEventListener('input',function(){
+    this.value=this.value.replace(/\D/g,'');
+  });
   document.getElementById('btn-save').addEventListener('click',function(e){
     e.stopPropagation();
     var toastEl=document.getElementById('toast');
@@ -2084,7 +2086,7 @@ if(!window.PARAM_SCRIPTS){
     if(!no) markError(document.getElementById('flow-no'),'請輸入流程編號');
     if(!name) markError(document.getElementById('flow-name'),'請輸入業務流程名稱');
     if(!type) markError(document.getElementById('tpl-type'),'請選擇樣板類型');
-    if(!skill) markError(document.getElementById('transfer-skill'),'請選擇轉真人Skills');
+    if(!skill) markError(document.getElementById('transfer-skill'),'請輸入轉真人Skills代碼');
     var scField=document.getElementById('fld-survey-code');
     var scVal='';
     if(scField&&!scField.hidden){var sc=document.getElementById('survey-code');scVal=sc.dataset.code||'';if(!scVal) markError(sc,'流程編號未對應啟用的問卷代碼');}
@@ -2264,15 +2266,6 @@ if(!window.PARAM_SCRIPTS){
         sl.map(function(s){return '<tr data-code="'+esc(s.code)+'"><td>'+esc(s.code)+'</td><td>'+esc(s.text)+'</td><td><button class="param-edit-btn" data-code="'+esc(s.code)+'">編輯</button><button class="param-del-btn" data-code="'+esc(s.code)+'">刪除</button></td></tr>';}).join('')+
         '</tbody></table>'+pagerHTML(pg,pages)+
         '<div class="param-add-row"><input type="text" placeholder="代碼" id="pa-code" style="width:100px"><input type="text" placeholder="台詞內容" id="pa-text" style="flex:1"><button id="pa-add">新增</button></div>';
-    } else if(activeTab==='skills'){
-      var skills=window.PARAM_SKILLS.slice().sort();
-      var pages=Math.max(1,Math.ceil(skills.length/PS));
-      if(pg>pages)pg=pages;paramPage[activeTab]=pg;
-      var sl=skills.slice((pg-1)*PS,pg*PS);
-      body.innerHTML='<table class="param-table"><thead><tr><th>Skills代碼</th><th>操作</th></tr></thead><tbody>'+
-        sl.map(function(s){return '<tr data-code="'+esc(s)+'"><td>'+esc(s)+'</td><td><button class="param-edit-btn" data-code="'+esc(s)+'">編輯</button><button class="param-del-btn" data-code="'+esc(s)+'">刪除</button></td></tr>';}).join('')+
-        '</tbody></table>'+pagerHTML(pg,pages)+
-        '<div class="param-add-row"><input type="text" placeholder="Skills代碼" id="pa-skill" style="width:160px"><button id="pa-add">新增</button></div>';
     } else if(activeTab==='reasons'){
       var reasons=window.PARAM_REASONS.slice().sort(function(a,b){return a.code<b.code?-1:a.code>b.code?1:0;});
       var pages=Math.max(1,Math.ceil(reasons.length/PS));
