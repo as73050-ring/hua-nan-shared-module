@@ -1944,6 +1944,7 @@ if(!window.PARAM_SCRIPTS){
     document.getElementById('view-list').style.display='none';
     document.getElementById('view-form').style.display='';
     document.getElementById('view-params').style.display='none';
+    history.pushState({view:'form'},'','#form');
     window._isEditMode=!!isEdit;
     window._editingNo=editNo||'';
     if(typeName) window.renderTemplate(typeName);
@@ -2296,13 +2297,24 @@ if(!window.PARAM_SCRIPTS){
     document.getElementById('view-list').style.display='';
     document.getElementById('view-form').style.display='none';
     document.getElementById('view-params').style.display='none';
+    history.pushState({view:'list'},'','#');
   });
   document.getElementById('nav-params').addEventListener('click',function(e){
     e.preventDefault();
     document.getElementById('view-list').style.display='none';
     document.getElementById('view-form').style.display='none';
     document.getElementById('view-params').style.display='';
+    history.pushState({view:'params'},'','#params');
     renderParamBody();
+  });
+
+  /* 瀏覽器上一頁/下一頁 */
+  history.replaceState({view:'list'},'','');
+  window.addEventListener('popstate',function(e){
+    var s=e.state&&e.state.view||'list';
+    document.getElementById('view-list').style.display=(s==='list'?'':'none');
+    document.getElementById('view-form').style.display=(s==='form'?'':'none');
+    document.getElementById('view-params').style.display=(s==='params'?'':'none');
   });
 
   /* tab switching */
