@@ -716,29 +716,44 @@ if(!window.PARAM_SCRIPTS){
   var PARAM_SKILLS=window.PARAM_SKILLS;
 
   var PARAM_INTERVIEW=[
-    {contact:"本人",type:"本人接聽",results:["考慮中，再聯絡","忙碌中，再聯絡","無意願接受訪談","尚未申辦","線上申辦分期","卡片註銷","毋需對帳單","自行查詢","自行變更","郵寄","e-mail","分行親取","沒有興趣","考慮中，再聯絡","有意願消費，有意願申辦","無意願消費，無意願申辦","已申請調額"]},
-    {contact:"本人",type:"郵寄申請書",results:["郵寄申請書(待追蹤)","傳真申請書(待追蹤)","E-mail申請書"]},
-    {contact:"本人",type:"已申辦",results:["已申辦"]},
-    {contact:"本人",type:"無意願申辦",results:["無意願申辦","申辦方式不便","回饋活動不吸引人","分期利率太高","已有無息分期卡","其他","未表示","習慣一次繳清"]},
-    {contact:"本人",type:"非有效卡",results:["非有效卡"]},
-    {contact:"本人",type:"自行來電",results:["自行來電變更"]},
-    {contact:"本人",type:"取消信用卡電子帳單",results:["取消信用卡電子帳單"]},
-    {contact:"本人",type:"已達免年費標準",results:["已達免年費標準"]},
-    {contact:"本人",type:"完成通知",results:["完成通知","完成問卷","未完成問卷","抱怨"]},
+    {contact:"本人",type:"自行變更",results:["自行變更"]},
+    {contact:"本人",type:"完成通知",results:["完成通知"]},
     {contact:"本人",type:"無法確認理專",results:["無法確認理專"]},
-    {contact:"本人",type:"已達問卷數",results:["曾接觸過的名單，惟已達問卷數","尚未接觸的名單，惟已達問卷數"]},
-    {contact:"本人",type:"理專人員已離職",results:["理專人員已離職"]},
+    {contact:"本人",type:"本人接聽",results:["資料正確無誤","無意願接受訪談","忙碌中，再聯絡","完成問卷","未完成問卷（一題未給分)"]},
+    {contact:"本人",type:"客戶抱怨",results:["客戶抱怨"]},
+    {contact:"本人",type:"聽不懂轉真人(意願確認)",results:["聽不懂轉真人(確認身分)","聽不懂轉真人(意願確認)"]},
+    {contact:"本人",type:"轉真人",results:["轉真人"]},
+    {contact:"本人",type:"沒有興趣",results:["沒有興趣"]},
+    {contact:"本人",type:"自行查詢",results:["自行查詢"]},
+    {contact:"本人",type:"鍵檔錯誤，要求更改",results:["鍵檔錯誤，要求更改"]},
+    {contact:"本人",type:"取消電子帳單申請",results:["取消電子帳單申請"]},
+    {contact:"本人",type:"客戶要求線上變更",results:["客戶要求線上變更"]},
+    {contact:"本人",type:"重寄",results:["重寄"]},
+    {contact:"本人",type:"要求註銷",results:["要求註銷"]},
+    {contact:"本人",type:"自行來電處理",results:["自行來電處理"]},
+    {contact:"本人",type:"完成回撥",results:["完成回撥"]},
+    {contact:"本人",type:"已達免年費標準",results:["已達免年費標準"]},
+    {contact:"本人",type:"通知負責人",results:["通知負責人"]},
+    {contact:"本人",type:"通知會計人員",results:["通知會計人員"]},
+    {contact:"本人",type:"外國人",results:["外國人"]},
+    {contact:"本人",type:"尚未接觸的名單，惟已達問卷數",results:["尚未接觸的名單，惟已達問卷數"]},
     {contact:"本人",type:"65歲以上不宜電訪",results:["65歲以上不宜電訪"]},
-    {contact:"非本人",type:"非本人接聽",results:["先前表示無意願","近期已外撥","關係戶","先前表示無意願"]},
-    {contact:"非本人",type:"非本人接聽",results:["非本人接聽"]},
-    {contact:"非本人",type:"非本人接聽(結案)",results:["非本人接聽(結案)","無法聯絡"]},
+    {contact:"本人",type:"溢繳款退回本行帳戶",results:["溢繳款退回本行帳戶"]},
+    {contact:"本人",type:"溢繳款退回他行帳戶",results:["溢繳款退回他行帳戶"]},
+    {contact:"本人",type:"已繳款",results:["已繳款"]},
+    {contact:"本人",type:"已聯絡",results:["已聯絡"]},
+    {contact:"本人",type:"未表示",results:["未表示"]},
+    {contact:"本人",type:"習慣一次繳清",results:["習慣一次繳清"]},
+    {contact:"本人",type:"已申請帳務調整",results:["已申請帳務調整"]},
+    {contact:"本人",type:"本人",results:["E-mail申請書","簡訊寄送申請連結","無意願申辦"]},
     {contact:"非本人",type:"查無此人",results:["查無此人"]},
+    {contact:"非本人",type:"非本人接聽",results:["非本人接聽"]},
     {contact:"非本人",type:"三次聯絡不到",results:["三次聯絡不到"]},
     {contact:"非本人",type:"無人接聽",results:["無人接聽"]},
-    {contact:"非本人",type:"無效電話",results:["無法受話","空號","手機已暫停使用","傳真機"]},
-    {contact:"非本人",type:"聯絡不到先行結案",results:["聯絡不到先行結案"]},
-    {contact:"非本人",type:"無需外撥(非有效卡)",results:["非有效卡"]},
-    {contact:"本人",type:"系統紀錄",results:["閒置","轉真人(聽不懂)","轉真人(敏感詞)","轉真人(意圖)"]}
+    {contact:"非本人",type:"無效電話",results:["無效電話"]},
+    {contact:"非本人",type:"客戶自行掛斷",results:["客戶自行掛斷"]},
+    {contact:"非本人",type:"重複件",results:["重複件"]},
+    {contact:"非本人",type:"非有效卡",results:["非有效卡"]}
   ];
   if(!window.PARAM_INTERVIEW) window.PARAM_INTERVIEW=PARAM_INTERVIEW;
 
@@ -2395,10 +2410,9 @@ if(!window.PARAM_SCRIPTS){
       var pages=Math.max(1,Math.ceil(reasons.length/PS));
       if(pg>pages)pg=pages;paramPage[activeTab]=pg;
       var sl=reasons.slice((pg-1)*PS,pg*PS);
-      body.innerHTML='<table class="param-table"><colgroup><col style="width:100px"><col><col style="width:120px"></colgroup><thead><tr><th>代碼</th><th>原因名稱</th><th>操作</th></tr></thead><tbody>'+
-        sl.map(function(r){return '<tr data-code="'+esc(r.code)+'"><td>'+esc(r.code)+'</td><td>'+esc(r.name)+'</td><td><button class="param-edit-btn" data-code="'+esc(r.code)+'">編輯</button><button class="param-del-btn" data-code="'+esc(r.code)+'">刪除</button></td></tr>';}).join('')+
-        '</tbody></table>'+pagerHTML(pg,pages)+
-        '<div class="param-add-row"><input type="text" placeholder="代碼" id="pa-rcode" style="width:100px"><input type="text" placeholder="原因名稱" id="pa-rname" style="width:200px"><button id="pa-add">新增</button></div>';
+      body.innerHTML='<table class="param-table"><colgroup><col style="width:100px"><col></colgroup><thead><tr><th>代碼</th><th>原因名稱</th></tr></thead><tbody>'+
+        sl.map(function(r){return '<tr><td>'+esc(r.code)+'</td><td>'+esc(r.name)+'</td></tr>';}).join('')+
+        '</tbody></table>'+pagerHTML(pg,pages);
     } else if(activeTab==='interview'){
       var all=window.PARAM_INTERVIEW;
       var filtered=[];
@@ -2407,10 +2421,9 @@ if(!window.PARAM_SCRIPTS){
       if(pg>pages)pg=pages;paramPage[activeTab]=pg;
       var sl=filtered.slice((pg-1)*PS,pg*PS);
       body.innerHTML='<div class="param-filter"><span class="pf-btn'+(interviewFilter==='all'?' active':'')+'" data-filter="all">全部</span><span class="pf-btn'+(interviewFilter==='本人'?' active':'')+'" data-filter="本人">本人</span><span class="pf-btn'+(interviewFilter==='非本人'?' active':'')+'" data-filter="非本人">非本人</span></div>'+
-        '<table class="param-table"><colgroup><col style="width:80px"><col style="width:160px"><col><col style="width:120px"></colgroup><thead><tr><th>接觸結果</th><th>訪談結果類型</th><th>訪談結果</th><th>操作</th></tr></thead><tbody>'+
-        sl.map(function(f){var it=f.item,idx=f.origIdx;return '<tr data-idx="'+idx+'"><td>'+esc(it.contact)+'</td><td>'+esc(it.type)+'</td><td>'+it.results.map(function(r){return esc(r);}).join('、')+'</td><td><button class="param-edit-btn" data-idx="'+idx+'">編輯</button><button class="param-del-btn" data-idx="'+idx+'">刪除</button></td></tr>';}).join('')+
-        '</tbody></table>'+pagerHTML(pg,pages)+
-        '<div class="param-add-row"><select id="pa-icontact" style="width:100px"><option value="本人">本人</option><option value="非本人">非本人</option></select><input type="text" placeholder="訪談結果類型" id="pa-itype" style="width:160px"><input type="text" placeholder="訪談結果(逗號分隔)" id="pa-iresults" style="flex:1"><button id="pa-add">新增</button></div>';
+        '<table class="param-table"><colgroup><col style="width:80px"><col style="width:160px"><col></colgroup><thead><tr><th>接觸結果</th><th>訪談結果類型</th><th>訪談結果</th></tr></thead><tbody>'+
+        sl.map(function(f){var it=f.item;return '<tr><td>'+esc(it.contact)+'</td><td>'+esc(it.type)+'</td><td>'+it.results.map(function(r){return esc(r);}).join('、')+'</td></tr>';}).join('')+
+        '</tbody></table>'+pagerHTML(pg,pages);
     } else if(activeTab==='notify'){
       var flows=getNotifyFlowList();
       var selHTML='<div class="notify-param-flow-sel"><label>選擇流程</label><select id="notify-flow-sel"><option value="">-- 請選擇 --</option>';
