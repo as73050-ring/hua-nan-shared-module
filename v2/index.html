@@ -267,6 +267,31 @@ h1.page-title{text-align:center;font-size:28px;font-weight:400;color:#7C8790;mar
 .param-filter .pf-btn{padding:6px 16px;border:1px solid var(--line);border-radius:5px;background:#fff;font-size:13px;cursor:pointer;color:var(--ink-light)}
 .param-filter .pf-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
 
+/* Notify param tab */
+.notify-param-flow-sel{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.notify-param-flow-sel label{font-size:14px;font-weight:600;color:var(--ink)}
+.notify-param-flow-sel select{height:36px;border:1px solid var(--line);border-radius:5px;padding:0 10px;font-size:14px;min-width:200px}
+.notify-sub-tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:2px solid var(--line);padding-bottom:0}
+.notify-sub-tab{padding:8px 18px;font-size:14px;cursor:pointer;border:1px solid var(--line);border-bottom:none;border-radius:6px 6px 0 0;background:#fff;color:var(--ink-light);position:relative;top:2px}
+.notify-sub-tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.notify-form{background:var(--bg-soft);border:1px solid var(--line);border-radius:8px;padding:20px 24px}
+.notify-form .nf-field{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.notify-form .nf-field label{min-width:130px;font-size:14px;color:var(--ink);padding-top:8px;text-align:right}
+.notify-form .nf-field input[type="text"]{flex:1;height:36px;border:1px solid var(--line);border-radius:5px;padding:0 10px;font-size:14px}
+.notify-form textarea{flex:1;min-height:80px;border:1px solid var(--line);border-radius:5px;padding:8px 10px;font-size:14px;resize:vertical}
+.notify-priority{display:flex;align-items:center;gap:16px;flex:1}
+.notify-priority label.pr-opt{display:flex;align-items:center;gap:4px;font-size:14px;cursor:pointer;padding:4px 10px;border:1px solid var(--line);border-radius:5px;background:#fff;min-width:40px;justify-content:center}
+.notify-priority label.pr-opt.locked{background:#f0f0f0;color:#bbb;border-color:#ddd;cursor:not-allowed;text-decoration:line-through}
+.notify-priority label.pr-opt.locked::after{content:' ('attr(data-owner)')';font-size:11px;color:#bbb;margin-left:2px}
+.notify-priority label.pr-opt.selected{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:600}
+.notify-priority .released-badge{display:inline-block;background:#f0ad4e;color:#fff;font-size:12px;padding:2px 8px;border-radius:4px;margin-left:8px}
+.notify-reselect-btn{margin-left:12px;padding:4px 12px;border:1px solid var(--blue);background:#fff;color:var(--blue);border-radius:5px;font-size:13px;cursor:pointer}
+.notify-reselect-btn:hover{background:var(--blue);color:#fff}
+.notify-actions{display:flex;gap:12px;margin-top:20px;justify-content:flex-end}
+.notify-actions button{height:38px;padding:0 24px;border-radius:5px;font-size:14px;cursor:pointer}
+.notify-actions .na-cancel{border:1px solid var(--line);background:#fff;color:var(--ink)}
+.notify-actions .na-save{border:1px solid var(--blue);background:var(--blue);color:#fff}
+
 /* Req1: select text overflow */
 .resp select{white-space:normal;max-width:100%;min-width:0}
 .resp > .action-script{overflow:hidden}
@@ -407,6 +432,7 @@ h1.page-title{text-align:center;font-size:28px;font-weight:400;color:#7C8790;mar
       <span class="ptab active" data-ptab="scripts">台詞管理</span>
       <span class="ptab" data-ptab="reasons">轉真人原因</span>
       <span class="ptab" data-ptab="interview">訪談結果</span>
+      <span class="ptab" data-ptab="notify">訊息通知</span>
     </div>
     <div class="param-body" id="param-body"></div>
   </div>
@@ -448,7 +474,7 @@ var TEMPLATES = {
       ]}
     ],
     surveyCode: "Q001",
-    actions: ["進入問卷（主流程）","再聽一次（重複本區塊）","轉真人","轉inbound","留電","再聯絡","結束通話（送出以下結束台詞）"],
+    actions: ["進入問卷（主流程）","再聽一次（重複本區塊）","轉真人","轉inbound","留電","訊息通知","再聯絡","結束通話（送出以下結束台詞）"],
     part1: {
       blocks: [
         {name:"開場白", lines:["S001"],
@@ -520,7 +546,7 @@ var TEMPLATES = {
       {"code":"S030","text":"請您稍候，將為您轉接線上智能客服，謝謝！"}
     ],
     surveys: [],
-    actions: ["播放通知內容（主流程）","再聽一次（重複本區塊）","轉真人","轉inbound","留電","再聯絡","結束通話（送出以下結束台詞）"],
+    actions: ["播放通知內容（主流程）","再聽一次（重複本區塊）","轉真人","轉inbound","留電","訊息通知","再聯絡","結束通話（送出以下結束台詞）"],
     part1: {
       blocks: [
         {name:"開場白", lines:["S001"],
@@ -562,7 +588,7 @@ function parseCSV(text){
 
 async function loadData(){
   var base='data/';
-  var [scriptsR,skillsR,reasonsR,interviewR,surveysR,questionsR,flowsR,actionsR,intentsR,checksR,varsR] = await Promise.all([
+  var [scriptsR,skillsR,reasonsR,interviewR,surveysR,questionsR,flowsR,actionsR,intentsR,checksR,varsR,notifyR] = await Promise.all([
     fetch(base+'scripts.csv').then(function(r){return r.text();}),
     fetch(base+'skills.csv').then(function(r){return r.text();}),
     fetch(base+'reasons.csv').then(function(r){return r.text();}),
@@ -573,7 +599,8 @@ async function loadData(){
     fetch(base+'actions.csv').then(function(r){return r.text();}),
     fetch(base+'intents.csv').then(function(r){return r.text();}),
     fetch(base+'checks.csv').then(function(r){return r.text();}),
-    fetch(base+'variables.csv').then(function(r){return r.text();})
+    fetch(base+'variables.csv').then(function(r){return r.text();}),
+    fetch(base+'notifications.csv').then(function(r){return r.text();}).catch(function(){return '';})
   ]);
 
   window.PARAM_SCRIPTS = parseCSV(scriptsR);
@@ -625,6 +652,27 @@ async function loadData(){
     if(!window._CSV_VARS[r.template]) window._CSV_VARS[r.template]=[];
     window._CSV_VARS[r.template].push({code:r.code, name:r.name});
   });
+
+  /* ---- 載入 notifications CSV ---- */
+  window._NOTIFY_DATA = {};
+  if(notifyR){
+    var nRows=parseCSV(notifyR);
+    var fieldMap={
+      SMS:['bizType','sysCode','content'],
+      LINE:['txnSeq','templateCode','channelCode','content'],
+      Email:['projectCode','subject','content'],
+      APP:['appId','productNo','msgType','msgCategoryId','subject','content']
+    };
+    nRows.forEach(function(r){
+      var fn=r.flow_no, ch=r.channel, pr=parseInt(r.priority)||0;
+      if(!fn||!ch)return;
+      if(!window._NOTIFY_DATA[fn]) window._NOTIFY_DATA[fn]={};
+      var keys=fieldMap[ch]||[];
+      var fields={};
+      keys.forEach(function(k,i){fields[k]=r['field'+(i+1)]||'';});
+      window._NOTIFY_DATA[fn][ch]={priority:pr,fields:fields};
+    });
+  }
 
   /* ---- 載入 JSON 流程檔 ---- */
   try{
@@ -698,7 +746,7 @@ if(!window.PARAM_SCRIPTS){
   function SCRIPTS(){return window.PARAM_SCRIPTS||window.FLOW_SCRIPTS||[];}
   function ACTIONS(){
     if(window.FLOW_ACTIONS) return window.FLOW_ACTIONS;
-    return window._CSV_ACTIONS_DEFAULT||['進入主流程區','前往指定區塊','再聽一次（重複本區塊）','轉真人','轉inbound','SMS','EMAIL','LINE','APP推播','留電','再聯絡','結束通話（送出以下結束台詞）'];
+    return window._CSV_ACTIONS_DEFAULT||['進入主流程區','前往指定區塊','再聽一次（重複本區塊）','轉真人','轉inbound','訊息通知','留電','再聯絡','結束通話（送出以下結束台詞）'];
   }
   var RESP_INTENTS=window._CSV_INTENTS||['是(意圖)','否(意圖)'];
   var CHECK_KEYS=window._CSV_CHECKS||['閒置','聽不懂','抱怨負面情緒','轉真人','結束','再聯絡','掛斷'];
@@ -897,7 +945,7 @@ if(!window.PARAM_SCRIPTS){
           '<div class="cb-row"><span class="cb-label">覆述辨識結果</span><select class="cb-sel">'+scriptOptions('')+'</select></div>'+
           '<div class="cb-row"><span class="cb-label">結束台詞</span><select class="cb-sel">'+scriptOptions('')+'</select></div>'+
         '</div>';
-      var isNotify=(action==='SMS'||action==='EMAIL'||action==='LINE'||action==='APP推播');
+      var isNotify=(action==='訊息通知');
       html+='<div class="notify-set'+(isNotify?'':' hidden')+'">';
       if(isNotify) html+=notifyFields(action);
       html+='</div>';
@@ -1066,9 +1114,9 @@ if(!window.PARAM_SCRIPTS){
     if(g){g.classList.toggle('hidden',v!=='前往指定區塊');refreshBlockOptions();}
     if(cb)cb.classList.toggle('hidden',v!=='再聯絡');
     var nf=row.querySelector('.notify-set');
-    if(nf){var isNotify=(v==='SMS'||v==='EMAIL'||v==='LINE'||v==='APP推播');nf.classList.toggle('hidden',!isNotify);if(isNotify&&nf.dataset.notifyType!==v){nf.dataset.notifyType=v;nf.innerHTML=notifyFields(v);}}
+    if(nf){var isNotify=(v==='訊息通知');nf.classList.toggle('hidden',!isNotify);if(isNotify&&!nf.innerHTML.trim()){nf.innerHTML='<div class="nf-note" style="padding:8px 0;color:var(--ink-light);font-size:13px">參數與訊息內文請於訊息通知公版維護中設定</div>';}}
     var iv=row.querySelector('.interview-set');
-    if(iv){var showIv=(v==='轉真人'||isEndAct(v)||v==='轉inbound'||v==='留電'||v==='再聯絡'||v==='SMS'||v==='EMAIL'||v==='LINE'||v==='APP推播');iv.classList.toggle('hidden',!showIv);}
+    if(iv){var showIv=(v==='轉真人'||isEndAct(v)||v==='轉inbound'||v==='留電'||v==='再聯絡'||v==='訊息通知');iv.classList.toggle('hidden',!showIv);}
   }
 
   function refreshSubActionFields(row){
@@ -2236,7 +2284,82 @@ if(!window.PARAM_SCRIPTS){
    ===================================================================== */
 (function(){
   var activeTab='scripts';
+  var notifySubTab='SMS';
+  var notifySelectedFlow='';
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  if(!window._NOTIFY_DATA) window._NOTIFY_DATA={};
+  if(!window._notifyReleasedPriorities) window._notifyReleasedPriorities=new Set();
+
+  function getNotifyFlowList(){
+    var flows=window._JSON_FLOWS||window._CSV_FLOWS||[];
+    return flows.map(function(f){return {no:f.no,name:f.name};});
+  }
+
+  function getNotifyDefault(channel){
+    var defs={SMS:{priority:1,fields:{bizType:'',sysCode:'',content:''}},LINE:{priority:2,fields:{txnSeq:'',templateCode:'',channelCode:'',content:''}},Email:{priority:3,fields:{projectCode:'',subject:'',content:''}},APP:{priority:4,fields:{appId:'',productNo:'',msgType:'',msgCategoryId:'',subject:'',content:''}}};
+    return JSON.parse(JSON.stringify(defs[channel]));
+  }
+
+  function getNotifyChannelData(flowNo,channel){
+    if(window._NOTIFY_DATA[flowNo]&&window._NOTIFY_DATA[flowNo][channel])return window._NOTIFY_DATA[flowNo][channel];
+    return getNotifyDefault(channel);
+  }
+
+  function getOtherChannelPriorities(flowNo,currentChannel){
+    var used={};
+    var channels=['SMS','LINE','Email','APP'];
+    channels.forEach(function(ch){
+      if(ch===currentChannel) return;
+      var d=getNotifyChannelData(flowNo,ch);
+      if(d.priority>0) used[d.priority]=ch;
+    });
+    return used;
+  }
+
+  function renderNotifyForm(channel,data){
+    var fieldDefs={
+      SMS:[{key:'bizType',label:'業務性質代號'},{key:'sysCode',label:'系統代號'},{key:'content',label:'簡訊內容',type:'textarea'}],
+      LINE:[{key:'txnSeq',label:'交易序號'},{key:'templateCode',label:'推播樣板代號'},{key:'channelCode',label:'通路代號'},{key:'content',label:'LINE訊息內文',type:'textarea'}],
+      Email:[{key:'projectCode',label:'專案類別代碼'},{key:'subject',label:'信件主旨'},{key:'content',label:'郵件內文',type:'textarea'}],
+      APP:[{key:'appId',label:'產品序號(appID)'},{key:'productNo',label:'產品編號'},{key:'msgType',label:'訊息內文類型'},{key:'msgCategoryId',label:'訊息分類ID'},{key:'subject',label:'訊息主旨'},{key:'content',label:'APP推播內文',type:'textarea'}]
+    };
+    var fields=fieldDefs[channel]||[];
+    var released=window._notifyReleasedPriorities;
+    var otherUsed=getOtherChannelPriorities(notifySelectedFlow,channel);
+    var channelLabelsMap={SMS:'SMS',LINE:'LINE',Email:'Email',APP:'APP'};
+    var prHTML='<div class="nf-field"><label>順位</label><div class="notify-priority">';
+    for(var p=1;p<=4;p++){
+      var isMine=(data.priority===p);
+      var takenByOther=!!otherUsed[p];
+      var isRel=released.has(p);
+      var disabled=(!isMine&&takenByOther&&!isRel);
+      var cls='pr-opt';
+      if(isMine) cls+=' selected';
+      if(disabled) cls+=' locked';
+      var ownerAttr=disabled?' data-owner="'+esc(channelLabelsMap[otherUsed[p]]||otherUsed[p])+'"':'';
+      prHTML+='<label class="'+cls+'"'+ownerAttr+'><input type="radio" name="notify-pr-'+esc(channel)+'" value="'+p+'"'+(isMine?' checked':'')+(disabled?' disabled':'')+'>'+p+'</label>';
+    }
+    if(data.priority===0)prHTML+='<span class="released-badge">已釋出</span>';
+    prHTML+='<button type="button" class="notify-reselect-btn" data-channel="'+esc(channel)+'">重選順位</button>';
+    prHTML+='</div></div>';
+    var html=prHTML;
+    fields.forEach(function(f){
+      var val=data.fields[f.key]||'';
+      if(f.type==='textarea'){
+        html+='<div class="nf-field"><label>'+esc(f.label)+'</label><textarea data-key="'+esc(f.key)+'">'+esc(val)+'</textarea></div>';
+      } else {
+        html+='<div class="nf-field"><label>'+esc(f.label)+'</label><input type="text" data-key="'+esc(f.key)+'" value="'+esc(val)+'"></div>';
+      }
+    });
+    var noteMap={
+      SMS:'<div class="nf-note">另需由外撥清單中提供核身資料：手機號碼{:DAl}</div>',
+      LINE:'<div class="nf-note">另需由外撥清單中提供核身資料：身分證號{:nationalID}、Line ID{:UID}</div>',
+      Email:'<div class="nf-note">另需由外撥清單中提供核身資料：寄送至Email地址{:To_Mail}</div>',
+      APP:'<div class="nf-note">另需由外撥清單中提供核身資料：身分證字號{:ID}、裝置編號{:device_id}、綁定帳號{:domain_key}</div>'
+    };
+    html+=(noteMap[channel]||'');
+    return html;
+  }
 
   function getAllScripts(){
     var all=[],seen={};
@@ -2288,6 +2411,24 @@ if(!window.PARAM_SCRIPTS){
         sl.map(function(f){var it=f.item,idx=f.origIdx;return '<tr data-idx="'+idx+'"><td>'+esc(it.contact)+'</td><td>'+esc(it.type)+'</td><td>'+it.results.map(function(r){return esc(r);}).join('、')+'</td><td><button class="param-edit-btn" data-idx="'+idx+'">編輯</button><button class="param-del-btn" data-idx="'+idx+'">刪除</button></td></tr>';}).join('')+
         '</tbody></table>'+pagerHTML(pg,pages)+
         '<div class="param-add-row"><select id="pa-icontact" style="width:100px"><option value="本人">本人</option><option value="非本人">非本人</option></select><input type="text" placeholder="訪談結果類型" id="pa-itype" style="width:160px"><input type="text" placeholder="訪談結果(逗號分隔)" id="pa-iresults" style="flex:1"><button id="pa-add">新增</button></div>';
+    } else if(activeTab==='notify'){
+      var flows=getNotifyFlowList();
+      var selHTML='<div class="notify-param-flow-sel"><label>選擇流程</label><select id="notify-flow-sel"><option value="">-- 請選擇 --</option>';
+      flows.forEach(function(f){selHTML+='<option value="'+esc(f.no)+'"'+(notifySelectedFlow===f.no?' selected':'')+'>'+esc(f.no)+' - '+esc(f.name)+'</option>';});
+      selHTML+='</select></div>';
+      if(!notifySelectedFlow){
+        body.innerHTML=selHTML;
+        return;
+      }
+      var channels=['SMS','LINE','Email','APP'];
+      var channelLabels={SMS:'SMS簡訊',LINE:'LINE',Email:'Email',APP:'APP推播'};
+      var subTabsHTML='<div class="notify-sub-tabs">';
+      channels.forEach(function(ch){subTabsHTML+='<span class="notify-sub-tab'+(notifySubTab===ch?' active':'')+'" data-nch="'+ch+'">'+channelLabels[ch]+'</span>';});
+      subTabsHTML+='</div>';
+      var chData=getNotifyChannelData(notifySelectedFlow,notifySubTab);
+      var formHTML='<div class="notify-form" data-channel="'+esc(notifySubTab)+'">'+renderNotifyForm(notifySubTab,chData)+'</div>';
+      var actionsHTML='<div class="notify-actions"><button class="na-cancel" id="notify-cancel">取消</button><button class="na-save" id="notify-save">儲存</button></div>';
+      body.innerHTML=selHTML+subTabsHTML+formHTML+actionsHTML;
     }
   }
 
@@ -2428,6 +2569,90 @@ if(!window.PARAM_SCRIPTS){
     if(pfBtn){
       interviewFilter=pfBtn.dataset.filter;
       paramPage.interview=1;
+      renderParamBody();
+    }
+    /* notify: flow selector */
+    var nfSel=e.target.closest('#notify-flow-sel');
+    /* notify: sub-tab click - save current tab's priority before switching */
+    var nSubTab=e.target.closest('.notify-sub-tab');
+    if(nSubTab){
+      var form=document.querySelector('.notify-form');
+      if(form&&notifySelectedFlow){
+        var curCh=form.dataset.channel;
+        if(!window._NOTIFY_DATA[notifySelectedFlow]) window._NOTIFY_DATA[notifySelectedFlow]={};
+        if(!window._NOTIFY_DATA[notifySelectedFlow][curCh]) window._NOTIFY_DATA[notifySelectedFlow][curCh]=getNotifyDefault(curCh);
+        var prRadio=form.querySelector('input[name="notify-pr-'+curCh+'"]:checked');
+        if(prRadio){
+          var selPr=parseInt(prRadio.value);
+          window._NOTIFY_DATA[notifySelectedFlow][curCh].priority=selPr;
+          window._notifyReleasedPriorities.delete(selPr);
+        }
+        var inputs=form.querySelectorAll('input[data-key],textarea[data-key]');
+        inputs.forEach(function(inp){window._NOTIFY_DATA[notifySelectedFlow][curCh].fields[inp.dataset.key]=inp.value;});
+      }
+      notifySubTab=nSubTab.dataset.nch;
+      renderParamBody();
+    }
+    /* notify: reselect priority */
+    var reselBtn=e.target.closest('.notify-reselect-btn');
+    if(reselBtn&&activeTab==='notify'){
+      var ch=reselBtn.dataset.channel;
+      var d=getNotifyChannelData(notifySelectedFlow,ch);
+      if(d.priority>0){
+        window._notifyReleasedPriorities.add(d.priority);
+        if(!window._NOTIFY_DATA[notifySelectedFlow]) window._NOTIFY_DATA[notifySelectedFlow]={};
+        if(!window._NOTIFY_DATA[notifySelectedFlow][ch]) window._NOTIFY_DATA[notifySelectedFlow][ch]=getNotifyDefault(ch);
+        window._NOTIFY_DATA[notifySelectedFlow][ch].priority=0;
+      }
+      renderParamBody();
+    }
+    /* notify: save */
+    var nSave=e.target.closest('#notify-save');
+    if(nSave&&activeTab==='notify'&&notifySelectedFlow){
+      var allCh=['SMS','LINE','Email','APP'];
+      var form=document.querySelector('.notify-form');
+      /* save current form fields first */
+      if(form){
+        var curCh=form.dataset.channel;
+        var inputs=form.querySelectorAll('input[data-key],textarea[data-key]');
+        if(!window._NOTIFY_DATA[notifySelectedFlow]) window._NOTIFY_DATA[notifySelectedFlow]={};
+        if(!window._NOTIFY_DATA[notifySelectedFlow][curCh]) window._NOTIFY_DATA[notifySelectedFlow][curCh]=getNotifyDefault(curCh);
+        var chObj=window._NOTIFY_DATA[notifySelectedFlow][curCh];
+        var prRadio=form.querySelector('input[name="notify-pr-'+curCh+'"]:checked');
+        if(prRadio) chObj.priority=parseInt(prRadio.value);
+        inputs.forEach(function(inp){chObj.fields[inp.dataset.key]=inp.value;});
+      }
+      /* validate: no duplicate priorities */
+      var prMap={},dupErr=false;
+      allCh.forEach(function(ch){
+        var d=getNotifyChannelData(notifySelectedFlow,ch);
+        if(d.priority>0){
+          if(prMap[d.priority]){dupErr=true;}
+          prMap[d.priority]=ch;
+        }
+      });
+      var toastEl=document.getElementById('toast');
+      if(dupErr){
+        toastEl.textContent='儲存失敗：有兩個通知方式選擇了相同的順位，請先調整';
+        toastEl.classList.add('show');
+        setTimeout(function(){toastEl.classList.remove('show');},3000);
+        return;
+      }
+      toastEl.textContent='已儲存 '+notifySelectedFlow+' 訊息通知設定';
+      toastEl.classList.add('show');
+      setTimeout(function(){toastEl.classList.remove('show');},2200);
+    }
+    /* notify: cancel */
+    var nCancel=e.target.closest('#notify-cancel');
+    if(nCancel&&activeTab==='notify'){
+      renderParamBody();
+    }
+  });
+  /* notify: flow selector change (non-click, use change event) */
+  document.addEventListener('change',function(e){
+    if(e.target.id==='notify-flow-sel'){
+      notifySelectedFlow=e.target.value;
+      window._notifyReleasedPriorities=new Set();
       renderParamBody();
     }
   });
