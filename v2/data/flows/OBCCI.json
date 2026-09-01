@@ -9,9 +9,6 @@
     "閒置": {
       "script": ""
     },
-    "聽不懂": {
-      "script": "ZZZ002"
-    },
     "抱怨負面情緒": {
       "script": "ZZZ002"
     },
@@ -33,9 +30,6 @@
     "sharedRules": {
       "閒置": {
         "script": "ZZZ001"
-      },
-      "聽不懂": {
-        "script": "ZZZ002"
       },
       "抱怨負面情緒": {
         "script": "ZZZ002"
@@ -94,11 +88,26 @@
                 "type": "非本人接聽",
                 "result": "非本人接聽"
               }
+            },
+            {
+              "intent": "聽不懂",
+              "locked": false,
+              "hideScript": false,
+              "action": "轉真人",
+              "script": "",
+              "scriptText": "",
+              "reason": "NV00",
+              "gotoBlock": "",
+              "inboundText": "",
+              "interview": {
+                "contact": "本人",
+                "type": "聽不懂轉真人(意願確認)",
+                "result": "聽不懂轉真人(確認身分)"
+              }
             }
           ],
           "applyRules": [
             "閒置",
-            "聽不懂",
             "抱怨負面情緒",
             "轉真人",
             "結束",
@@ -146,11 +155,26 @@
                 "type": "本人接聽",
                 "result": "尚未申辦"
               }
+            },
+            {
+              "intent": "聽不懂",
+              "locked": false,
+              "hideScript": false,
+              "action": "轉真人",
+              "script": "ZZZ002",
+              "scriptText": "馬上為您轉接專人服務",
+              "reason": "NV00",
+              "gotoBlock": "",
+              "inboundText": "",
+              "interview": {
+                "contact": "本人",
+                "type": "聽不懂轉真人(意願確認)",
+                "result": "聽不懂轉真人(意願確認)"
+              }
             }
           ],
           "applyRules": [
             "閒置",
-            "聽不懂",
             "抱怨負面情緒",
             "轉真人",
             "結束",

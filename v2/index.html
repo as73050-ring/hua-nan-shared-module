@@ -478,8 +478,8 @@ var TEMPLATES = {
     part1: {
       blocks: [
         {name:"開場白", lines:["S001"],
-          resps:[["是","進入問卷（主流程）"],["否","結束通話（送出以下結束台詞）"]],
-          checks:{"閒置":true,"抱怨負面情緒":false,"聽不懂":true,"結束":false,"再聯絡":true,"轉真人":false,"掛斷":false}}
+          resps:[["是","進入問卷（主流程）"],["否","結束通話（送出以下結束台詞）"],["聽不懂","轉真人"]],
+          checks:{"閒置":true,"抱怨負面情緒":false,"結束":false,"再聯絡":true,"轉真人":false,"掛斷":false}}
       ]
     },
     part2: {
@@ -488,7 +488,7 @@ var TEMPLATES = {
       hint: "問卷代碼於基本資訊區輸入後自動對應題目與選項｜問卷內容若有修改時將即時更新，此處僅供預覽",
       surveyScript: "S003",
       endDone: "S025", endHuman: "S030", endSkill: "",
-      checks:{"閒置":true,"抱怨負面情緒":false,"聽不懂":true,"結束":false,"再聯絡":false,"轉真人":false,"掛斷":false}
+      checks:{"閒置":true,"抱怨負面情緒":false,"結束":false,"再聯絡":false,"轉真人":false,"掛斷":false}
     },
     part3: null
   },
@@ -512,8 +512,8 @@ var TEMPLATES = {
     part1: {
       blocks: [
         {name:"開場白", lines:[],
-          resps:[["是","前往指定區塊","區塊1"],["否","結束通話（送出以下結束台詞）"]],
-          checks:{"閒置":true,"聽不懂":true,"抱怨負面情緒":false,"轉真人":false,"結束":false,"再聯絡":false,"掛斷":false}}
+          resps:[["是","前往指定區塊","區塊1"],["否","結束通話（送出以下結束台詞）"],["聽不懂","轉真人"]],
+          checks:{"閒置":true,"抱怨負面情緒":false,"轉真人":false,"結束":false,"再聯絡":false,"掛斷":false}}
       ]
     },
     part2: {
@@ -523,8 +523,8 @@ var TEMPLATES = {
       resp: 1,
       blocks: [
         {name:"區塊1", lines:[],
-          resps:[],
-          checks:{"閒置":true,"聽不懂":true,"抱怨負面情緒":true,"轉真人":false,"結束":true,"再聯絡":true,"掛斷":false}}
+          resps:[["聽不懂","轉真人"]],
+          checks:{"閒置":true,"抱怨負面情緒":true,"轉真人":false,"結束":true,"再聯絡":true,"掛斷":false}}
       ]
     },
     part3: null
@@ -550,8 +550,8 @@ var TEMPLATES = {
     part1: {
       blocks: [
         {name:"開場白", lines:["S001"],
-          resps:[["是","播放通知內容（主流程）"],["否","結束通話（送出以下結束台詞）"]],
-          checks:{"閒置":true,"抱怨負面情緒":false,"聽不懂":true,"結束":false,"再聯絡":false,"轉真人":false,"掛斷":false}}
+          resps:[["是","播放通知內容（主流程）"],["否","結束通話（送出以下結束台詞）"],["聽不懂","轉真人"]],
+          checks:{"閒置":true,"抱怨負面情緒":false,"結束":false,"再聯絡":false,"轉真人":false,"掛斷":false}}
       ]
     },
     part2: {
@@ -716,44 +716,55 @@ if(!window.PARAM_SCRIPTS){
   var PARAM_SKILLS=window.PARAM_SKILLS;
 
   var PARAM_INTERVIEW=[
-    {contact:"本人",type:"自行變更",results:["自行變更"]},
-    {contact:"本人",type:"完成通知",results:["完成通知"]},
-    {contact:"本人",type:"無法確認理專",results:["無法確認理專"]},
-    {contact:"本人",type:"本人接聽",results:["資料正確無誤","無意願接受訪談","忙碌中，再聯絡","完成問卷","未完成問卷（一題未給分)"]},
-    {contact:"本人",type:"客戶抱怨",results:["客戶抱怨"]},
-    {contact:"本人",type:"聽不懂轉真人(意願確認)",results:["聽不懂轉真人(確認身分)","聽不懂轉真人(意願確認)"]},
-    {contact:"本人",type:"轉真人",results:["轉真人"]},
-    {contact:"本人",type:"沒有興趣",results:["沒有興趣"]},
-    {contact:"本人",type:"自行查詢",results:["自行查詢"]},
-    {contact:"本人",type:"鍵檔錯誤，要求更改",results:["鍵檔錯誤，要求更改"]},
-    {contact:"本人",type:"取消電子帳單申請",results:["取消電子帳單申請"]},
-    {contact:"本人",type:"客戶要求線上變更",results:["客戶要求線上變更"]},
-    {contact:"本人",type:"重寄",results:["重寄"]},
-    {contact:"本人",type:"要求註銷",results:["要求註銷"]},
-    {contact:"本人",type:"自行來電處理",results:["自行來電處理"]},
-    {contact:"本人",type:"完成回撥",results:["完成回撥"]},
+    {contact:"本人",type:"65歲以上不宜電訪",results:["65歲以上不宜電訪"]},
+    {contact:"本人",type:"已申請帳務調整",results:["已申請帳務調整"]},
+    {contact:"本人",type:"已申辦",results:["已申辦"]},
     {contact:"本人",type:"已達免年費標準",results:["已達免年費標準"]},
+    {contact:"本人",type:"已達問卷數",results:["曾接觸過的名單，惟已達問卷數"]},
+    {contact:"本人",type:"已聯絡",results:["已聯絡"]},
+    {contact:"本人",type:"已繳款",results:["已繳款"]},
+    {contact:"本人",type:"外國人",results:["外國人"]},
+    {contact:"本人",type:"未表示",results:["未表示"]},
+    {contact:"本人",type:"本人",results:["無意願申辦","簡訊寄送申請連結","E-mail申請書"]},
+    {contact:"本人",type:"本人接聽",results:["已申請調額","分行親取","毋需對帳單","卡片註銷","未完成問卷","未完成問卷（一題未給分)","忙碌中，再聯絡","有意願","有意願消費，有意願申辦","考慮中，再聯絡","完成問卷","尚未申辦","抱怨","客戶至分行辦理","客戶填寫錯誤，要求更改","無意願","無意願受訪","無意願消費，無意願申辦","無意願接受訪談","郵寄","資料正確無誤","線上申辦分期","e-mail"]},
+    {contact:"本人",type:"自行來電",results:["自行來電變更"]},
+    {contact:"本人",type:"自行來電處理",results:["自行來電處理"]},
+    {contact:"本人",type:"自行查詢",results:["自行查詢"]},
+    {contact:"本人",type:"自行變更",results:["自行變更"]},
+    {contact:"本人",type:"完成回撥",results:["完成回撥"]},
+    {contact:"本人",type:"完成通知",results:["完成通知"]},
+    {contact:"本人",type:"沒有興趣",results:["沒有興趣"]},
+    {contact:"本人",type:"取消信用卡電子帳單",results:["取消信用卡電子帳單"]},
+    {contact:"本人",type:"取消電子帳單申請",results:["取消電子帳單申請"]},
+    {contact:"本人",type:"尚未接觸的名單，惟已達問卷數",results:["尚未接觸的名單，惟已達問卷數"]},
+    {contact:"本人",type:"客戶抱怨",results:["客戶抱怨"]},
+    {contact:"本人",type:"客戶要求線上變更",results:["客戶要求線上變更"]},
+    {contact:"本人",type:"要求註銷",results:["要求註銷"]},
+    {contact:"本人",type:"重寄",results:["重寄"]},
+    {contact:"本人",type:"理專人員已離職",results:["理專人員已離職"]},
+    {contact:"本人",type:"習慣一次繳清",results:["習慣一次繳清"]},
     {contact:"本人",type:"通知負責人",results:["通知負責人"]},
     {contact:"本人",type:"通知會計人員",results:["通知會計人員"]},
-    {contact:"本人",type:"外國人",results:["外國人"]},
-    {contact:"本人",type:"尚未接觸的名單，惟已達問卷數",results:["尚未接觸的名單，惟已達問卷數"]},
-    {contact:"本人",type:"65歲以上不宜電訪",results:["65歲以上不宜電訪"]},
-    {contact:"本人",type:"溢繳款退回本行帳戶",results:["溢繳款退回本行帳戶"]},
+    {contact:"本人",type:"無法確認理專",results:["無法確認理專"]},
+    {contact:"本人",type:"無意願申辦",results:["已有無息分期卡","分期利率太高","申辦方式不便","回饋活動不吸引人","其他"]},
+    {contact:"本人",type:"郵寄申請書",results:["郵寄申請書(待追蹤)","傳真申請書(待追蹤)"]},
+    {contact:"本人",type:"閒置",results:["閒置"]},
     {contact:"本人",type:"溢繳款退回他行帳戶",results:["溢繳款退回他行帳戶"]},
-    {contact:"本人",type:"已繳款",results:["已繳款"]},
-    {contact:"本人",type:"已聯絡",results:["已聯絡"]},
-    {contact:"本人",type:"未表示",results:["未表示"]},
-    {contact:"本人",type:"習慣一次繳清",results:["習慣一次繳清"]},
-    {contact:"本人",type:"已申請帳務調整",results:["已申請帳務調整"]},
-    {contact:"本人",type:"本人",results:["E-mail申請書","簡訊寄送申請連結","無意願申辦"]},
-    {contact:"非本人",type:"查無此人",results:["查無此人"]},
-    {contact:"非本人",type:"非本人接聽",results:["非本人接聽"]},
-    {contact:"非本人",type:"三次聯絡不到",results:["三次聯絡不到"]},
-    {contact:"非本人",type:"無人接聽",results:["無人接聽"]},
-    {contact:"非本人",type:"無效電話",results:["無效電話"]},
+    {contact:"本人",type:"溢繳款退回本行帳戶",results:["溢繳款退回本行帳戶"]},
+    {contact:"本人",type:"鍵檔錯誤，要求更改",results:["鍵檔錯誤，要求更改"]},
+    {contact:"本人",type:"轉真人",results:["轉真人"]},
+    {contact:"本人",type:"轉真人(敏感詞)",results:["轉真人(敏感詞)"]},
+    {contact:"本人",type:"聽不懂轉真人(意願確認)",results:["聽不懂轉真人(意願確認)","聽不懂轉真人(確認身分)"]},
+    {contact:"非本人",type:"三次聯絡不到",results:["三次連絡不到"]},
+    {contact:"非本人",type:"非本人接聽",results:["先前表示無意願","近期已外撥","非本人接聽","關係戶"]},
+    {contact:"非本人",type:"非本人接聽(結案)",results:["非本人接聽(結案)"]},
+    {contact:"非本人",type:"非有效卡",results:["非有效卡"]},
     {contact:"非本人",type:"客戶自行掛斷",results:["客戶自行掛斷"]},
+    {contact:"非本人",type:"查無此人",results:["查無此人"]},
     {contact:"非本人",type:"重複件",results:["重複件"]},
-    {contact:"非本人",type:"非有效卡",results:["非有效卡"]}
+    {contact:"非本人",type:"無人接聽",results:["無人接聽"]},
+    {contact:"非本人",type:"無效電話",results:["手機已暫停使用","空號","無法受話","無效電話","傳真機"]},
+    {contact:"非本人",type:"聯絡不到先行結案",results:["聯絡不到先行結案"]}
   ];
   if(!window.PARAM_INTERVIEW) window.PARAM_INTERVIEW=PARAM_INTERVIEW;
 
@@ -763,12 +774,12 @@ if(!window.PARAM_SCRIPTS){
     if(window.FLOW_ACTIONS) return window.FLOW_ACTIONS;
     return window._CSV_ACTIONS_DEFAULT||['進入主流程區','前往指定區塊','再聽一次（重複本區塊）','轉真人','轉inbound','訊息通知','留電','再聯絡','結束通話（送出以下結束台詞）'];
   }
-  var RESP_INTENTS=window._CSV_INTENTS||['是(意圖)','否(意圖)'];
-  var CHECK_KEYS=window._CSV_CHECKS||['閒置','聽不懂','抱怨負面情緒','轉真人','結束','再聯絡','掛斷'];
+  var RESP_INTENTS=window._CSV_INTENTS||['是(意圖)','否(意圖)','聽不懂'];
+  var CHECK_KEYS=window._CSV_CHECKS||['閒置','抱怨負面情緒','轉真人','結束','再聯絡','掛斷'];
   var INTENT_DEFAULTS={'轉真人':'轉真人','抱怨負面情緒':'轉真人','再連絡':'再聯絡'};
   function getEndAction(){var a=ACTIONS();for(var i=a.length-1;i>=0;i--){if(a[i].indexOf('結束通話')===0)return a[i];}return '結束通話（送出以下結束台詞）';}
   function resolveDefault(intent){if(intent==='結束'||intent==='掛斷')return getEndAction();return INTENT_DEFAULTS[intent]||'';}
-  var THRESHOLD_INTENTS=['聽不懂','閒置'];
+  var THRESHOLD_INTENTS=['閒置'];
   var CHECK_TO_INTENT={'再聯絡':'再連絡'};
 
   function flowNameNow(){var f=document.getElementById('flow-name');return f?f.value:'';}
@@ -1009,6 +1020,12 @@ if(!window.PARAM_SCRIPTS){
         '<button class="btn-add-resp">＋ 新增回應選項</button>'+checksHTML({}):'')+
       '<div class="preview"></div></div></div>');
     partBody.insertBefore(b,partBody.querySelector('.btn-add-block'));
+    /* 新區塊預設加入聽不懂回應列 */
+    if(withResp){
+      var respsDiv=b.querySelector('.resps');
+      if(respsDiv) respsDiv.appendChild(respRow('聽不懂','轉真人',''));
+      b.querySelectorAll('.resp').forEach(function(r){syncActionFields(r);});
+    }
     refreshPreview(b);bindDnD(b.querySelector('.lines'),'.line');refreshBlockOptions();refreshAddLineButtons();
   }
 
@@ -1053,12 +1070,12 @@ if(!window.PARAM_SCRIPTS){
     /* Lock configs for shared-check intents */
     var lockConfigs={
       '閒置':'threshold',
-      '聽不懂':'threshold',
-      '轉真人':{action:'轉真人',reason:'NV01',iv:{contact:'本人',type:'系統紀錄',result:'轉真人(意圖)'}},
-      '抱怨負面情緒':{action:'轉真人',reason:'NV05',iv:{contact:'本人',type:'系統紀錄',result:'轉真人(敏感詞)'}},
+      '聽不懂':{action:'轉真人',reason:'NV00'},
+      '轉真人':{action:'轉真人',reason:'NV01',iv:{contact:'本人',type:'轉真人',result:'轉真人'}},
+      '抱怨負面情緒':{action:'轉真人',reason:'NV05',iv:{contact:'本人',type:'轉真人(敏感詞)',result:'轉真人(敏感詞)'}},
       '結束':{action:getEndAction(),reason:'',iv:{contact:'本人',type:'本人接聽',result:'無意願接受訪談'}},
       '再連絡':{action:'再聯絡',reason:'',iv:{contact:'本人',type:'本人接聽',result:'忙碌中，再聯絡'}},
-      '掛斷':{action:getEndAction(),reason:'',iv:{contact:'本人',type:'本人接聽',result:'無意願接受訪談'},hideScript:true}
+      '掛斷':{action:getEndAction(),reason:'',iv:{contact:'非本人',type:'客戶自行掛斷',result:'客戶自行掛斷'},hideScript:true}
     };
 
     var lc=lockConfigs[intentVal];
@@ -1288,13 +1305,12 @@ if(!window.PARAM_SCRIPTS){
     /* 共用回應處理規則（此流程共用） */
     html+='<div class="shared-rules"><div class="sr-head" id="sr-toggle-head"><h2>共用回應處理規則（此流程共用）</h2><span class="sr-toggle">收起 ▲</span></div>';
     html+='<div class="sr-body" id="sr-body">';
-    html+='<div class="sr-item" data-rule="閒置"><span class="sr-intent">閒置</span><div class="sr-config"><span class="sr-fixed">達標準後：再聽一次｜達次數後：結束通話</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ001')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 系統紀錄 / 閒置</span></div></div>';
-    html+='<div class="sr-item" data-rule="聽不懂"><span class="sr-intent">聽不懂</span><div class="sr-config"><span class="sr-fixed">未達次數：再聽一次｜達次數後：轉真人(NV00)</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ002')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 系統紀錄 / 轉真人(聽不懂)</span></div></div>';
-    html+='<div class="sr-item" data-rule="抱怨負面情緒"><span class="sr-intent">抱怨負面情緒</span><div class="sr-config"><span class="sr-fixed">轉真人(NV05)</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ002')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 系統紀錄 / 轉真人(敏感詞)</span></div></div>';
-    html+='<div class="sr-item" data-rule="轉真人"><span class="sr-intent">轉真人</span><div class="sr-config"><span class="sr-fixed">轉真人(NV01)</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ002')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 系統紀錄 / 轉真人(意圖)</span></div></div>';
+    html+='<div class="sr-item" data-rule="閒置"><span class="sr-intent">閒置</span><div class="sr-config"><span class="sr-fixed">達標準後：再聽一次｜達次數後：結束通話</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ001')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 閒置 / 閒置</span></div></div>';
+    html+='<div class="sr-item" data-rule="抱怨負面情緒"><span class="sr-intent">抱怨負面情緒</span><div class="sr-config"><span class="sr-fixed">轉真人(NV05)</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ002')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 轉真人(敏感詞) / 轉真人(敏感詞)</span></div></div>';
+    html+='<div class="sr-item" data-rule="轉真人"><span class="sr-intent">轉真人</span><div class="sr-config"><span class="sr-fixed">轉真人(NV01)</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ002')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 轉真人 / 轉真人</span></div></div>';
     html+='<div class="sr-item" data-rule="結束"><span class="sr-intent">結束</span><div class="sr-config"><span class="sr-fixed">結束通話</span> <span class="sr-lbl">台詞：</span><select class="sr-script scriptsel">'+scriptOptions('ZZZ001')+'</select> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 本人接聽 / 無意願接受訪談</span></div></div>';
-    html+='<div class="sr-item" data-rule="再聯絡"><span class="sr-intent">再聯絡</span><div class="sr-config"><span class="sr-fixed">再聯絡</span><span class="sr-note" style="font-size:12px;color:var(--ink-light);margin-left:8px">（覆述辨識結果用戶按鍵回覆2(錯誤)時，流程回到詢問可再聯絡日期）</span><div class="sr-cb-list" style="display:flex;flex-direction:column;gap:4px;flex-basis:100%;margin-top:6px"><div><span class="sr-lbl">詢問可再聯絡日期：</span><select class="sr-cb1 scriptsel">'+scriptOptions('ZZA001')+'</select></div><div><span class="sr-lbl">確認聯絡時段：</span><select class="sr-cb2 scriptsel">'+scriptOptions('ZZA002')+'</select></div><div><span class="sr-lbl">覆述辨識結果：</span><select class="sr-cb3 scriptsel">'+scriptOptions('ZZA003')+'</select></div><div><span class="sr-lbl">結束台詞：</span><select class="sr-cb4 scriptsel">'+scriptOptions('ZZA004')+'</select></div></div><span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 本人接聯 / 忙碌中，再聯絡</span></div></div>';
-    html+='<div class="sr-item" data-rule="掛斷"><span class="sr-intent">掛斷</span><div class="sr-config"><span class="sr-fixed">結束通話（不需台詞）</span> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 本人接聽 / 無意願接受訪談</span></div></div>';
+    html+='<div class="sr-item" data-rule="再聯絡"><span class="sr-intent">再聯絡</span><div class="sr-config"><span class="sr-fixed">再聯絡</span><span class="sr-note" style="font-size:12px;color:var(--ink-light);margin-left:8px">（覆述辨識結果用戶按鍵回覆2(錯誤)時，流程回到詢問可再聯絡日期）</span><div class="sr-cb-list" style="display:flex;flex-direction:column;gap:4px;flex-basis:100%;margin-top:6px"><div><span class="sr-lbl">詢問可再聯絡日期：</span><select class="sr-cb1 scriptsel">'+scriptOptions('ZZA001')+'</select></div><div><span class="sr-lbl">確認聯絡時段：</span><select class="sr-cb2 scriptsel">'+scriptOptions('ZZA002')+'</select></div><div><span class="sr-lbl">覆述辨識結果：</span><select class="sr-cb3 scriptsel">'+scriptOptions('ZZA003')+'</select></div><div><span class="sr-lbl">結束台詞：</span><select class="sr-cb4 scriptsel">'+scriptOptions('ZZA004')+'</select></div></div><span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：本人 / 本人接聽 / 忙碌中，再聯絡</span></div></div>';
+    html+='<div class="sr-item" data-rule="掛斷"><span class="sr-intent">掛斷</span><div class="sr-config"><span class="sr-fixed">結束通話（不需台詞）</span> <span class="sr-fixed" style="flex-basis:100%;margin-top:4px;color:var(--ink-light)">訪談結果：非本人 / 客戶自行掛斷 / 客戶自行掛斷</span></div></div>';
     html+='</div></div>';
 
     /* Part 1 開場白區（多區塊） */
