@@ -95,7 +95,12 @@
       ]
     },
     "part2Notice": {
-      "script": "OBCCA002"
+      "script": "OBCCA002",
+      "interview": {
+        "contact": "本人",
+        "type": "完成通知",
+        "result": "完成通知"
+      }
     }
   }
 }

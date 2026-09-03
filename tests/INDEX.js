@@ -20,8 +20,9 @@
  * │ import-export.spec.js       │   2    │ JSON匯出結構/儲存後保留       │
  * │ notify.spec.js              │   4    │ SMS/EMAIL/LINE/APP面板        │
  * │ validation.spec.js          │   4    │ 必填紅框/通過儲存             │
+ * │ v2-form-updates.spec.js     │   5    │ v2 inbound/樣板規則/訪談結果  │
  * └─────────────────────────────┴────────┴───────────────────────────────┘
- *                                  50 total
+ *                                  55 total
  *
  * ═══════════════════════════════════════════════════════════════════════
  * 關聯性對照（改了左邊，跑右邊的測試）
@@ -52,6 +53,8 @@
  * data/interview.csv               │ (目前無獨立測試，影響訪談結果選單)
  * data/skills.csv                  │ validation (transfer-skill)
  * data/reasons.csv                 │ form-responses
+ * v2/index.html                    │ v2-form-updates
+ * v2/data/flows/*.json             │ v2-form-updates
  *
  * ═══════════════════════════════════════════════════════════════════════
  * 快速覆測指令

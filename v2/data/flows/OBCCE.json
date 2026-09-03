@@ -199,8 +199,8 @@
               "inboundText": "補寄帳單",
               "interview": {
                 "contact": "本人",
-                "type": "客戶要求線上變更",
-                "result": "客戶要求線上變更"
+                "type": "重寄",
+                "result": "重寄"
               }
             },
             {
@@ -215,8 +215,8 @@
               "inboundText": "",
               "interview": {
                 "contact": "本人",
-                "type": "沒有興趣",
-                "result": "沒有興趣"
+                "type": "無意願",
+                "result": "無意願"
               }
             },
             {
@@ -262,8 +262,8 @@
               "inboundText": "",
               "interview": {
                 "contact": "本人",
-                "type": "鍵檔錯誤，要求更改",
-                "result": "鍵檔錯誤，要求更改"
+                "type": "本人接聽",
+                "result": "客戶填寫錯誤，要求更改"
               }
             },
             {
@@ -278,8 +278,8 @@
               "inboundText": "",
               "interview": {
                 "contact": "本人",
-                "type": "沒有興趣",
-                "result": "沒有興趣"
+                "type": "本人接聽",
+                "result": "無意願"
               }
             },
             {
