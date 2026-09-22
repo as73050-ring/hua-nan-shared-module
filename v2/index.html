@@ -192,6 +192,12 @@ h1.page-title{text-align:center;font-size:28px;font-weight:400;color:#7C8790;mar
 
 /* ===== 列表頁 ===== */
 .list-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:16px;flex-wrap:wrap}
+.query-panel{display:grid;grid-template-columns:1fr 1fr;gap:18px 32px;padding:18px 20px;border:1px solid var(--line-soft);border-radius:8px;background:#fff;margin-bottom:18px}
+.query-panel .field label{display:block;font-weight:600;margin-bottom:8px}
+.query-panel .field select,.query-panel .field input{width:100%;height:40px;border:1px solid var(--line);border-radius:5px;padding:0 12px;background:#fff}
+.query-actions{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:24px}
+.list-footer{display:flex;justify-content:center;margin-top:14px}
+@media(max-width:700px){.query-panel{grid-template-columns:1fr}}
 .search-box{display:flex;align-items:center;gap:8px;flex:1;max-width:420px}
 .search-box input{flex:1;height:40px;border:1px solid var(--line);border-radius:5px;padding:0 12px;background:#fff}
 .search-box button{height:40px;padding:0 18px;border:1px solid var(--blue);background:var(--blue);color:#fff;border-radius:5px;font-size:14px;white-space:nowrap}
@@ -356,22 +362,58 @@ h1.page-title{text-align:center;font-size:28px;font-weight:400;color:#7C8790;mar
   <div id="view-list">
     <div class="crumb">ChatWeb管理 ＞ <b>外撥語音流程管理</b></div>
     <h1 class="page-title">外撥語音流程管理</h1>
-    <div class="list-toolbar">
+
+    <section class="query-panel">
+      <div class="field">
+        <label>ChatWeb主題ID</label>
+        <select id="q-topic">
+          <option value="202260915144539497">202260915144539497／華南外撥語音</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>樣板類型</label>
+        <select id="q-type">
+          <option value="">請選擇</option>
+          <option>滿意度類</option>
+          <option>客戶意願確認轉真人服務類</option>
+          <option>業務資訊通知類</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>流程編號</label>
+        <input type="text" id="q-flowno" placeholder="請輸入流程編號">
+      </div>
+      <div class="field">
+        <label>狀態</label>
+        <select id="q-status">
+          <option value="">請選擇</option>
+          <option value="on">啟用</option>
+          <option value="off">停用</option>
+        </select>
+      </div>
+    </section>
+
+    <div class="list-toolbar" style="display:none">
       <div class="search-box">
         <input type="text" id="search-input" placeholder="輸入流程編號或名稱搜尋...">
         <button id="btn-search">搜尋</button>
       </div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <button class="btn-new" id="btn-import-flow" style="background:var(--blue-dark)">匯入流程</button>
-        <button class="btn-new" id="btn-export-all" style="background:#2E8B57">匯出全部</button>
-        <button class="btn-new" id="btn-new-flow">＋ 新增流程</button>
-      </div>
-      <input type="file" id="import-flow-input" accept=".json" style="display:none" multiple>
     </div>
+
+    <div class="query-actions">
+      <button class="btn-pill ghost" id="btn-query-reset">重填</button>
+      <button class="btn-pill" id="btn-query">查詢</button>
+      <button class="btn-pill" id="btn-import-flow" style="background:var(--blue-dark)">匯入流程</button>
+      <button class="btn-pill" id="btn-new-flow">＋ 新增流程</button>
+    </div>
+    <input type="file" id="import-flow-input" accept=".json" style="display:none" multiple>
     <table class="flow-table">
       <thead><tr><th>流程編號</th><th>業務流程名稱</th><th>樣板類型</th><th>狀態</th><th>操作</th></tr></thead>
       <tbody id="flow-tbody"></tbody>
     </table>
+    <div class="list-footer">
+      <button class="btn-pill" id="btn-export-all" style="background:#2E8B57;display:none">匯出全部</button>
+    </div>
   </div>
 
   <!-- ===== 表單頁（樣板設定） ===== -->
@@ -2012,13 +2054,36 @@ if(!window.PARAM_SCRIPTS){
     {no:'OB-2026-0003',name:'財富管理客戶滿意度調查',type:'滿意度類',enabled:true,skill:'',surveyCode:'',formData:null}
   ];
 
-  function renderList(keyword){
+  function getQueryFilters(){
+    var flowNoEl=document.getElementById('q-flowno');
+    var typeEl=document.getElementById('q-type');
+    var statusEl=document.getElementById('q-status');
+    var kwEl=document.getElementById('search-input');
+    return{
+      flowNo:flowNoEl?flowNoEl.value:'',
+      type:typeEl?typeEl.value:'',
+      status:statusEl?statusEl.value:'',
+      keyword:kwEl?kwEl.value:''
+    };
+  }
+
+  function renderList(filters){
+    filters=filters||{};
     var tbody=document.getElementById('flow-tbody');
-    var kw=(keyword||'').trim().toLowerCase();
+    var flowNo=(filters.flowNo||'').trim().toLowerCase();
+    var kw=(filters.keyword||'').trim().toLowerCase();
+    var type=filters.type||'';
+    var status=filters.status||'';
     var filtered=FLOW_LIST.filter(function(f){
-      if(!kw)return true;
-      return f.no.toLowerCase().indexOf(kw)>=0||f.name.toLowerCase().indexOf(kw)>=0;
+      if(flowNo&&f.no.toLowerCase().indexOf(flowNo)<0)return false;
+      if(kw&&f.no.toLowerCase().indexOf(kw)<0&&f.name.toLowerCase().indexOf(kw)<0)return false;
+      if(type&&f.type!==type)return false;
+      if(status==='on'&&!f.enabled)return false;
+      if(status==='off'&&f.enabled)return false;
+      return true;
     });
+    var exportBtn=document.getElementById('btn-export-all');
+    if(exportBtn) exportBtn.style.display=filtered.length?'':'none';
     if(!filtered.length){tbody.innerHTML='<tr><td colspan="5" class="list-empty">查無符合條件的流程</td></tr>';return;}
     tbody.innerHTML=filtered.map(function(f){
       return '<tr><td>'+f.no+'</td><td>'+f.name+'</td><td>'+f.type+'</td>'+
@@ -2110,11 +2175,18 @@ if(!window.PARAM_SCRIPTS){
     showForm(null);
   });
   document.getElementById('btn-search').addEventListener('click',function(){
-    renderList(document.getElementById('search-input').value);
+    renderList(getQueryFilters());
   });
   document.getElementById('search-input').addEventListener('keyup',function(e){
-    if(e.key==='Enter') renderList(this.value);
-    if(!this.value) renderList('');
+    if(e.key==='Enter'||!this.value) renderList(getQueryFilters());
+  });
+  document.getElementById('btn-query').addEventListener('click',function(){
+    renderList(getQueryFilters());
+  });
+  document.getElementById('btn-query-reset').addEventListener('click',function(){
+    document.getElementById('q-flowno').value='';
+    document.getElementById('q-type').value='';
+    document.getElementById('q-status').value='';
   });
   document.getElementById('btn-cancel').addEventListener('click',function(e){
     e.stopPropagation(); showList();
@@ -2325,7 +2397,7 @@ if(!window.PARAM_SCRIPTS){
     if(btn.dataset.act==='del'){
       if(!confirm('確定刪除？'))return;
       FLOW_LIST=FLOW_LIST.filter(function(f){return f.no!==btn.dataset.no;});
-      renderList(document.getElementById('search-input').value);
+      renderList(getQueryFilters());
     }
   });
 
